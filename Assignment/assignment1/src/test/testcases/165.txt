@@ -1,0 +1,4 @@
+
+            Var: a, b = 10;
+            a = foo(b * 3) + 10;
+            writeln(a);

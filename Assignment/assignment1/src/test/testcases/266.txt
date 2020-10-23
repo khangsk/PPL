@@ -1,0 +1,7 @@
+
+            Function: foo
+            Body:
+                a = -1;
+                Return a * 190;
+            EndBody.
+        

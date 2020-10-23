@@ -1,0 +1,25 @@
+Function: foo
+    Body:
+        Break;
+        Continue;
+        For (qbc = 321, (True || False), 123) Do
+            Break;
+            Continue;
+        EndFor.
+
+        While False Do
+            If (abc) Then
+                Break
+                ;
+            ElseIf def Then
+                Continue   ;
+            Else Break;
+            EndIf.
+        EndWhile.
+
+        Do 
+            Break;
+            Continue;
+        While True
+        EndDo.
+    EndBody.

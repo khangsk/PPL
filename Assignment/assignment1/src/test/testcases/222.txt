@@ -1,0 +1,8 @@
+
+        Function: foo
+            Parameter: a[5], b
+            Body:
+                For (i = 0, i < 10, 2) Do
+                    a[i] = b;
+                EndFor.
+            EndBody.

@@ -1,0 +1,4 @@
+Function: foo 
+    Body: 
+        a = 0123 + 123;
+    EndBody.

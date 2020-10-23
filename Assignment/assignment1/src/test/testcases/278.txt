@@ -1,0 +1,8 @@
+
+            Function: square
+            Body:
+                Var: r = 10., v;
+                v = (4. \. 3.) *. 3.14 *. r *. r *. r;
+                Return v;
+            EndBody.
+        

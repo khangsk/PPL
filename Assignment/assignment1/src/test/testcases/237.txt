@@ -1,0 +1,14 @@
+
+        Function: power_rep
+            Parameter: base, exp
+            Body:
+                If (exp == 0) Then
+                    Return 1;
+                EndIf.
+                For (i = 0, i < exp - 1, 1) Do
+                    base = base * a;
+                EndFor.
+                Var: a = 2;
+                Return base;
+            EndBody.
+        

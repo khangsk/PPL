@@ -1,0 +1,12 @@
+
+            Function: main
+            Body:
+                Var: a, b = 5;
+                input(a);
+                If (a > b && a < 10) Then
+                    Return True;
+                Else
+                    Return False;
+                EndIf.
+            EndBody.
+        

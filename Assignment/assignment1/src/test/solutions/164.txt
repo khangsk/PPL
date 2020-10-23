@@ -1,0 +1,1 @@
+While,n,<,10,Do,If,n,==,7,Then,Continue,;,ElseIf,n,>,7,Then,Break,;,EndIf,.,writeln,(,n,*,n,+,foo,(,n,),),;,EndWhile,.,<EOF>

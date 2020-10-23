@@ -1,0 +1,8 @@
+
+            Function: foo
+            Body:
+                If (a >. b) && (a <. b) || (a <= d) && (a >= e)  Then
+                    Return True;
+                EndIf.
+            EndBody.
+        

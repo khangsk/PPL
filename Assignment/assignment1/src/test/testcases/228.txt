@@ -1,0 +1,12 @@
+
+        Function: foo
+            Parameter: a[10]
+            Body:
+                Var: i;
+                For (i = 0, i < 10, 1) Do
+                    writeln(a[i]);
+                    If (a[10] > 5) Then
+                        Break;
+                    EndIf.
+                EndFor.
+            EndBody.

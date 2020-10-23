@@ -1,0 +1,4 @@
+Function: foo
+    Body:
+        foo((((123*.321))), abcd, efgh * ij[a[b[1]][2]][3]);
+    EndBody.

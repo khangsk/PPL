@@ -1,0 +1,10 @@
+
+            Function: foo
+            Body:
+                Var: s = "123";
+                n = int(s);
+                Body:
+                    Return True;
+                EndBody.
+            EndBody.
+        

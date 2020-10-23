@@ -1,0 +1,25 @@
+Function: foo
+    Body:
+        Return;
+        Return True;
+        For (qbc = 321, (True || False), 123) Do
+            Return;
+            Return (999);
+        EndFor.
+
+        While False Do
+            If (abc) Then
+                Return
+                ;
+            ElseIf def Then
+                Return "somes tring"   ;
+            Else Break;
+            EndIf.
+        EndWhile.
+
+        Do 
+            Return xas\a\.h*.c+.n \ "string";
+            Return;
+        While True
+        EndDo.
+    EndBody.

@@ -1,0 +1,11 @@
+
+            Function: test
+            Parameter: num
+            Body:
+                For (i = num * 2, i < num * num, i + 1) Do
+                    If i % 2 == 0 Then
+                        writeln(a * i);
+                    EndIf.
+                    Var: a = 1;
+                EndFor.
+            EndBody.

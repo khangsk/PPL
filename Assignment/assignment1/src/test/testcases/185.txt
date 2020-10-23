@@ -1,0 +1,6 @@
+ 
+        Function: test
+        Body:
+            Var: a = 1, b = 1.0;
+            writeln(a \. b);
+        EndBody. 

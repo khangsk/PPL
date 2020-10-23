@@ -1,0 +1,4 @@
+Function: foo 
+    Body: 
+        Do While True Do EndWhile. While True EndDo.
+    EndBody.

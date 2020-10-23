@@ -1,0 +1,8 @@
+Function: foo 
+    Parameter: something, more
+    Body:
+        Do
+            do_something();
+        While 
+        EndDo.
+    EndBody.

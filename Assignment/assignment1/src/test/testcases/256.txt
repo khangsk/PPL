@@ -1,0 +1,10 @@
+
+            Function: test
+            Parameter: num
+            Body:
+                Var: sum = 0;
+                For (i = num, i < sqr(num), 2) Do
+                    sum = 123[1[1][1][1][1][1][1][1]][i];
+                EndFor.
+                Return sum;
+            EndBody.

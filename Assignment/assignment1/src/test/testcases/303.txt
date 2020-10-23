@@ -1,0 +1,12 @@
+Function: foo 
+    Parameter: something, more
+    Body:
+        Do
+            Do
+                more = more + something;
+                do_something();
+            While (abc + 123 \ 321)
+            EndDo.
+        While (something > more)
+        EndDo.
+    EndBody.

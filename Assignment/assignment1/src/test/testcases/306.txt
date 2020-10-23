@@ -1,0 +1,5 @@
+Function: foo
+    Body:
+        Do a = 123;
+        EndDo.
+    EndBody.

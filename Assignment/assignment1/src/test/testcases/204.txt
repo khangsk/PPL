@@ -1,0 +1,1 @@
+Var: abc =  0XF123,    x___asdyz = 0xA398;

@@ -1,0 +1,6 @@
+
+        Function: foo
+            Parameter: x, y
+            Body:
+                writeln(foo(2 + x, 4. \. y) * goo());
+            EndBody.

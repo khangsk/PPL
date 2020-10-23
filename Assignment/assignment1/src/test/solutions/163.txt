@@ -1,0 +1,1 @@
+Do,i,=,i,+,1,;,input,(,a,[,i,],),;,If,(,i,==,6,),Then,Break,;,EndIf,.,While,(,i,<,10,),EndDo,.,<EOF>

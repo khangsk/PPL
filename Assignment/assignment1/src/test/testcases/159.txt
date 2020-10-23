@@ -1,0 +1,5 @@
+
+        If (a > b) && (!c) Then
+            Return True;
+        Else Return False;
+        EndIf.

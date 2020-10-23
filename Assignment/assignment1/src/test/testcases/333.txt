@@ -1,0 +1,7 @@
+Function: foo
+    Body:
+        Do
+            Return abc (999 + 1) "oops" "failed";
+        While True
+        EndDo.
+    EndBody.

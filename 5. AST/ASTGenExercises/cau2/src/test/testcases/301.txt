@@ -1,0 +1,3 @@
+int a,b
+        float c,d,e
+        int m,n

@@ -1,0 +1,12 @@
+
+            Function: foo
+            Body:
+                If a =/= b Then
+                    Return False;
+                ElseIf a >=. b Then
+                    Return True;
+                ElseIf a <=. b Then
+                    Return True;
+                EndIf.
+            EndBody.
+        

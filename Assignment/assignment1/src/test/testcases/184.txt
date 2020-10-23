@@ -1,0 +1,6 @@
+ 
+        Function: test
+        Body:
+            VaR: a = 1;
+            writeln(a);
+        EndBody. 

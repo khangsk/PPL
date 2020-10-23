@@ -1,0 +1,14 @@
+
+            Var: arr[5][6]=1.e790,b,c=2;
+            Var: x;
+            Function: tEST_function_Name_1
+                Parameter: x[100]
+                Body:
+                    Do 
+                        x=x + foo(267+a[6]+. 1.0);
+                        x=x%2;
+                        If (i>=9) Then
+                            writeln(a+7);
+                        EndIf.
+                    While i<=27 EndDo .
+                EndBody.

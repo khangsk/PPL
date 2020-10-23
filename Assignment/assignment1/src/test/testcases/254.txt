@@ -1,0 +1,11 @@
+
+            Var: a = True, b = {1,2}, c = {{True, False}, {1.e2, 2e2}};
+            Function: test
+            Parameter: num
+            Body:
+                Var: sum = 0;
+                For (i = num, i < sqr(num), 2) Do
+                    sum = sum + i * i;
+                EndFor.
+                Return sum;
+            EndBody.

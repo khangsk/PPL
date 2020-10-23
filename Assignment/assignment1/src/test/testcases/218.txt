@@ -1,0 +1,19 @@
+
+        Var: ajsd_123s = "Khang", u___12sA[2] = {  "Hoang" ,    "Gia"     };
+        Var: a, b, c = 3.e3;
+        Var: nothing;
+        Function: fact
+            Parameter: n
+            Body:
+                If n == 0 Then
+                    Return 1;
+                Else
+                    Return n * fact(n - 1);
+                EndIf.
+            EndBody.
+        **Test comment!!!**
+        Function: main
+            Body:
+                x = 10;
+                fact(x);
+            EndBody.

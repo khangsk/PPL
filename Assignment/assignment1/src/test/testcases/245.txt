@@ -1,0 +1,6 @@
+
+        Function: reverseString
+            Parameter: initialString
+            Body:
+                initialString = "khang
+            EndBody.

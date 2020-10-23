@@ -1,0 +1,11 @@
+
+        Function: foo
+            Parameter: a[2], b
+            Body:
+                For (i = 0, i < 2, 1) Do
+                    If a[i] > b Then writeln(a[i], " is larger than ", b);
+                    ElseIf a[i] == b Then writeln(a[i], " equal ", b);
+                    Else writeln(a[i], " is smaller than ", b);
+                    EndIf.
+                EndFor.
+            EndBody.

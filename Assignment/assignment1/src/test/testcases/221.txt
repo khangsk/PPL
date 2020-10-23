@@ -1,0 +1,13 @@
+
+        Function: foo
+            Parameter: a[5], b
+            Body:
+                For (i = 0, i < 10, 2) Do
+                    writeln(a[i] + b);
+                EndFor.
+            EndBody.
+        Function: main
+            Body:
+                x = 10;
+                fact(x);
+            EndBody.

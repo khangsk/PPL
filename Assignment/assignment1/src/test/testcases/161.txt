@@ -1,0 +1,4 @@
+
+        While n < 10 Do
+            writeln(n * n + foo(n));
+        EndWhile.

@@ -1,0 +1,28 @@
+Var: a = 0,b,c;
+
+Function: foo 
+    Body: 
+        Var: a,b = True,c;
+        do_something();
+
+        For (it=0, 0, 0) Do
+            Var: d,e,f;
+            do_something();
+
+            While (abcd) Do
+                Var: g,h,i;
+                do_something();
+
+                If True Then
+                    Var: o,f,f;
+                    do_something();
+                ElseIf d Then
+                    Var: f,f;
+                    do_something();
+                Else
+                    Var: d,o,w,n;
+                    do_something();
+                EndIf.
+            EndWhile.
+        EndFor.
+    EndBody.

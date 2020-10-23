@@ -1,0 +1,8 @@
+
+            Function: foo
+            Body:
+                If (a == b) && (a != c) || (a > b) || (a < c)   Then
+                    Return True;
+                EndIf.
+            EndBody.
+        

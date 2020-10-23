@@ -1,0 +1,8 @@
+
+            Function: foo
+            Body:
+                Var: s = "123";
+                n = int(s);
+                Return n * 10;
+            EndBody.
+        

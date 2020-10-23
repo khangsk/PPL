@@ -1,0 +1,1 @@
+Var: a = "hoang gia khang", b___1, c=12.;

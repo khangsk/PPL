@@ -1,0 +1,11 @@
+
+        Function: foo
+            Parameter: a[2], b
+            Body:
+                Var: i = 0;
+                **While have no "Do"**
+                While (a[i] > b)
+                    writeln(a[i]);
+                    i = i + 1;
+                EndWhile.
+            EndBody.

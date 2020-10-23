@@ -1,0 +1,1 @@
+Do,i,=,i,+,1,;,input,(,a,[,i,],),;,While,(,i,<,10,),EndDo,.,<EOF>
