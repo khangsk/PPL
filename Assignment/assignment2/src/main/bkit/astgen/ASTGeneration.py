@@ -4,39 +4,74 @@ from AST import *
 
 
 class ASTGeneration(BKITVisitor):
+    # program  : var_declare* func_declare* EOF ;
     def visitProgram(self, ctx: BKITParser.ProgramContext):
-        # return Program([VarDecl(Id(ctx.ID().getText()),[],None)])
-        return None
+        arr = []
+        for i in ctx.var_declare():
+            arr += self.visitVar_declare(i)
+        for i in ctx.func_declare():
+            arr += self.visitFunc_declare(i)
+        return Program(arr)
 
+    # var_declare: VAR COLON list_var (COMMA list_var)* SEMI ;
     def visitVar_declare(self, ctx: BKITParser.Var_declareContext):
-        return None
+        arr = []
+        for i in ctx.list_var():
+            initVar = self.visitList_var(i)
+            if len(initVar) == 1: 
+                if len(initVar[0]) == 1: arr.append(VarDecl(initVar[0][0],[],None))
+                else: 
+                    arr.append(VarDecl(initVar[0][0],initVar[0][1],None))
+            else:
+                if len(initVar[0]) == 1: arr.append(VarDecl(initVar[0][0],[],initVar[1]))
+                else: 
+                    arr.append(VarDecl(initVar[0][0],initVar[0][1],initVar[1]))
+        return arr
 
+    # list_var: variable (EQUAL literal)? ;
     def visitList_var(self, ctx: BKITParser.List_varContext):
-        return None
+        if ctx.getChildCount() == 1: return [self.visitVariable(ctx.variable())]
+        return [self.visitVariable(ctx.variable()), self.visitLiteral(ctx.literal())]
 
+    # func_declare: FUNCTION COLON ID params_list? compound_stmt;
     def visitFunc_declare(self, ctx: BKITParser.Func_declareContext):
         return None
 
+    # list_variable: variable (COMMA variable)* ;
     def visitList_variable(self, ctx: BKITParser.List_variableContext):
         return None
 
+    # variable: ID (LSB INT RSB)* ;
     def visitVariable(self, ctx: BKITParser.VariableContext):
-        return None
+        if ctx.getChildCount() == 1:
+            return [Id(ctx.ID().getText())]
+        arr = [IntLiteral(i.getText()) for i in ctx.INT()]
+        return [Id(ctx.ID().getText()), arr]
+        
 
+    # params_list: PARAMETER COLON list_variable ;
     def visitParams_list(self, ctx: BKITParser.Params_listContext):
         return None
 
+    # array: (lit_array | arr_array) ;
     def visitArray(self, ctx: BKITParser.ArrayContext):
-        return None
+        return self.visitChildren(ctx)
 
+    # lit_array: LCB literal? (COMMA literal)* RCB ;
     def visitLit_array(self, ctx: BKITParser.Lit_arrayContext):
         return None
 
+    # arr_array: LCB array? (COMMA array)* RCB ;
     def visitArr_array(self, ctx: BKITParser.Arr_arrayContext):
         return None
 
+    # literal:  INT | FLOAT | BOOLEAN | STRING | array;
     def visitLiteral(self, ctx: BKITParser.LiteralContext):
-        return None
+        if ctx.INT(): return IntLiteral(ctx.INT().getText())
+        elif ctx.FLOAT(): return FloatLiteral(ctx.FLOAT().getText())
+        elif ctx.BOOLEAN(): return BooleanLiteral(ctx.BOOLEAN().getText())
+        elif ctx.STRING(): return StringLiteral(ctx.STRING().getText())
+        else: return self.visitArray(ctx.array())
 
     def visitCompound_stmt(self, ctx: BKITParser.Compound_stmtContext):
         return None

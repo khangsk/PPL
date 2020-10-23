@@ -1,7 +1,2 @@
-Var: x = 5;
-        Function: main
-        Body:
-            x = 10;
-            printLn(x);
-        EndBody.
-        
+Var:x = 1, y;
+        Var: a[2] = 3, b[4]
