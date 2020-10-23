@@ -1,0 +1,16 @@
+
+        Function: fact
+        Body:
+            If a[i] > b Then 
+                writeln(a[i], " is larger than ", b);
+            ElseIf a[i] == b Then 
+                writeln(a[i], " equal ", b);
+            ElseIf a[i] && b Then 
+                writeln(a[i]);
+            ElseIf !a[i] Then 
+                writeln(b);
+            Else 
+                writeln(a[i], " is smaller than ", b);
+            EndIf.
+        EndBody.
+        

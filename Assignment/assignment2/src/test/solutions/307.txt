@@ -1,0 +1,1 @@
+Program([FuncDecl(Id(fact)[],([][If(BinaryOp(>,ArrayCell(Id(a),[Id(i)]),Id(b)),[],[CallExpr(Id(writeln),[ArrayCell(Id(a),[Id(i)]),StringLiteral( is larger than ),Id(b)])])Else([],[CallExpr(Id(writeln),[ArrayCell(Id(a),[Id(i)]),StringLiteral( is smaller than ),Id(b)])])])])
