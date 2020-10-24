@@ -1,21 +1,19 @@
 
-        Function: longest_substr
-            Parameter: str
+            Function: func_name
+            Parameter: n
             Body:
-                Var: count = 0, check = False;
-                For (i = 0, i < length(str), 1) Do
-                    For (j = 0, j < length(str), 1) Do
-                        If (str[i] == str[j]) && (i != j) Then
-                            check = True;
-                            Break;
-                        EndIf.
-                        If (check) Then
-                            check = False;
-                        EndIf.
-                        Continue;
-                    EndFor.
-                    count = count + 1;
+                Var: a[20];
+                Var: dem = 0, i;
+                Do
+                    a[dem+1] = (n % dEC_10);
+                    n = n \ dEC_10;
+                While n > 0
+                EndDo.
+                For (i = 0, i < (dem \ 2), i+1) Do
+                    If (a[i] != a[(dem - i - 1)]) Then
+                        Return 0;
+                    EndIf.
                 EndFor.
-                Return count;     
+                Return 1;
             EndBody.
         

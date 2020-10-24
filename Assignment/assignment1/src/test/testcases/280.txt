@@ -1,13 +1,19 @@
 
-            Var: arr[3][2] = {{1, 2}, {4, 5}, {3, 5}};
-            Function: main
-            Body:
-                Var: p = 1;
-                For (i = 0, i < 3, 1) Do
-                    For (j = 0, j < 2, 1) Do
-                        p = p * arr[i][j];
-                    EndFor.
-                EndFor.
-                writeln(p);
-            EndBody.
+            Function: phanTichSoNguyen
+            Parameter: n
+                Body:
+                Var: i = 2;
+                Var: dem = 0;
+                Var: a[100];
+                ** This is test comment 1 **
+                While n <=. 1 Do
+                    If (n % i == 0) Then
+                        n = n \ i;
+                        a[dem+1] = i;
+                    Else 
+                        i=i+.1.;
+                    EndIf.
+                EndWhile.
+                 ** This is test comment 2 ***
+                EndBody.
         

@@ -1,3 +1,19 @@
 
-            Var: a = -1.23;
-            
+            Function: selectionSort
+            Parameter: arr[100],n
+            Body:
+                Var: i, j, min_idx;
+                ****
+                For (i = 1+foo(2), i < n-1, i+1) Do
+                    **.**
+                    min_idx = i;
+                    For (j = i+1, j < n, j+2) Do
+                        If (arr[j] < arr[min_idx]) Then
+                            min_idx = j;
+                        EndIf. 
+                        **@**
+                    EndFor.
+                    swap(arr[min_idx], arr[i]);
+                EndFor.
+            EndBody.
+        

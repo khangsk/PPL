@@ -1,11 +1,15 @@
 
-        Function: foo
-            Parameter: a[2], b
-            Body:
-                For (i = 0, i < 2, 1) Do
-                    If a[i] > b Then writeln(a[i], " is larger than ", b);
-                    **Error '='**
-                    ElseIf a[i] = b Then writeln(a[i], " equal ", b);
-                    EndIf.
-                EndFor.
-            EndBody.
+            Function: convertNumber
+            Parameter: n,b
+                Body: 
+                    Var: i;
+                    Var: arr[20];
+                    Var: count = 0;
+                    Var: m;
+                    Var: remainder = 1;
+                    if (n < 0 || b < 2 || b > 16 ) Then
+                        cout("He co so hoac gia tri chuyen doi khong hop le!");
+                        Return 0;
+                    }
+                EndBody.
+                

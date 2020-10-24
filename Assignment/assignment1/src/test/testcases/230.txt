@@ -1,6 +1,7 @@
 
-        Function: foo
-            Parameter: x, y
+            Function: test_comment
             Body:
-                writeln(foo(2 + x, 4. \. y) * goo());
+                Var: x = {};
+                ** this is a comment ****
             EndBody.
+        

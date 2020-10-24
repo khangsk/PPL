@@ -1,10 +1,13 @@
 
             Function: main
             Body:
-                Var: a, b;
-                input(a, b);
-                c = a == b;
-                d = c+-1.23*.-3e4;
-                writeln(d);
+                Var: arr[10] = {1, 2, 3,            4, 5, 6, 7, 8,              9,                    10};
+                Var: i, total = 0;
+                Var: size = "x 	";
+                For(i = 0, i < size, i+1) Do
+                    total = total + arr[i];
+                EndFor.
+                printf(5+x);
+                Return 0;
             EndBody.
         

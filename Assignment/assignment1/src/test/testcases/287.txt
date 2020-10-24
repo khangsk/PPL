@@ -1,10 +1,9 @@
 
-            Function: main
-            Body:
-                Var: a = 0XFA1B23;
-                Var: b = 1;
-                a = a *- b;
-                a = a*.-b;
-                writeln(a);
-            EndBody.
+        Function: main
+        Body:
+            If (a> 0) && (b >0) Then
+                a= int_of_string();
+                b= float_of_int(a) +. 2.0;
+            EndIf.
+        EndBody.
         

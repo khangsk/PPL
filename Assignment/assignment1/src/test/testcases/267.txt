@@ -1,8 +1,15 @@
 
-            Function: foo
+            Function: main
             Body:
-                a = !1;
-                b = !True;
-                Return a * 190;
+                Var: count = 0;
+                Var: i;
+                print("Liet ke tat ca cac so co 5 chu so:");
+                For (i = 10001, i < 99999, i+2)
+                    If (isPrimeNumber(i)) Then
+                        printf("%d\n", i);
+                        count+1;
+                    EndIf.
+                EndFor.
+                printf("Tong cac so nguyen to co 5 chu so la: %d", count);
             EndBody.
         

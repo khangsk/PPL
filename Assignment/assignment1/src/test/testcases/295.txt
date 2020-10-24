@@ -1,23 +1,6 @@
 
-            Var: a = "Hoang Gia Khang";
-            Function: check
-            Parameter: b
-            Body:
-                If (a == b) Then
-                    Return True;
-                EndIf.
-                Return False;
-            EndBody.
             Function: main
             Body:
-                Var: s, k, result;
-                input(s);
-                input(k);
-                result = string(s) + string(k);
-                If check(result) Then
-                    writeln(result);
-                Else
-                    writeln("Nothing");
-                EndIf.
+                Var: x= ''' "abc ' def ''" '''
             EndBody.
         

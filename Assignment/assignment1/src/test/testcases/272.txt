@@ -1,8 +1,25 @@
 
-            Function: foo
+            Function: phanTichSoNguyen
             Body:
-                Var: s = "123";
-                n = int(s);
-                Return n * 10;
+                Var: i = 2;
+                Var: dem = 0;
+                Var: a[100];
+                While (n > 1) Do
+                    If (n % i == 0) Then
+                        n = n \ i;
+                        a[dem+1] = i;
+                    Else
+                        i=i+1;
+                    EndIf.
+                EndWhile.
+                ** this is a comment **
+                If (dem == 0) Then
+                    a[dem+1] = n;
+                EndIf.
+                ****
+                For (i = 0, i < dem - 1, 1) Do
+                    printf("%d x ", a[i]);
+                EndFor.
+                printf("%d", a[dem - 1]);
             EndBody.
         

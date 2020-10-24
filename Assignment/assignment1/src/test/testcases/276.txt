@@ -1,12 +1,8 @@
 
-            Var: string[3] = {"1.23", "0.e4", "12e2"};
-            Function: test
-            Body:
-                Var: x[3], sum = 0.;
-                For (i = 0, i < 3, 1) Do
-                    x[i] = float(string[i]);
-                    sum = sum + x[i];
-                EndFor.
-                Return sum;
-            EndBody.
+        Function: main
+        Body:
+            Var: a = 10;
+            Var: x= {        ** this is a comment **    "abc\n",    **** 1,   2,3,{1,2}};
+            Var: x = {{{1,  2 ,2e-124, "avc" , 1 }, {  4 , **erty**  5}  },  {{ 6  ,  7  },{ 8,9}}};
+        EndBody.
         

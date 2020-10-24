@@ -1,14 +1,27 @@
 
-        Function: foo
-            Parameter: str
+            Function: main
             Body:
-                Var: count = 0, check = False;
-                For (i = 0, i < length(str), 1) Do
-                    If !str[i] Then
-                        count = count + 1;
-                        writeln(str[i]);
+                Var: s1[50];     
+                Var: s2[50];
+                Var: n = 0;
+                Var: flag = 1;
+                printf("Nhap chuoi s1: ");
+                gets(s1);
+                printf("Nhap chuoi s2: ");
+                gets(s2);
+                ** this is a comment **
+                While s1[n] != "\\" Do
+                    If s1[n] != s2[n] Then
+                        flag = 0;
+                        Break;
                     EndIf.
-                EndFor.
-                Return count;     
+                    n=n+1;
+                EndWhile.
+                If flag == 1 Then
+                    printf("Chuoi %s va chuoi %s la giong nhau.", s1,s2);
+                Else
+                    printf("Chuoi %s va chuoi %s la khac nhau.", s1, s2);
+                EndIf.
+                Return 0;
             EndBody.
         

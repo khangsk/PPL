@@ -1,6 +1,5 @@
 
             Function: main
-            Parameter: a ** = 3 **, b = "error";
             Body:
             EndBody.
         

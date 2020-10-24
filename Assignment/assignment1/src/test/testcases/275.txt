@@ -1,11 +1,15 @@
 
-            Function: foo
-            Parameter: a[5], b
-            Body:
-                Var: i = 0;
-                While (i < 5)
-                    a[i] = b +. 1.0;
-                    i = i + 1;
-                EndWhile.
-            EndBody.
+        Function: main
+        Body:
+            Var: a = 10;
+            While( a < 20 ) Do   
+                print("Gia tri cua a: ");
+                a=a+{1};
+                If( a > 15) Then
+                    ** ket thuc vong lap khi a lon hon 15 **
+                    Breakk;
+                EndIf.
+            EndWhile.
+        Return 0;
+        EndBody.
         

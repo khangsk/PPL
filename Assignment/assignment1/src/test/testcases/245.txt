@@ -1,6 +1,13 @@
 
-        Function: reverseString
-            Parameter: initialString
+            Function: main 
             Body:
-                initialString = "khang
-            EndBody.
+                printf("Ve tam giac sao vuong can:\n");
+                For(i = 1, i <= n, i+x) Do
+                    For(j = 1, j <= i, j+a) Do
+                        printf("* ");
+                    EndFor.
+                printf("
+");
+                EndFor.
+            Return 0;
+        

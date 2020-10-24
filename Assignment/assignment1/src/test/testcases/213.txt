@@ -1,5 +1,7 @@
 
-        Var: a = 5;
-        Var: b[2][3] = {{2,3,4},{4,5,6}};
-        Var: c, d = 6, e, z;
-        Var: m = 1, n[2] = {   2   ,   3   };
+            Var: x={1, 2,   3}, y;
+            Function: tEST_13
+                Body:
+                    v = a && b > 2 =/= 0;
+                EndBody.
+                

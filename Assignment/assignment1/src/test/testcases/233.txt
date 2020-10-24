@@ -1,17 +1,16 @@
 
-        Function: printDivivsors
-            Parameter: n
+            Function: main
+            Parameter: n, i, j
             Body:
-                For (i = 1, i <= n, 1) Do
-                    If (n % i == 0) Then
-                        writeln(i);
-                    EndIf.
-                EndFor.
-            EndBody.
-        Function: main
-            Body:
-                Var: x;
-                input(x);
-                printDivivsors(x);
+            Var: x = 6;
+            printf("Chuoi: \t      ");
+            For(i = 0, i <= n, i+1) Do
+                For(j = 0, j <= n-i, j+1) Do
+                    printf("  ");
+                    For(j = 0, j <= i, j+x) Do
+                        printf(" %3d", ncr(i, j));
+                        printf("\n");
+                    EndFor.
+                Return 0;
             EndBody.
         

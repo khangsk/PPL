@@ -1,18 +1,10 @@
 
-            Var: a, b, operator;
-            Function: main
-            Body:  
-                input(a);
-                input(b);
-                input(operator);
-                If operator == "+" Then
-                    Return a + b;
-                ElseIf operator == "-" Then
-                    Return a - b;
-                ElseIf operator == "*" Then
-                    Return a * b;
-                Else
-                    Return a \ b;
-                EndIf.
-            EndBody.
-        
+            Var: x[7][6]={1,"abc",               1.};
+            Function: test_index_op
+                Body:
+                    v=123[True];
+                    y=123[0[0[False]]];
+                    z=a[1[1][1][1][1][1][1][1]];
+                EndBody.
+                a=foo(1);
+            

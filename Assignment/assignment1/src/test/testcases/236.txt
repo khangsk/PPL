@@ -1,30 +1,14 @@
 
-        Function: power_rep
-            Parameter: base, exp
+            Function: main
             Body:
-                Var: a = 2;
-                If (exp == 0) Then
-                    Return 1;
-                EndIf.
-                For (i = 0, i < exp - 1, 1) Do
-                    base = base * a;
+                Var: arr[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+                Var: i, total = 0;
+                Var: size = "x";
+                For(i = 0, i < size, i+1) Do
+                    total = total + arr[i];
                 EndFor.
-                Return base;
+                printf(5+x);
+                Return 0;
             EndBody.
-        Function: power_recur
-            Parameter: base, exp
-            Body:
-                If (exp == 0) Then
-                    Return 1;
-                EndIf.
-                Return base * power_recur(base, exp - 1);
-            EndBody.
-        Function: main
-            Parameter: base, exp
-            Body:
-                base = input();
-                exp = input();
-                writeln(power_rep(base, exp));
-                writeln(power_recur(base, exp));
-            EndBody.
+            Var: x;
         

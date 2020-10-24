@@ -1,1 +1,3 @@
-Var: a = "hoang gia khang", b___1, c=12.;
+
+            Var: i = "This is a string \x and error"
+            

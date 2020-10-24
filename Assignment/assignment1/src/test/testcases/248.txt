@@ -1,10 +1,27 @@
 
-            Function: tEST_function_Name_2
-                Parameter: x,a[69],b[1][2][3]
-                Body:
-                    For (i=1, goo(2+a[6]) < i,2>goo(9)) Do
-                        If arr[7] >= foo(3) Then
-                            Break;
-                        EndIf.
-                    EndFor.
-                EndBody.
+            **
+            * giai phuong trinh bac 2: ax2 + bx + c = 0
+            * 
+            * @param a: he so bac 2
+            * @param b: he so bac 1
+            * @param c: so hang tu do
+            **
+            Function: giaiPTBac2_part_2
+            Parameter: a,b,c
+            Body:
+                Var: delta = 1;
+                Var: float = "x1";
+                Var: float = "x2";
+                delta = b*b - 4*a*c;
+                If (delta > 0) Then
+                    x1 = float((-b + sqrt(delta)) \ (2*a));
+                    x2 = float((-b - sqrt(delta)) \ (2*a));
+                    printf("Phuong trinh co 2 nghiem la: x1 = %f va x2 = %f", x1, x2);
+                ElseIf delta == 0 Then
+                    x1 = (-b \ (2 * a));
+                    printf("Phong trinh co nghiem kep: x1 = x2 = %f", x1);
+                Else
+                    printf("Phuong trinh vo nghiem!");
+                EndIf.
+            EndBody.
+        

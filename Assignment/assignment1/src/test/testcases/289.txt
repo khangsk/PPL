@@ -1,12 +1,14 @@
 
-            Function: main
-            Body:
-                Var: a, b = 5;
-                input(a);
-                If (a > b && a < 10) Then
-                    Return True;
-                Else
-                    Return False;
-                EndIf.
-            EndBody.
-        
+            Function: fibonacci 
+                Body: 
+                    Var: f0=0,f1=1,fn=1;
+                    Var: i;
+                    If n<0 Then
+                        Return -1;
+                    ElseIf (n==0) || (n==1) Then
+                        return n;
+                    Else 
+                    EndIf.
+                    Return fn;
+                EndBody.
+                

@@ -1,11 +1,11 @@
 
-            Function: foo
+            Function: main
             Body:
-                Var: s = "123";
-                n = int(s);
-                Function: a
-                Body:
-                    Return True;
-                EndBody.
+                Var: a = 10;
+                Do
+                    println("Gia tri cua a: ");
+                    a=a+1;
+                While a < 20.
+                Return 0;
             EndBody.
         

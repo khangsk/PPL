@@ -1,7 +1,7 @@
 
-            Function: foo
+            Var: x;
+            Function: main
             Body:
-                a = -1;
-                Return a * 190;
+                Var: x = "This is a string 	 ";
             EndBody.
         

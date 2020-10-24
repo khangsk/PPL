@@ -1,1 +1,5 @@
-Var: abc = 0xA398,    x___asdyz = 0XG123;
+
+        Function: main
+        Body:
+        s = "abc
+        EndBody.

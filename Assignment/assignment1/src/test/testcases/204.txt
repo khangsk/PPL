@@ -1,1 +1,20 @@
-Var: abc =  0XF123,    x___asdyz = 0xA398;
+
+        Var: x=120000e-1;
+        ** This is a single-line comment. **
+        Function: fact
+        Body:
+            Var: v;
+            If n==0 Then 
+                Return 1;
+            Else
+                a[3+foo(2)] = a[b[2][3]] +4;
+                Return n*fact(n-1);
+            EndIf.
+        EndBody.
+        
+        Function: main
+        Body:
+            x=10;
+            fact (x);
+        EndBody.
+        

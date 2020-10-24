@@ -1,8 +1,8 @@
 
-            Function: foo
-            Body:
-                If (a == b) && (a != c) || (a > b) || (a < c)   Then
-                    Return True;
-                EndIf.
+            Function: main
+            Body: 
+                Var: txt[12] = "ABABDABACDABABCABAB	 \n", pat[27] = "ABABCABAB  \\"; 
+                KMPSearch(pat, txt); 
+                Return 0; 
             EndBody.
         

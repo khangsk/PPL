@@ -1,10 +1,8 @@
 
-            Function: main
+            Function: partition
+            Parameter: arr[1], low, high
             Body:
-                For (i = 1, i <= 10, 1) Do
-                    For (j = 2, j <= 9, 1) Do
-                        writeln(i, j, i * j);
-                    EndFor.
-                EndFor.
+                ** this is a comment_1 * * **
+                ** this is a comment_2 * *
             EndBody.
         

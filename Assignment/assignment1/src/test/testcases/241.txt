@@ -1,16 +1,10 @@
 
-        Function: uoc_chung_lon_nhat
-            Parameter: a, b
+            Function: main
             Body:
-                If (a == b) Then
-                    Return a;
-                EndIf.
-	            If (a > b) Then
-		            a = a % b;
-                EndIf.
-	            If (a == 0) Then
-                    Return b;
-                EndIf.
-	            Return uoc_chung_lon_nhat(b, a);
-            EndBody.
+                Var: string[100];
+                printf("Nhap chuoi bat ky: ");
+                gets(string);
+                strupr(string);
+                printf("this is a string ");
+                return (0);
         

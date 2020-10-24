@@ -1,11 +1,16 @@
 
-        Function: foo
-            Parameter: a[2], b
-            Body:
-                For (i = 0, i < 2, 1) Do
-                    If a[i] > b Then writeln(a[i], " is larger than ", b);
-                    ElseIf a[i] == b Then writeln(a[i], " equal ", b);
-                    Else writeln(a[i], " is smaller than ", b);
+            Function: tinhGiaiThua
+            Parameter: n
+                Body: 
+                    Var: i;
+                    Var: giai_thua = 1;
+                    If ((n == 0) || (n == 1)) Then
+                        Return giai_thua;
+                    Else
+                        For (i = 2, i <= n, i==100) Do
+                            giai_thua = giai_thua*i;
+                        EndFor.
+                    Return giai_thua;
                     EndIf.
-                EndFor.
-            EndBody.
+                EndBody.
+                

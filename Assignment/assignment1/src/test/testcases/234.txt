@@ -1,14 +1,8 @@
 
-        Function: power_rep
-            Parameter: base, exp
+            Function: main
+            Parameter: n, i, j
             Body:
-                Var: a = 2;
-                If (exp == 0) Then
-                    Return 1;
-                EndIf.
-                For (i = 0, i < exp - 1, 1) Do
-                    base = base * a;
-                EndFor.
-                Return base;
+            Var: x = 6;
+            123[True][1][x] = {{}};
             EndBody.
         

@@ -1,1 +1,1 @@
-successful
+Chuoi s1 = !s 

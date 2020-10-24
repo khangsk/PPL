@@ -1,1 +1,11 @@
-Var: a = 112.0e3, b___1, c=12.;
+
+            Var: i;
+            Function: tEST_11
+                Body:
+                    For(i=100,i<strlen(s1)\2,2) Do
+                        If (s1[i] != s1[strlen(s1)-1-i]) Then
+                            Return 0;
+                        EndIf.
+                        Return 1;
+                    EndFor.
+                EndBody.

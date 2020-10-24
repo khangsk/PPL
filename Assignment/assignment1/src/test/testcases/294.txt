@@ -1,13 +1,6 @@
 
             Function: main
             Body:
-                Var: a___b = 12345;
-                Var: b = True, c = 123.;
-                If b Then
-                    c = c +. 1.;
-                ElseIf !b Then
-                    Return c;
-                EndIf.
-                Return float(a___b) + c;
+            writeln("In bang cuu chuong rut gon: '");
             EndBody.
         

@@ -1,11 +1,23 @@
 
-            Function: reverseString
-            Parameter: num
+            Var: s[4][20];
+            Var: t[20];
+            Var: i, j;
+            Var: size = 4;
+            Function: test____
             Body:
-                For (i = num * 2, i < num * num, i + 1) Do
-                    Var: a = 1;
-                    If i % 2 == 0 Then
-                        writeln(a * i);
-                    EndIf.
+                printf("\tNhap 4 chuoi bat ky: \t");
+                For (i = 0, i < size, i+1) Do
+                    scanf("%s", s[i]);
                 EndFor.
+                For (i = 1, i < size, i+1) Do
+                    For (j = 1, j < size, j+1) Do
+                        If (strcmp(s[j - 1], s[j]) > 0) Then
+                            strcpy(t, s[j - 1]);
+                            strcpy(s[j - 1], s[j]);
+                            strcpy(s[j], t);
+                        EndIf.
+                    EndFor.             
+                EndFor.
+            return(0);
             EndBody.
+        

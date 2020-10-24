@@ -1,6 +1,12 @@
 
-            Function: main
-            Body:
-                Var: a = b = 1;
+            Function: giaiPTBac2_part_1
+                If (a == 0) Then
+                    If (b == 0) Then
+                        printf("Phuong trinh vo nghiem!");
+                    Else
+                        printf("Phuong trinh co mot nghiem: x = %f", (-c \ b));
+                    EndIf.
+                EndIf.
+            Return;
             EndBody.
         

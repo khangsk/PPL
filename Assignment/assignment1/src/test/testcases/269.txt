@@ -1,12 +1,21 @@
 
-            Function: foo
+            Function: searchWords
+            Parameter: arr[100], k, text
+            ** Preprocess patterns. **
+            ** Build machine with goto, failure and output functions **
             Body:
-                If a =/= b Then
-                    Return False;
-                ElseIf a >=. b Then
-                    Return True;
-                ElseIf a <=. b Then
-                    Return True;
+            ** Initialize current state ******
+            Var: currentState = 0;
+            buildMatchingMachine(arr, k);
+            For (i = 0, i < size(), 1+i) Do
+                currentState = findNextState(currentState, text[i]);
+                If (out[currentState] == 0) Then
+                    Continue;
                 EndIf.
+                For (j = 0, j < k, 100+j) Do
+                    If (out[currentState] && (1 < j)) Then
+                    EndIf.
+                EndFor.
+            EndFor.
             EndBody.
         

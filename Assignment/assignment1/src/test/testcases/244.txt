@@ -1,15 +1,16 @@
 
-        Function: reverseString
-            Parameter: initialString
+            Function: test
             Body:
-                If (initialString == nullptr) Then
-                    Return;
-                EndIf.
-                If (strlen(initialString) == 1) Then
-                    writeln(initialString[0]);
-                    Return;
-                EndIf.
-                writeln(initialString[strlen(initialString) - 1]);
-                initialString[strlen(initialString) - 1] = 0;
-                reverseString(initialString);
+                Var: n,i,j,k=1,a[6];
+                Var: n = 6;
+                printf("Ve tam giac Floyd:
+");
+                For(i = 1, i <= n, a[foo()+9]) Do
+                    For(j=1,j <= i, j+1) Do
+                        printf("%3d", k++);
+                    EndFor.
+                EndFor.
+                printf("
+");
             EndBody.
+        

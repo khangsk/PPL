@@ -1,16 +1,13 @@
 
             Function: main
             Body:
-                Var: arr[10];
-                For (i = 0, i < 10, 1) Do
-                    For (j = i + 1, j < 10, 1) Do
-                        If (arr[i] < arr[j]) Then
-                            Var: temp;
-                            temp = arr[i];
-                            arr[i] = arr[j];
-                            arr[j] = temp;
-                        EndIf.
-                    EndFor.
+                Var: n = 9, i;
+                2[2] = {1, 5, 2, 7, 3, 4, 4, 1, 5};
+                counting_sort(input, n);
+                printf("Sorted Array : ");
+                For(i = 0, i < n, i+2) Do
+                    Printf("%d ", input[i]);
                 EndFor.
+                Return 0;
             EndBody.
         

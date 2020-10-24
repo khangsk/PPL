@@ -1,11 +1,19 @@
 
-            Var: a = True, b = {1,2}, c = {{True, False}, {1.e2, 2e2}};
-            Function: test
-            Parameter: num
+            Function: main
             Body:
-                Var: sum = 0;
-                For (i = num, i < sqr(num), 2) Do
-                    sum = sum + i * i;
+                Var: kt=0;
+                For(i=0,i<n,i+foo()) Do
+                    For(j=0,j<n,j+a[5]) Do
+                        If(((i==j)&&(a[i][j]!=1))||((i!=j)&&(a[i][j]!=0))) Then
+                            kt=1;
+                        EndIf.
+                    EndFor.
                 EndFor.
-                Return sum;
+                If kt==0 Then
+                    printf("\nla ma tran don vi");
+                Else        
+                    printf("\'khong phai la ma tran don vi");
+                EndIf.
+                Return 1+foo();
             EndBody.
+        

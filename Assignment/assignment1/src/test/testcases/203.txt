@@ -1,1 +1,17 @@
-Var: a = 1, b=2123, c=0;
+
+        Var: a;
+        Var: b[2][3] = {{2,3,4},{4,5,6}};
+        Var: c,d=6,e,f;
+        Var: m,n[10];
+        Function: main
+        ** This is a 
+        
+        * multi-line
+        * comment.
+        **
+        Parameter: a[5][7],b
+        Body:
+            Var: i=0; 
+            Do foo(2+x,4. \.  y); While i<100 EndDo.
+        EndBody.
+        

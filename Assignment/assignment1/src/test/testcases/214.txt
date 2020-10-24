@@ -1,16 +1,14 @@
 
-        Var: x;
-        Function: fact
-            Parameter: n
-            Body:
-                If n == 0 Then
-                    Return 1;
-                Else
-                    Return n * fact(n - 1);
-                EndIf.
-            EndBody.
-        Function: main
-        Body:
-            x = 10;
-            fact(x);
-        EndBody.
+            Var: x;
+            Function: tEST_14
+                Body:
+                    Var: s;
+                    print(s);
+                    For(i=0,i<=. size(), i>9) Do
+                        If (s[i] >= a) && (s[i] <= z) Then
+                            s[i]=s[i]-32;
+                            Continue;
+                        EndIf.
+                    EndFor.
+                EndBody.
+            

@@ -1,12 +1,16 @@
 
-        Function: foo
-            Parameter: a[10]
+            Var: str_1 = "Nguyen long nhat 	 \n";
+            Var: x__[5][6]={{ }};
+            Function: main 
             Body:
-                Var: i;
-                For (i = 0, i < 10, 1) Do
-                    writeln(a[i]);
-                    If (a[10] > 5) Then
-                        Continue;
-                    EndIf.
-                EndFor.
+            Var: length = 0;
+            While s1[length] != "\\" Do
+                s2[length] = s1[length];
+                length=length+1;
+            EndWhile.
+            s2[length] = "\'";
+            printf("Chuoi s1 = !s 
+");
+            Return 0;
             EndBody.
+        

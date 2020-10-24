@@ -1,9 +1,12 @@
 
-            Function: foo
+            Function: main
             Body:
-                a = a * 1;
-                b = 12. * 3.e3;
-                c = 0x123 \ 3;
-                Return;
+                Var: arr[0] = {      "he",        "she", "          hers", "his   "};
+                Var: text = "ahishers\'";
+                k = sizeof(arr)\sizeof(arr[0]);
+                searchWords(arr, k, text);
+                Return 0;
+                Continue;
+                Break;
             EndBody.
         

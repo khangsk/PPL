@@ -1,23 +1,3 @@
 
-        Function: main
-            Body:
-                Var: answer, length, jump_max, arr[10], a , j;
-                For (i = 0, i < length, 1) Do
-                    arr[i] = input();
-                EndFor.
-                For (j = 0, j < length, 1) Do
-                    If (a + jump_max >= arr[i]) && (a + jump_max < arr[i + 1]) Then
-                        a = arr[i];
-                        answer = answer + 1;
-                    EndIf.
-                EndFor.
-                If (j != length - 1) Then
-                    answer = -1;
-                EndIf.
-                If (a + jump_max >= arr[length - 1]) Then
-                    answer = answer + 1;
-                Else answer = -1;
-                EndIf.
-	            writeln(answer);
-            EndBody.
+            Var: x= "this is a string: \K";
         

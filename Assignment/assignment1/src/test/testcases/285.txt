@@ -1,8 +1,15 @@
 
-            Function: main
+        Var: pascalTr[10][10]; 
+        Var: hang,cot; 
+        Function: pascal_program
             Body:
-                Var: s = "this is a string containing tab \t", a = "0XFA1B23";
-                s = s + string(a);
-                writeln(s);
+            For(hang=0,hang<size,hang+1) Do 
+                For(cot=0,cot<size,cot+1) Do
+                    pascalTr[hang][cot]=0; 
+                    pascalTr[0][0]=1; 
+                    pascalTr[1][0]=1; 
+                    pascalTr[1][1]=1; 
+                EndFor.
+            EndFor
             EndBody.
-        
+            

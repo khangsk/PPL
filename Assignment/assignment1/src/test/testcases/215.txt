@@ -1,16 +1,29 @@
 
-        Var: x;
-        Function: fact
-            Parameter: n
+        Var: pascalTr[10][10]; 
+        Var: hang,cot; 
+        Function: pascal_program
             Body:
-                If n == 0 Then
-                    Return 1;
-                Else
-                    Return n * fact(n - 1);
-                EndIf.
+            For(hang=0,hang<size,hang+1) Do 
+                For(cot=0,cot<size,cot+1) Do
+                    pascalTr[hang][cot]=0; 
+                    pascalTr[0][0]=1; 
+                    pascalTr[1][0]=1; 
+                    pascalTr[1][1]=1; 
+                EndFor.
+            EndFor.
+         
+            For(hang=2,hang<size,hang+1) Do 
+                pascalTr[hang][0]=1; 
+                For(cot=1,cot<=hang,cot+1) Do
+                    pascalTr[hang][cot]=pascalTr[hang-1][cot-1]+pascalTr[hang-1][cot]; 
+                EndFor.                   
+            EndFor.   
+                 
+            For(hang=0,hang<size,hang+1) Do 
+                For(cot=0,cot<=hang,cot+1) Do                
+                   printf(pascalTr[10][10]); 
+                EndFor. 
+            println();   
+            EndFor.
             EndBody.
-        Function: main
-            Body:
-                x = 10;
-                fact(x);
-            EndBody.
+            

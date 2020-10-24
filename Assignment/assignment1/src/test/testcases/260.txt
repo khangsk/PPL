@@ -1,29 +1,8 @@
 
-            Function: prime_number
-            Parameter: n
+            Function: partition
+            Parameter: arr[1], low, high
             Body:
-                If (n < 2) Then
-                    Return False;
-                ElseIf (n > 2) Then
-                    If (n % 2 == 0) Then
-                        Return False;
-                    EndIf.
-                    For (i = 3, i <= sqrt(n), 2) Do
-                        If (n % i == 0) Then
-                            Return False;
-                        EndIf.
-                    EndFor.
-                EndIf.
-                Return True;
-            EndBody.
-            Function: main
-            Body:
-                Var: n;
-                input(n);
-                If prime_number(n) Then
-                    writeln(n, "is prime number");
-                Else
-                    writeln(n, "is not prime number");
-                EndIf.
+                Var: 
+                ** this is a comment ******
             EndBody.
         

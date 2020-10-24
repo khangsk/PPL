@@ -1,10 +1,17 @@
 
-        Function: reverseString
-            Parameter: num
+            Function: uSCLN
+            Parameter: a,b
             Body:
-                For (i = num * 2, i < num * num, i + 1) Do
-                    If i % 2 == 0 Then
-                        writeln(i);
-                    EndIf.
-                EndFor.
+                If b == 0 Then Return a; EndIf.
+                Return uSCLN(b, a % b);
             EndBody.
+            **
+            * Tim boi so chung nho nhat (BSCNN)
+            **
+             
+            Function: bSCNN
+            Parameter: a,b
+            Body:
+                Return (a * b) \ uSCLN(a, b);
+            EndBody.
+        

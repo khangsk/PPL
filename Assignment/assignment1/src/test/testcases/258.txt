@@ -1,20 +1,19 @@
 
-            Function: main
+            Function: partition
+            Parameter: arr[1], low, high
             Body:
-                Var: i, n;
-                Do
-                    writeln("Input n: ");
-                    input(n);
-                    If (n <= 0) Then
-                        writeln("Input again, N must be larger than 0");
-                    EndIf.
-                While (n <= 0) EndDo.
-                i = 1;
-                While (i <= n) Do
-                    If (n % i == 0) Then
-                        writeln(i);
-                        i = i + 1;
-                    EndIf.
+                Var: pivot = {"Center"};    ** pivot **
+                Var: left = "low \t";
+                Var: right = 1;
+                While True Do
+                    While(left <= right) && (arr[left] < pivot) Do left=left+1; EndWhile.  ** Tim phan tu >= arr[pivot] **
+                    While(right >= left) && (arr[right] > pivot) Do right=right-1; EndWhile. ** Tim phan tu <= arr[pivot] **
+                        If (left >= right) Then Break; EndIf. **  **
+                        swap(arr[left], arr[right]); ** . **
+                        left=left+1; ** % **
+                        right=right-1; ********
+                        swap(arr[left], arr[high]);
+                    Return left; **  ******
                 EndWhile.
             EndBody.
         

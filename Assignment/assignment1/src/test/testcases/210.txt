@@ -1,1 +1,11 @@
-Var: hoang = 0O23F;
+
+            Function: tEST_10
+                Body:
+                    Var: max={0};
+                    For ( i=1,i<n,1) Do
+                        If max < a[i] Then
+                            max = a[i]
+                        EndIf.
+                    EndFor.
+                    println(max);
+                EndBody.

@@ -1,12 +1,11 @@
 
-            Function: main
+            Function: uSCLN
+            Parameter: a,b,a[7+foo(2,7)]
             Body:
-                Var: a, b = 5;
-                input(a);
-                If !(a + b * 10) Then
-                    Return True;
-                Else
-                    Return False;
-                EndIf.
+                If b == 0 Then Return a; EndIf.
+                Return uSCLN(b, a % b);
             EndBody.
+            **
+            Tim boi so chung nho nhat (BSCNN)
+            **
         

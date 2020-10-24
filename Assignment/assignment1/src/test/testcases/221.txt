@@ -1,13 +1,19 @@
 
-        Function: foo
-            Parameter: a[5], b
-            Body:
-                For (i = 0, i < 10, 2) Do
-                    writeln(a[i] + b);
-                EndFor.
-            EndBody.
-        Function: main
-            Body:
-                x = 10;
-                fact(x);
-            EndBody.
+            Function: fibonacci 
+                Body: 
+                    Var: f0=0,f1=1,fn=1;
+                    Var: i;
+                    If n<0 Then
+                        Return -1;
+                    ElseIf (n==0) || (n==1) Then
+                        Return n;
+                    Else 
+                        For ( i=2,i<n, i+1 ) Do
+                            f0=f1;
+                            f1=fn;
+                            fn=f0+f1;
+                        EndFor.
+                    EndIf.
+                    Return fn;
+                EndBody.
+                

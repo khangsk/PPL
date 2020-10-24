@@ -1,14 +1,21 @@
 
-        Function: power_rep
-            Parameter: base, exp
+            Var: string[1] = "Long_Nhat";
+            Var: temp;
+            Var: i, j;
+            Var: size = 000e23;
+            Function: test_comment
             Body:
-                If (exp == 0) Then
-                    Return 1;
-                EndIf.
-                For (i = 0, i < exp - 1, 1) Do
-                    base = base * a;
+                printf("this is a string \b");
+                For (i = 0, i < size-1, i+1) Do
+                    For (j = i+1, j < size, 100) Do
+                        If (string[i] > string[j]) Then
+                            temp = string[i];
+                            string[i] = string[j];
+                            string[j] = temp;
+                        EndIf.
+                    EndFor.
                 EndFor.
-                Var: a = 2;
-                Return base;
+                printf("string: '" a '" ");
+                Return 0;
             EndBody.
         

@@ -1,1 +1,15 @@
-Var: ;
+
+        Var: x = 1;
+        Function: main
+        Parameter: x
+        Body:
+            While(i<5) Do
+                For (i = 1 , i<10 ,2) Do
+                    a=a+-1;
+                EndFor.
+            EndWhile.
+            For (i=x+7,i<a[2][3], 6) Do
+                writeLn(i);
+            EndFor.
+        EndBody.
+        

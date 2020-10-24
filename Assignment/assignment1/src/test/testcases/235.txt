@@ -1,10 +1,7 @@
 
-        Function: power_recur
-            Parameter: base, exp
+            Function: main
+            Parameter: n, i, j
             Body:
-                If (exp == 0) Then
-                    Return 1;
-                EndIf.
-                Return base * power_recur(base, exp - 1);
+            Var: x = -6;
             EndBody.
         

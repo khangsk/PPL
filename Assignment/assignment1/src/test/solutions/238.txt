@@ -1,1 +1,1 @@
-successful
+this is a string: \K

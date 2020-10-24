@@ -1,6 +1,18 @@
 
             Function: main
             Body:
-                a = 1!;
+                Var: flag = 1;
+                printf("Nhap chuoi s1: ");
+                gets(s1);
+                printf("Nhap chuoi s2: ");
+                gets(s2);
+                ** this is a comment **
+                While s1[n] != "\s" Do
+                    If s1[n] != s2[n] Then
+                        flag = 0;
+                        Break;
+                    EndIf.
+                    n=n+1;
+                EndWhile.
             EndBody.
         

@@ -1,12 +1,26 @@
 
-            Function: test
-            Parameter: num
-            Var: test = 100;
+            Function: main
             Body:
-                For (i = num * 2, i < num * num, i + 1) Do
-                    Var: a = 1;
-                    If i % 2 == 0 Then
-                        writeln(a * i);
-                    EndIf.
+                Var: n, t;
+                Var: sum = 0;
+                For (i = 1, i <= n, i+1) Do
+                    readln(a[i],b[i]);
+                    sum = sum +- a[i];
+                    EndFor.
+                print(a[i]);
+                For ( i = 1, i <= t, 1) Do
+                    For (k = 1, k <= n, k+1) Do
+                        If (a[k] > 0) Then
+                            a[k] = -b[k];
+                        EndIf.
+                    EndFor.
+                    For (j = 1, j <= n, j+1) Do
+                        If (a[j] >= 0) Then
+                            sum = sum + a[j];
+                        EndIf.
+                    EndFor.		
+                    println(sum);
                 EndFor.
+            Return 0;
             EndBody.
+        

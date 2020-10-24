@@ -1,11 +1,10 @@
 
-            Function: test
-            Parameter: num
+            Function: main
             Body:
-                For (i = num * 2, i < num * num, i + 1) Do
-                    If i % 2 == 0 Then
-                        writeln(a * i);
-                    EndIf.
-                    Var: a = 1;
-                EndFor.
+                Var: n;
+                printf("Nhap so nguyen duong = ");
+                scanf("%d", n__0);
+                printf("Cac so fibonacci nho hon %d va la so nguyen to: ", n);
+                Var: i = 0;
             EndBody.
+        

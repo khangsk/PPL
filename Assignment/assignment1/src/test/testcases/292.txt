@@ -1,9 +1,3 @@
 
-            Function: main
-            Body:
-                While a > 0 Do
-                EndWhile.
-                While If a > 0 Then Do
-                EndWhile.
-            EndBody.
+
         

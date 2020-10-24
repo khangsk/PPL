@@ -1,7 +1,6 @@
 
-            Function: abc
-            Body:
-                a = !((!b && c) + 1) || check(d);
-                Return a;
-            EndBody.
-        
+            Function: foo 
+                Body: 
+                    b = 1.E-12  =/= Foo(123);
+                EndBody.
+                

@@ -1,9 +1,8 @@
 
-            Function: main
-            Body:
-                Var: a = 0XFA1B23;
-                Var: b = 1;
-                a = a *+ b;
-                writeln(a);
-            EndBody.
-        
+            Function: tEST_286
+                Parameter: x,a[69],b[1][2][3+1]
+                Body:
+                    For (i=1, goo(2+a[6]) < i,2>goo(9)) Do
+                    EndFor.
+                EndBody.
+            

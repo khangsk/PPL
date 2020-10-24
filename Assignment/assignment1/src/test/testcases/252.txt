@@ -1,6 +1,19 @@
 
-            Function: _test
-            Parameter: num
+            Function: prc
+            Parameter: n
             Body:
-                return false;
+                For ( y = 1, y < a, y+1) Do
+                    x = a \ (y + 1) - y \ 2;
+                    If ((y + 1)*(x + float(y) \ 2) == a) Then
+                        print("a\n");
+                        For (j = x, j < x + y, j+1) Do
+                            print("a\t");
+                        EndFor.
+                        println(x + y, "this is a string
+");
+                        Return 1;
+                    EndIf.
+                EndFor.
+                Return x;
             EndBody.
+        

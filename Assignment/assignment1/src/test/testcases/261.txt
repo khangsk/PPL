@@ -1,16 +1,19 @@
 
-            Function: main
+            Function: nhapMaTran
+            Parameter: a[1][2], n
             Body:
-                Var: a[10], max;
-                For (i = 0, i < 10, 1) Do
-                    input(a[i]);
-                EndFor.
-                max = a[0];
-                For (i = 0, i < 10, 1) Do
-                    If max < a[i] Then
-                        max = a[i];
+                Do
+                    printf("\nNhap n: ");
+                    scanf("%d", n);
+                    If (n < 1) || (n > max) Then
+                        printf("\\So phan tu khong hop le. Xin kiem tra lai !");
                     EndIf.
+                While (n < 1) || (n > max) EndDo.
+                For(i = 0, i < n, i+1) Do
+                    For(j = 0, j < n, j+go()) Do
+                        printf("\bNhap vao a[%d][%d] = ", i, j);
+                        scanf("%d", a[i][j]);
+                    EndFor.
                 EndFor.
-                writeln("Max number in array is: ", max);
             EndBody.
         

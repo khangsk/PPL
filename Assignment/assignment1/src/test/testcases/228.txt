@@ -1,12 +1,21 @@
 
-        Function: foo
-            Parameter: a[10]
+            Function: main
             Body:
-                Var: i;
-                For (i = 0, i < 10, 1) Do
-                    writeln(a[i]);
-                    If (a[10] > 5) Then
-                        Break;
-                    EndIf.
-                EndFor.
+            Var: s[0] = "VietTuts.Vn";  ** initial value of s **
+            Var: ch = "t";             ** comment test **
+            Var: i = 0;
+            Var: count = 0;             
+            While s[i] != "0" Do
+                If s[i] == ch Then
+                    count=count+1;
+                EndIf.
+            i=i+1;
+            EndWhile.
+            If count > 0 Then
+                printf("Ky tu %c xuat hien %d lan trong chuoi \n ");
+            Else
+                printf("Ky tu %c khong co mat trong chuoi \h");
+            EndIf.
+            Return 0;
             EndBody.
+        

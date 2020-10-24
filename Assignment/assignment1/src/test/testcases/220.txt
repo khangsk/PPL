@@ -1,1 +1,7 @@
-Var: FF
+
+            Function: foo 
+                Body: 
+                    a = 1 + 1.23 *. abc \. id[12[123][2][moreid]];
+                    b = 1.E-12  =/= foo(123);
+                EndBody.
+                

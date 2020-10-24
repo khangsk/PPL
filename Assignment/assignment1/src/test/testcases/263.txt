@@ -1,8 +1,7 @@
 
-            **
-            * A
-            &
-            * %\\s
-            * 3'
-            **
+            Function: main
+            Body:
+                a = " this is a string : '" a'" and '" ";
+                Break;
+            EndBody.
         

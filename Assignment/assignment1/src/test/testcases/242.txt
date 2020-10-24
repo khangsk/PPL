@@ -1,22 +1,3 @@
 
-        Function: longest_substr
-            Parameter: str
-            Body:
-                Var: count = 0, check = False;
-                For (i = 0, i < length(str), 1) Do
-                    For (j = 0, j < length(str), 1) Do
-                        **Error is here (!=)**
-                        If (str[i] == str[j] && i != j) Then
-                            check = True;
-                            Break;
-                        EndIf.
-                        If (check) Then
-                            check = False;
-                        EndIf.
-                        Continue;
-                    EndFor.
-                    count = count + 1;
-                EndFor.
-                Return count;     
-            EndBody.
+            Var: x="fifa is my life" ";
         

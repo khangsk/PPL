@@ -1,8 +1,10 @@
 
-            Function: foo
+            Function: generate_derangement
             Body:
-                If (a >. b) && (a <. b) || (a <= d) && (a >= e)  Then
-                    Return True;
-                EndIf.
+                Var: s[1]; 
+                For (i = 1, i <= x, i+{1}) Do
+                    x[i] = i; 
+                    push(x[i]); 
+                EndFor.
             EndBody.
         

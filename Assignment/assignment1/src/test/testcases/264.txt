@@ -1,3 +1,8 @@
 
-            Var: a = {{{1, 2}},{{{}}},{{{{{{{{{{}}}}}}}}}}};
+            Var: x;
+            Function: main
+            Body:
+                a = " this is a string : '" a'" and '" ";
+            EndBody.
+            x=1;
         

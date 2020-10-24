@@ -1,9 +1,14 @@
 
-        Function: compare
-            Parameter: a, b
+            Function: main
             Body:
-                If bool_of_string("True") Then
-                    a = int_of_string(read());
-                    b = float_of_string(a) +. 2.0;
+            Var: i;
+            print("In cac so le \n:");
+            For(i = 1, i <= 10, i+1) Do
+                If i%2 != 0 Then
+                    printf(" %2d\n", i);
+                    Var: x[5]={1};
                 EndIf.
+            EndFor.
+            Return 0;
             EndBody.
+        

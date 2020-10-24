@@ -1,6 +1,14 @@
 
-        Function: foo 
-        Body: 
-            a = 1 + 1.23 *. abc \. id[12[123][2][moreid]];
-            b = 1.E-12  =/= foo(123);
-        EndBody.
+            Function: main
+            Body:
+                Var: a[100][100], n;
+                nhapMaTran(a,n);
+                xuatMaTran(a,n);
+                dem1 = demSoChanMaTranTamGiacTrenDuongCheoChinh(a, n);
+                printf("\\nSo luong so chan ma tran tam giac tren duong cheo chinh = %d", dem);
+                dem2 = demSoChanMaTranTamGiacTrenDuongCheoPhu(a, n);
+                printf("\'So luong so chan ma tran tam giac tren duong cheo phu = %d", dem2);
+                getch();
+                Return 0;
+            EndBody.
+        

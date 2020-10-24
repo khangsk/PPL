@@ -1,9 +1,17 @@
 
-        Function: compare
-            Parameter: x, y
+            Function: main
             Body:
-                If (x > y) Then
-                    Return True ;
-                Else Return False;
-                EndIf.
+            Var: i, j, count;
+            Var: start = 2, end = 10;
+            writeln("In bang cuu chuong rut gon:");
+            For (i = start, i <=. end, 1) Do
+                count = i;
+                Break;
+            EndFor.
+            For (j = 1, j <= 10, 100) Do
+                Continue;
+            EndFor.
+            Continue;
+            Return 0;
             EndBody.
+        

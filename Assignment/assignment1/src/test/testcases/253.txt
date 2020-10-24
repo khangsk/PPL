@@ -1,7 +1,33 @@
 
-            Var: a = True, b = {1,2}, c = {{True, False}, {1.e2, 1e3}};
-            Function: test
-            Parameter: num
+            Var: a[10][10],b[10][10],c[10][10];
+            Var: i,j,m,n;
+            Function: main
             Body:
-                Return False;
+                printf("nhap so hang m=");
+                printf("nhap so cot n="); 
+                printf("nhap vao ma tran:\f");
+                For(i=0,i<m,i+a[foo(2)]) Do
+                    For(j=0,j<n,j+a[1]) Do
+                        scanf("%d",a[i][j]);
+                    EndFor.
+                EndFor.
+                For(i=0,i<m,i+1) Do
+                    For(j=0,j<n,j+2) Do
+                        scanf("%d",b[i][j]);
+                    EndFor.
+                EndFor.
+                For(i=0,i<m,i+3) Do
+                    For(j=0,j<n,j+4) Do
+                        c[i][j]=a[i][j]+b[i][j];
+                    EndFor.
+                EndFor.
+                printf("\nMa tran sau cong:\b");
+                For(i=0,i<m,j+6) Do    
+                    For(j=0,j<n,j+7) Do
+                        printf("%5d",c[i][j]);
+                    EndFor.
+                printf("\n");
+                EndFor.
+                getch();
             EndBody.
+        

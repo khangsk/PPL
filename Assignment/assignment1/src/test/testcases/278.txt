@@ -1,8 +1,14 @@
 
-            Function: square
+            Function: main
             Body:
-                Var: r = 10., v;
-                v = (4. \. 3.) *. 3.14 *. r *. r *. r;
-                Return v;
+                Var: a = 10;
+                Do
+                    If a == 15 Then
+                    a = a + 1;
+                    Continue;
+                    println( "Gia tri cua a: ");
+                    a=a+1;
+                While a < 20.
+                Return 0;
             EndBody.
         
