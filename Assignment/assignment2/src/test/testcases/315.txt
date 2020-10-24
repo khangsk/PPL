@@ -1,0 +1,11 @@
+
+        Function: abc
+        Body:
+            Do
+                Var: abc = False;
+                Break;
+                Continue;
+                writeln("nothing to print");
+            While True EndDo.
+        EndBody.
+        

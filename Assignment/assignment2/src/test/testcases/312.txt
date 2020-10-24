@@ -1,0 +1,10 @@
+
+        Function: abc
+        Body:
+            Var: i = 10;
+            While (i > 1) Do
+                writeln(i);
+                i = i - 1;
+            EndWhile.
+        EndBody.
+        

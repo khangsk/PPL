@@ -130,28 +130,57 @@ class ASTGeneration(BKITVisitor):
         ifstmt.append((arrExp[0], arrVar, arrStmt))
         return If(ifstmt, elsestmt)
         
-
+    # for_stmt: FOR LP ID EQUAL exp COMMA exp COMMA exp RP DO var_declare* stmt* ENDFOR DOT ;
     def visitFor_stmt(self, ctx: BKITParser.For_stmtContext):
+        idx1 = Id(ctx.ID().getText())
+        expr1 = self.visitExp(ctx.exp(0))
+        expr2 = self.visitExp(ctx.exp(1))
+
+        expr3 = self.visitExp(ctx.exp(2))
+        if ctx.getChildCount() == 13:
+            pass
         return None
 
+    # while_stmt: WHILE exp DO var_declare* stmt* ENDWHILE DOT ;
     def visitWhile_stmt(self, ctx: BKITParser.While_stmtContext):
-        return None
+        expr = self.visitExp(ctx.exp())
+        arrVar = []
+        for i in ctx.var_declare():
+            arrVar += self.visitVar_declare(i)
+        arrStmt = []
+        for i in ctx.stmt():
+            arrStmt.append(self.visitStmt(i))
+        return While(expr, (arrVar, arrStmt))
 
+    # do_while_stmt: DO var_declare* stmt* WHILE exp ENDDO DOT ;
     def visitDo_while_stmt(self, ctx: BKITParser.Do_while_stmtContext):
-        return None
+        arrVar = []
+        for i in ctx.var_declare():
+            arrVar += self.visitVar_declare(i)
+        arrStmt = []
+        for i in ctx.stmt():
+            arrStmt.append(self.visitStmt(i))
+        expr = self.visitExp(ctx.exp())
+        return Dowhile((arrVar, arrStmt), expr)
 
+    # break_stmt: BREAK SEMI ;
     def visitBreak_stmt(self, ctx: BKITParser.Break_stmtContext):
-        return None
+        return Break()
 
+    # continue_stmt: CONTINUE SEMI ;
     def visitContinue_stmt(self, ctx: BKITParser.Continue_stmtContext):
-        return None
+        return Continue()
 
     # call_stmt: call_exp SEMI ;
     def visitCall_stmt(self, ctx: BKITParser.Call_stmtContext):
         return self.visitCall_exp(ctx.call_exp())
 
+    # return_stmt: RETURN exp? SEMI ;
     def visitReturn_stmt(self, ctx: BKITParser.Return_stmtContext):
-        return None
+        expr = None
+        if ctx.exp():
+            expr = self.visitExp(ctx.exp())
+        return Return(expr)
 
     # call_exp: ID LP exps_list? RP ;
     def visitCall_exp(self, ctx: BKITParser.Call_expContext):
