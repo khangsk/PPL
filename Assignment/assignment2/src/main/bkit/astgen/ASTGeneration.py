@@ -64,17 +64,10 @@ class ASTGeneration(BKITVisitor):
     def visitParams_list(self, ctx: BKITParser.Params_listContext):
         return self.visitList_variable(ctx.list_variable())
 
-    # array: (lit_array | arr_array) ;
+    # array: LCB (literal (COMMA literal)*)? RCB ;
     def visitArray(self, ctx: BKITParser.ArrayContext):
-        return self.visitChildren(ctx)
-
-    # lit_array: LCB literal? (COMMA literal)* RCB ;
-    def visitLit_array(self, ctx: BKITParser.Lit_arrayContext):
-        return None
-
-    # arr_array: LCB array? (COMMA array)* RCB ;
-    def visitArr_array(self, ctx: BKITParser.Arr_arrayContext):
-        return None
+        if ctx.getChildCount() == 2: return ArrayLiteral([])
+        return ArrayLiteral([self.visitLiteral(x) for x in ctx.literal()])
 
     # literal:  INT | FLOAT | BOOLEAN | STRING | array;
     def visitLiteral(self, ctx: BKITParser.LiteralContext):

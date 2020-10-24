@@ -103,6 +103,16 @@ class ASTGenSuite(unittest.TestCase):
     #     """
     #     expect = Program([])
     #     self.assertTrue(TestAST.checkASTGen(input,expect,309))
+    def test10_var_array(self):
+        input = """Var: a[3] = {1,0,2};"""
+        expect = Program([VarDecl(Id("a"),[IntLiteral(3)],ArrayLiteral([IntLiteral(1),IntLiteral(0),IntLiteral(2)]))])
+        self.assertTrue(TestAST.checkASTGen(input,expect,310))
+    def test11_var_array(self):
+        input = """Var: a[3][2] = {{1,0XAF},{4,0},{0O6543,7}};
+        """
+        expect = Program([VarDecl(Id("a"),[IntLiteral(3),IntLiteral(2)],ArrayLiteral([ArrayLiteral([IntLiteral(1),IntLiteral("0XAF")]),ArrayLiteral([IntLiteral(4),IntLiteral(0)]),ArrayLiteral([IntLiteral("0O6543"),IntLiteral(7)])]))])
+        self.assertTrue(TestAST.checkASTGen(input,expect,311))
+    
 
  
    

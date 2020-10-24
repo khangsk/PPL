@@ -171,7 +171,7 @@ class ArrayLiteral(Literal):
     value:List[Literal]
 
     def __str__(self):
-        return printlist(self.value,start="ArrayLiteral(",end=")")
+        return printlist(self.value,start="ArrayLiteral(",ending=")")
 
     def accept(self, v, param):
         return v.visitArrayLiteral(self, param)

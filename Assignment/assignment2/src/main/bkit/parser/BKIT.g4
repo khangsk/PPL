@@ -41,11 +41,7 @@ variable: ID (LSB INT RSB)* ;
 params_list: PARAMETER COLON list_variable ;
 
  //Array
-array: (lit_array | arr_array) ;
-
-lit_array: LCB literal? (COMMA literal)* RCB ;
-
-arr_array: LCB array? (COMMA array)* RCB ;
+array: LCB (literal (COMMA literal)*)? RCB ;
 
 literal:  INT | FLOAT | BOOLEAN | STRING | array;
 
