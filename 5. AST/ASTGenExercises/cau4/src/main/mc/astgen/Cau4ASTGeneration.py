@@ -8,46 +8,41 @@ class ASTGeneration(MCVisitor):
     def visitExp(self,ctx:MCParser.ExpContext):
         if ctx.getChildCount() == 3:
             op = ctx.getChild(1).getText()
-            left = self.visitTerm(ctx.term(0))
-            right = self.visitTerm(ctx.term(1))
+            left = ctx.term(0).accept(self)
+            right = ctx.term(1).accept(self)
             return Binary(op, left, right) # return a Binary object for the first right hand side
         else:
-            return self.visitTerm(ctx.term(0)) # generate code for the second right hand side
+            return ctx.term(0).accept(self) # generate code for the second right hand side
 
     # term: factor EXPONENT term | factor ;
     def visitTerm(self,ctx:MCParser.TermContext):
         if ctx.getChildCount() == 3:
             op = ctx.getChild(1).getText()
-            left = self.visitFactor(ctx.factor())
-            right = self.visitTerm(ctx.term())
+            left = ctx.factor().accept(self)
+            right = ctx.term().accept(self)
             return Binary(op, left, right) # return a Binary object for the first right hand side
         else:
-            return self.visitFactor(ctx.factor()) # generate code for the second right hand side
+            return ctx.factor().accept(self) # generate code for the second right hand side
 
     # factor: operand (ANDOR operand)* ; 
     def visitFactor(self,ctx:MCParser.FactorContext):
         if ctx.getChildCount() == 1:
-            return self.visitOperand(ctx.operand(0))
-        temp = self.visitOperand(ctx.operand(0))
-        countOperand, countANDOR = 0, 0
+            return ctx.operand(0).accept(self)
+        temp = ctx.operand(0).accept(self)
+        countANDOR = 0
         op = ''
-        for _ in ctx.operand():
-            if countOperand == 0: 
-                countANDOR = 1
-                countOperand = 1
-                continue
-            op = ctx.getChild(countANDOR).getText()
-            right = self.visitOperand(ctx.operand(countOperand))
-            Binary(op, temp, right)
+        for x in ctx.operand():
+            if x == ctx.operand(0): continue
+            op = ctx.ANDOR(countANDOR).getText()
+            right = x.accept(self)
             temp = Binary(op, temp, right)
-            countANDOR += 2
-            countOperand += 1
+            countANDOR += 1
         return temp # return a Binary object 
   
   	# operand: INTLIT | BOOLIT | LB exp RB ;
     def visitOperand(self,ctx:MCParser.OperandContext):
         if ctx.getChildCount() == 3:
-            return self.visitExp(ctx.exp()) # generate code for the third right hand side
+            return ctx.exp().accept(self) # generate code for the third right hand side
         elif ctx.INTLIT():
             return IntLit(ctx.INTLIT().getText()) # return a IntLit object
         if ctx.BOOLIT().getText() == 'true': return True

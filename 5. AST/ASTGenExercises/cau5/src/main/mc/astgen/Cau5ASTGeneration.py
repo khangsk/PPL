@@ -7,14 +7,14 @@ class ASTGeneration(MCVisitor):
     def visitProgram(self,ctx:MCParser.ProgramContext):
         arr = []
         for i in ctx.vardecl():
-            arr += self.visitVardecl(i)
+            arr += i.accept(self)
         return Program(arr) # return a Program object
 
     # vardecl: mctype manyvar ;
     def visitVardecl(self,ctx:MCParser.VardeclContext):
         arr = []
-        typ = self.visitMctype(ctx.mctype())
-        for x in self.visitManyvar(ctx.manyvar()):
+        typ = ctx.mctype().accept(self)
+        for x in ctx.manyvar().accept(self):
             if len(x) == 1:
                 arr.append(str(VarDecl(typ, x)))
             else:
@@ -30,7 +30,7 @@ class ASTGeneration(MCVisitor):
 
     # manyvar: var (COMMA var)* ;
     def visitManyvar(self,ctx:MCParser.ManyvarContext):
-        return [self.visitVar(i) for i in ctx.var()]
+        return [i.accept(self) for i in ctx.var()]
 
     # var: ID (LSB INTLIT RSB)? ;
     def visitVar(self,ctx:MCParser.VarContext):

@@ -5,7 +5,8 @@ from AST import *
 class Count(MCVisitor):
     # program: vardecls EOF;
     def visitProgram(self,ctx:MCParser.ProgramContext):
-        return ctx.vardecls().accept(self) + 1
+        # return ctx.vardecls().accept(self) + 1
+        return self.visitVardecls(ctx.vardecls()) + 1
 
     # mctype: INTTYPE | FLOATTYPE | ARRAY LB INTLIT RB OF mctype ;
     def visitMctype(self,ctx:MCParser.MctypeContext):
