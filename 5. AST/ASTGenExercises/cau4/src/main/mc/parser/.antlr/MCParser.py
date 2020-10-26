@@ -1,4 +1,4 @@
-# Generated from main/mc/parser/MC.g4 by ANTLR 4.8
+# Generated from c:\Users\KHANG\Desktop\PPL\5. AST\ASTGenExercises\cau4\src\main\mc\parser\MC.g4 by ANTLR 4.8
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -95,12 +95,6 @@ class MCParser ( Parser ):
         def getRuleIndex(self):
             return MCParser.RULE_exp
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitExp" ):
-                return visitor.visitExp(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -160,12 +154,6 @@ class MCParser ( Parser ):
         def getRuleIndex(self):
             return MCParser.RULE_term
 
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitTerm" ):
-                return visitor.visitTerm(self)
-            else:
-                return visitor.visitChildren(self)
-
 
 
 
@@ -220,12 +208,6 @@ class MCParser ( Parser ):
 
         def getRuleIndex(self):
             return MCParser.RULE_factor
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitFactor" ):
-                return visitor.visitFactor(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 
@@ -284,12 +266,6 @@ class MCParser ( Parser ):
 
         def getRuleIndex(self):
             return MCParser.RULE_operand
-
-        def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitOperand" ):
-                return visitor.visitOperand(self)
-            else:
-                return visitor.visitChildren(self)
 
 
 

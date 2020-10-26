@@ -19,4 +19,8 @@ class ASTGenSuite(unittest.TestCase):
         	Binary('>',Binary('^',IntLit(3),IntLit(4)),IntLit(5)),
         	Binary('<=',IntLit(4),Binary('^',IntLit(5),IntLit(2)))))
         self.assertTrue(TestAST.checkASTGen(input,expect,302))
+    def test_full_exp2(self):
+        input = """5 > 3"""
+        expect = str(Binary('>',IntLit(5),IntLit(3)))
+        self.assertTrue(TestAST.checkASTGen(input,expect,303))
        

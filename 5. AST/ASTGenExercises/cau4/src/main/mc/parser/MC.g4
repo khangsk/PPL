@@ -26,7 +26,7 @@ options{
 
 exp: term COMPARE term | term ; // COMPARE is none-association
 
-term: factor EXPONENT term | factor ; 
+term: (factor EXPONENT)* factor ; 
 
 factor: operand (ANDOR operand)* ; // ANDOR is left-association
 
