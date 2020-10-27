@@ -1,1 +1,8 @@
-Var: abc[1][2][3] = 4;
+
+        Function: fact
+        Parameter: b, c[1][2]
+        Body:
+            Var: a;
+            a = 5;
+            writeln(a[i], " is smaller than ", b);
+        EndBody.

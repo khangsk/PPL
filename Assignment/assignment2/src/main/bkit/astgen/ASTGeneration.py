@@ -135,11 +135,15 @@ class ASTGeneration(BKITVisitor):
         idx1 = Id(ctx.ID().getText())
         expr1 = self.visitExp(ctx.exp(0))
         expr2 = self.visitExp(ctx.exp(1))
-
         expr3 = self.visitExp(ctx.exp(2))
-        if ctx.getChildCount() == 13:
-            pass
-        return None
+        arrVar = []
+        for i in ctx.var_declare():
+            arrVar += self.visitVar_declare(i)
+        arrStmt = []
+        for i in ctx.stmt():
+            arrStmt.append(self.visitStmt(i))
+        loop = (arrVar, arrStmt)
+        return For(idx1, expr1, expr2, expr3, loop)
 
     # while_stmt: WHILE exp DO var_declare* stmt* ENDWHILE DOT ;
     def visitWhile_stmt(self, ctx: BKITParser.While_stmtContext):

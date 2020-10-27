@@ -217,7 +217,6 @@ class For(Stmt):
     idx1: Id
     expr1:Expr
     expr2:Expr
-    idx2: Id
     expr3:Expr
     loop: Tuple[List[VarDecl],List[Stmt]]
 
@@ -226,7 +225,6 @@ class For(Stmt):
         	str(self.idx1)+","+ \
         	str(self.expr1) + ","+ \
         	str(self.expr2) + "," + \
-        	str(self.idx2)+","+     \
         	str(self.expr3) + "," + \
         	printListStmt(self.loop) + ")"
 

@@ -1,0 +1,9 @@
+
+        Function: main
+        Parameter: a[10]
+        Body:
+            For (i = 1, i < 10, 1) Do
+                writeln(a[i]);
+            EndFor.
+        EndBody.
+        

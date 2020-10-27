@@ -3,6 +3,6 @@
         Body:
             Var: a = 1;
             a = a + 10;
-            Return a > 10;
+            Return a;
         EndBody.
         
