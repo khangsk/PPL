@@ -96,7 +96,7 @@ exp4: FACT exp4 | exp5 ;
 
 exp5: (SUB | SUB_DOT) exp5 | exp6 ;
 
-exp6: exp6 LSB exp RSB | exp7 ;
+exp6: exp7 (LSB exp RSB)* ;
 
 exp7: call_exp | operands ;
 
@@ -105,10 +105,9 @@ operands
     | ID
     | call_exp
     | LP exp RP
-    | operands LSB exp RSB
     ;
 
-index_exp: operands LSB exp RSB ;
+index_exp: operands (LSB exp RSB)+ ;
 
 //IDENTIFIERS
 ID: LOWER_CHAR (LOWER_CHAR | UPPER_CHAR | DIGIT | DASH)* ;

@@ -252,26 +252,24 @@ class ASTGeneration(BKITVisitor):
         return UnaryOp(op, right)
 
 ########### Khong chac
-    # exp6: exp6 LSB exp RSB | exp7 ;
+    # exp6: exp7 (LSB exp RSB)* ;
     def visitExp6(self, ctx: BKITParser.Exp6Context):
         if ctx.getChildCount() == 1:
             return self.visitExp7(ctx.exp7())
-        return ArrayCell(self.visitExp6(ctx.exp6()), self.visitExp(ctx.exp()))
+        return ArrayCell(self.visitExp7(ctx.exp7()), [self.visitExp(x) for x in ctx.exp()])
 
     # exp7: call_exp | operands ;
     def visitExp7(self, ctx: BKITParser.Exp7Context):
         return self.visitChildren(ctx)
 
-    # operands:literal | ID | call_exp | LP exp RP | operands LSB exp RSB
+    # operands:literal | ID | call_exp | LP exp RP
     def visitOperands(self, ctx: BKITParser.OperandsContext):
         if ctx.getChildCount() == 1:
             if ctx.ID(): return Id(ctx.ID().getText())
             if ctx.literal(): return self.visitLiteral(ctx.literal())
             return self.visitCall_exp(ctx.call_exp())
-        if ctx.LP():
-            return self.visitExp(ctx.exp())
-        return ArrayCell(self.visitOperands(ctx.operands()), [self.visitExp(ctx.exp())])
+        return self.visitExp(ctx.exp())
 
-    # index_exp: operands LSB exp RSB ;
+    # index_exp: operands (LSB exp RSB)+ ;
     def visitIndex_exp(self, ctx: BKITParser.Index_expContext):
-        return ArrayCell(self.visitOperands(ctx.operands()), [self.visitExp(ctx.exp())])
+        return ArrayCell(self.visitOperands(ctx.operands()), [self.visitExp(x) for x in ctx.exp()])

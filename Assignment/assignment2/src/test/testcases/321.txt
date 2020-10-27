@@ -1,0 +1,12 @@
+
+        Function: main
+        Parameter: a[2][10]
+        Body:
+            For (i = 0, i < 2, 1) Do
+                For (j = 0, j < 10, 1) Do
+                    a[i][j] = a[i][j] * 10;
+                    writeln(a[i][j]);
+                EndFor.
+            EndFor.
+        EndBody.
+        

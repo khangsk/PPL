@@ -214,4 +214,19 @@ class ASTGenSuite(unittest.TestCase):
         """
         expect = "Program([FuncDecl(Id(main)[VarDecl(Id(a),[IntLiteral(10)])],([][For(Id(i),IntLiteral(1),BinaryOp(<,Id(i),IntLiteral(10)),IntLiteral(1),[],[])])])"
         self.assertTrue(TestAST.checkASTGen(input,expect,320))
+    def test21_index_exp(self):
+        input = """
+        Function: main
+        Parameter: a[2][10]
+        Body:
+            For (i = 0, i < 2, 1) Do
+                For (j = 0, j < 10, 1) Do
+                    a[i][j] = a[i][j] * 10;
+                    writeln(a[i][j]);
+                EndFor.
+            EndFor.
+        EndBody.
+        """
+        expect = "Program([FuncDecl(Id(main)[VarDecl(Id(a),[IntLiteral(2),IntLiteral(10)])],([][For(Id(i),IntLiteral(0),BinaryOp(<,Id(i),IntLiteral(2)),IntLiteral(1),[],[For(Id(j),IntLiteral(0),BinaryOp(<,Id(j),IntLiteral(10)),IntLiteral(1),[],[Assign(ArrayCell(Id(a),[Id(i),Id(j)]),BinaryOp(*,ArrayCell(Id(a),[Id(i),Id(j)]),IntLiteral(10))),CallExpr(Id(writeln),[ArrayCell(Id(a),[Id(i),Id(j)])])])])])])"
+        self.assertTrue(TestAST.checkASTGen(input,expect,321))
     
