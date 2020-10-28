@@ -1,0 +1,9 @@
+
+            Function: foo
+            Body:
+                a = a * 1;
+                b = 12. * 3.e3;
+                c = 0x123 \ 3;
+                Return;
+            EndBody.
+        

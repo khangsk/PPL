@@ -1,0 +1,10 @@
+
+            Function: main
+            Body:
+                Var: a = 0XFA1B23;
+                Var: b = 1;
+                a = a *- b;
+                a = a*.-b;
+                writeln(a);
+            EndBody.
+        

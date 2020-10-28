@@ -1,0 +1,12 @@
+
+            Function: main
+            Body:
+                foo(3 +x[i] * y(3,z(4)));
+                If !foo Then
+                    Return False;
+                EndIf.
+                For (i = 0, i < 100, 2) Do
+                    writeln(sqrt(i) * test[3][foo(4)]);
+                EndFor.
+            EndBody.
+        

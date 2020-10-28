@@ -1,0 +1,30 @@
+
+        Function: power_rep
+            Parameter: base, exp
+            Body:
+                Var: a = 2;
+                If (exp == 0) Then
+                    Return 1;
+                EndIf.
+                For (i = 0, i < exp - 1, 1) Do
+                    base = base * a;
+                EndFor.
+                Return base;
+            EndBody.
+        Function: power_recur
+            Parameter: base, exp
+            Body:
+                If (exp == 0) Then
+                    Return 1;
+                EndIf.
+                Return base * power_recur(base, exp - 1);
+            EndBody.
+        Function: main
+            Parameter: base, exp
+            Body:
+                base = input();
+                exp = input();
+                writeln(power_rep(base, exp));
+                writeln(power_recur(base, exp));
+            EndBody.
+        

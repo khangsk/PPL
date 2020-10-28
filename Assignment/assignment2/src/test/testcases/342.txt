@@ -1,0 +1,14 @@
+
+        Function: foo
+            Parameter: str
+            Body:
+                Var: count = 0, check = False;
+                For (i = 0, i < length(str), 1) Do
+                    If !str[i] Then
+                        count = count + 1;
+                        writeln(str[i]);
+                    EndIf.
+                EndFor.
+                Return count;     
+            EndBody.
+        

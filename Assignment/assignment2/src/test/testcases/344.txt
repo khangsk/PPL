@@ -1,0 +1,16 @@
+
+        Function: square_num
+            Parameter: x
+            Body:
+                If x == 1 Then
+                    Return 1;
+                Else 
+                    Return sqrt(x + square_num(x - 1));
+                EndIf.
+            EndBody.
+        Function: main
+            Body:
+                Var: x = 10;
+                writeln(square_num(x));
+            EndBody.
+        

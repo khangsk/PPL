@@ -1,0 +1,1 @@
+Program([FuncDecl(Id(foo)[],([][If(BinaryOp(||,BinaryOp(||,BinaryOp(&&,BinaryOp(==,Id(a),Id(b)),BinaryOp(!=,Id(a),Id(c))),BinaryOp(>,Id(a),Id(b))),BinaryOp(<,Id(a),Id(c))),[],[Return(BooleanLiteral(true))])])])

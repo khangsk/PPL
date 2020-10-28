@@ -1,0 +1,10 @@
+
+            Function: main
+            Body:
+                Var: a, b;
+                input(a, b);
+                c = a == b;
+                d = c+-1.23*.-3e4;
+                writeln(d);
+            EndBody.
+        

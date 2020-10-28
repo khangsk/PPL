@@ -1,0 +1,17 @@
+
+        Function: printDivivsors
+            Parameter: n
+            Body:
+                For (i = 1, i <= n, 1) Do
+                    If (n % i == 0) Then
+                        writeln(i);
+                    EndIf.
+                EndFor.
+            EndBody.
+        Function: main
+            Body:
+                Var: x;
+                input(x);
+                printDivivsors(x);
+            EndBody.
+        

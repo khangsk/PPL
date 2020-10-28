@@ -1,0 +1,16 @@
+
+            Function: main
+            Body:
+                Var: a[10], max;
+                For (i = 0, i < 10, 1) Do
+                    input(a[i]);
+                EndFor.
+                max = a[0];
+                For (i = 0, i < 10, 1) Do
+                    If max < a[i] Then
+                        max = a[i];
+                    EndIf.
+                EndFor.
+                writeln("Max number in array is: ", max);
+            EndBody.
+        

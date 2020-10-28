@@ -1,0 +1,1 @@
+Program([FuncDecl(Id(main)[],([VarDecl(Id(a___b),IntLiteral(12345)),VarDecl(Id(b),BooleanLiteral(true)),VarDecl(Id(c),FloatLiteral(123.))][If(Id(b),[],[Assign(Id(c),BinaryOp(+.,Id(c),FloatLiteral(1.)))])ElseIf(UnaryOp(!,Id(b)),[],[Return(Id(c))]),Return(BinaryOp(+,CallExpr(Id(float),[Id(a___b)]),Id(c)))])])

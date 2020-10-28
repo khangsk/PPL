@@ -1,0 +1,1 @@
+Program([FuncDecl(Id(uoc_chung_lon_nhat)[VarDecl(Id(a)),VarDecl(Id(b))],([][If(BinaryOp(==,Id(a),Id(b)),[],[Return(Id(a))]),If(BinaryOp(>,Id(a),Id(b)),[],[Assign(Id(a),BinaryOp(%,Id(a),Id(b)))]),If(BinaryOp(==,Id(a),IntLiteral(0)),[],[Return(Id(b))]),Return(CallExpr(Id(uoc_chung_lon_nhat),[Id(b),Id(a)]))])])

@@ -1,0 +1,6 @@
+
+            Function: main
+            Body:
+                Return a(b(c(d(e(f(1123 + True + fo(z(f(f)))))))));
+            EndBody.
+        

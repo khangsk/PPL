@@ -1,0 +1,10 @@
+
+        Function: power_recur
+            Parameter: base, exp
+            Body:
+                If (exp == 0) Then
+                    Return 1;
+                EndIf.
+                Return base * power_recur(base, exp - 1);
+            EndBody.
+        

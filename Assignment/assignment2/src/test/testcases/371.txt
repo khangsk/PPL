@@ -1,0 +1,7 @@
+
+            Function: abc
+            Body:
+                a = !((!b && c) + 1) || check(d);
+                Return a;
+            EndBody.
+        

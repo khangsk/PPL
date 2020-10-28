@@ -1,0 +1,9 @@
+
+        Function: compare
+            Parameter: x, y
+            Body:
+                If (x > y) Then
+                    Return True ;
+                Else Return False;
+                EndIf.
+            EndBody.

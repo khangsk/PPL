@@ -1,0 +1,15 @@
+
+        Function: reverseString
+            Parameter: initialString
+            Body:
+                If (initialString == nullptr) Then
+                    Return;
+                EndIf.
+                If (strlen(initialString) == 1) Then
+                    writeln(initialString[0]);
+                    Return;
+                EndIf.
+                writeln(initialString[strlen(initialString) - 1]);
+                initialString[strlen(initialString) - 1] = 0;
+                reverseString(initialString);
+            EndBody.

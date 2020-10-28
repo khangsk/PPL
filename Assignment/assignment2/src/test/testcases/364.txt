@@ -1,0 +1,12 @@
+
+            Var: string[3] = {"1.23", "0.e4", "12e2"};
+            Function: test
+            Body:
+                Var: x[3], sum = 0.;
+                For (i = 0, i < 3, 1) Do
+                    x[i] = float(string[i]);
+                    sum = sum + x[i];
+                EndFor.
+                Return sum;
+            EndBody.
+        

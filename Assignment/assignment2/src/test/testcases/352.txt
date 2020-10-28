@@ -1,0 +1,10 @@
+
+            Function: main
+            Body:
+                For (i = 1, i <= 10, 1) Do
+                    For (j = 2, j <= 9, 1) Do
+                        writeln(i, j, i * j);
+                    EndFor.
+                EndFor.
+            EndBody.
+        
