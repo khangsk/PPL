@@ -1,0 +1,20 @@
+
+            Function: printArray
+            Body:
+                Var: i;
+                For (i=0, i < size, i+.1.0e0) Do
+                    printf("%d ", arr[i]);
+                EndFor.
+                printf("n");
+            EndBody.
+ 
+            Function: main
+            Body:
+                arr[1] = {64, 25, 12, 22, 11};
+                n = sizeof(arr)\sizeof(arr[0]);
+                selectionSort(arr, n);
+                printf("Sorted array: n");
+                printArray(arr, n);
+                Return 0;
+            EndBody.
+        

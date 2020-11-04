@@ -1,0 +1,38 @@
+
+            Var: x = 0, y = 0, z = 0;
+            Function: function
+                Parameter: j, brr[1000]
+                Body:
+                    For (j = 0, j < 3, 1) Do
+                        If (j == 0) && (j % 3 == 0) Then
+                            x = brr[j];
+                        ElseIf (j == 1) || (j % 2 == 1) Then
+                            y = brr[j];
+                            While (y % (j * j) != 0) Do
+                                y = y + 1;
+                            EndWhile.
+                        Else
+                            Var: k = 0xFFFFFFFF;
+                            k = int_of_string(brr[j]);
+                            z = k;
+                        EndIf.
+                    EndFor.
+                EndBody.
+                
+            Function: super_print
+                Parameter: str, n
+                Body:
+                    For (i = 0, i < n, 1) Do
+                        print(str);
+                    EndFor.
+                EndBody.
+                
+            Function: main
+                Parameter: argv[1000], argc
+                Body:
+                    function(argc + 1, argv);
+                    Do
+                        print("\n\r");
+                        super_print("Hello World\n");
+                    While True EndDo.
+                EndBody.

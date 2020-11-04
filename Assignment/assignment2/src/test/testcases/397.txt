@@ -1,0 +1,23 @@
+
+            Function: convertNumber_continue
+            Parameter: x[6][7]
+                Body: 
+                    While (remainder > 0) Do
+                        If (b > 10) Then
+                            m = remainder % b;
+                            If (m >= 10) Then
+                                arr[count] =  char(m + cHAR_55);
+                                count = count +1;
+                            Else 
+                                arr[count] = char(m + cHAR_48);
+                                count = count +1;
+                            EndIf.
+                        Else
+                            arr[count] = char((remainder % b) + cHAR_48);
+                            count = count +1;
+                        EndIf.
+                        remainder = remainder \. 3;
+                        Break;
+                    EndWhile.
+                EndBody.
+                

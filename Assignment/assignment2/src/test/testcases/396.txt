@@ -1,0 +1,8 @@
+
+        Function: main
+        Body:
+            Var: a = 10;
+            Var: x= {        ** this is a comment **    "abc\n",    **** 1,   2,3,{1,2}};
+            Var: x = {{{1,  2 ,2e-124, "avc" , 1 }, {  4 , **erty**  5}  },  {{ 6  ,  7  },{ 8,9}}};
+        EndBody.
+        

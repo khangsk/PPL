@@ -1,0 +1,15 @@
+
+            Var: a[2][2] = {{0, 0E123}, {0XFFF, 0x12FA}};
+            Var: b, c = "nothing";
+            Function: main
+            Parameter: x
+            Body:
+                For (i = 0, i < 10, i + 1) Do
+                    For (j = i, j < 10, j + 1) Do
+                        x = x + a[i][j];
+                        writeln(b, c, x);
+                    EndFor.
+                EndFor.
+                Return x;
+            EndBody.
+        

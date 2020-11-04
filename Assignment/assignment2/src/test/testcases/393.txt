@@ -1,0 +1,16 @@
+
+            Var: a[2] = {"Hoang", "Gia"};
+            Function: main
+            Parameter: x
+            Body:
+                input(x);
+                If int(x) == 0 Then
+                    writeln(a[int(x)]);
+                ElseIf int(x) == 1 Then
+                    writeln(a[int(x)] + "Khang");
+                Else
+                    writeln(a[0] + a[1] + "Khang");
+                EndIf.
+                Return 0;
+            EndBody.
+        

@@ -1,0 +1,5 @@
+Function: function
+            Parameter: j, brr[1000]
+            Body:
+                j = -.-.i +. brrr[5];
+            EndBody.
