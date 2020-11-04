@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(compare)[VarDecl(Id(x)),VarDecl(Id(y))],([][If(BinaryOp(>,Id(x),Id(y)),[],[Return(BooleanLiteral(true))])Else([],[Return(BooleanLiteral(false))])])])
+Program([FuncDecl(Id(compare)[VarDecl(Id(x)),VarDecl(Id(y))],([][If(BinaryOp(>,Id(x),Id(y)),[],[Return(BooleanLiteral(true))])Else([],[Return(BooleanLiteral(false))])]))])

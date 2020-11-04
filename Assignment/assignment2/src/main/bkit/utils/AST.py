@@ -78,14 +78,14 @@ class FuncDecl(Decl):
     def __str__(self):
         return "FuncDecl(" + str(self.name) + \
                 printlist(self.param)+ ",(" + printlist(self.body[0]) + \
-                printlist(self.body[1]) + ")"
+                printlist(self.body[1]) + "))"
     
     def accept(self, v, param):
         return v.visitFuncDecl(self, param)
 
 @dataclass
 class ArrayCell(LHS):
-    arr:Id
+    arr:Expr
     idx:List[Expr]
 
     def __str__(self):

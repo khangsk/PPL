@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(foo)[],([][Assign(Id(a),BinaryOp(*,Id(a),IntLiteral(1))),Assign(Id(b),BinaryOp(*,FloatLiteral(12.),FloatLiteral(3.e3))),Assign(Id(c),BinaryOp(\,IntLiteral(0x123),IntLiteral(3))),Return()])])
+Program([FuncDecl(Id(foo)[],([][Assign(Id(a),BinaryOp(*,Id(a),IntLiteral(1))),Assign(Id(b),BinaryOp(*,FloatLiteral(12.),FloatLiteral(3.e3))),Assign(Id(c),BinaryOp(\,IntLiteral(0x123),IntLiteral(3))),Return()]))])

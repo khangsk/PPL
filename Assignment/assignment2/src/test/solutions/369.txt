@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(main)[],([VarDecl(Id(s),StringLiteral(this is a string containing tab \t)),VarDecl(Id(a),StringLiteral(0XFA1B23))][Assign(Id(s),BinaryOp(+,Id(s),CallExpr(Id(string),[Id(a)]))),CallExpr(Id(writeln),[Id(s)])])])
+Program([FuncDecl(Id(main)[],([VarDecl(Id(s),StringLiteral(this is a string containing tab \t)),VarDecl(Id(a),StringLiteral(0XFA1B23))][Assign(Id(s),BinaryOp(+,Id(s),CallExpr(Id(string),[Id(a)]))),CallExpr(Id(writeln),[Id(s)])]))])

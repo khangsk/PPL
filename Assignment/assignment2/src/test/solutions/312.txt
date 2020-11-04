@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(abc)[],([VarDecl(Id(i),IntLiteral(10))][While(BinaryOp(>,Id(i),IntLiteral(1)),[],[CallExpr(Id(writeln),[Id(i)]),Assign(Id(i),BinaryOp(-,Id(i),IntLiteral(1)))])])])
+Program([FuncDecl(Id(abc)[],([VarDecl(Id(i),IntLiteral(10))][While(BinaryOp(>,Id(i),IntLiteral(1)),[],[CallExpr(Id(writeln),[Id(i)]),Assign(Id(i),BinaryOp(-,Id(i),IntLiteral(1)))])]))])

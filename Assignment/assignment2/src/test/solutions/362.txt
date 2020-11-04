@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(foo)[],([VarDecl(Id(s),StringLiteral(123))][Assign(Id(n),CallExpr(Id(int),[Id(s)])),Return(BinaryOp(*,Id(n),IntLiteral(10)))])])
+Program([FuncDecl(Id(foo)[],([VarDecl(Id(s),StringLiteral(123))][Assign(Id(n),CallExpr(Id(int),[Id(s)])),Return(BinaryOp(*,Id(n),IntLiteral(10)))]))])

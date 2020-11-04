@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(main)[],([][If(Id(a),[VarDecl(Id(a)),VarDecl(Id(b))],[CallExpr(Id(foo1),[]),CallExpr(Id(foo2),[]),Assign(Id(a),BooleanLiteral(false)),Assign(Id(b),BooleanLiteral(true))])])])
+Program([FuncDecl(Id(main)[],([][If(Id(a),[VarDecl(Id(a)),VarDecl(Id(b))],[CallExpr(Id(foo1),[]),CallExpr(Id(foo2),[]),Assign(Id(a),BooleanLiteral(false)),Assign(Id(b),BooleanLiteral(true))])]))])
