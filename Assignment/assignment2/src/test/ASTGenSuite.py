@@ -1345,10 +1345,12 @@ class ASTGenSuite(unittest.TestCase):
                         Var: a, b;
                         foo1();
                         foo2();
+                        a = False;
+                        b = True;
                     EndIf.
                 EndBody.
             """
-        expect = "Program([FuncDecl(Id(main)[],([][If(Id(a),[VarDecl(Id(a)),VarDecl(Id(b))],[CallExpr(Id(foo1),[]),CallExpr(Id(foo2),[])])])])"
+        expect = "Program([FuncDecl(Id(main)[],([][If(Id(a),[VarDecl(Id(a)),VarDecl(Id(b))],[CallExpr(Id(foo1),[]),CallExpr(Id(foo2),[]),Assign(Id(a),BooleanLiteral(false)),Assign(Id(b),BooleanLiteral(true))])])])"
         self.assertTrue(TestAST.checkASTGen(input,expect,391))
     def test92(self):
         input = """

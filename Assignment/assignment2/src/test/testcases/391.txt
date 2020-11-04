@@ -5,6 +5,8 @@
                         Var: a, b;
                         foo1();
                         foo2();
+                        a = False;
+                        b = True;
                     EndIf.
                 EndBody.
             
