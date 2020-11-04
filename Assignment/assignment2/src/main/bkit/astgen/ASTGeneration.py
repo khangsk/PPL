@@ -1,17 +1,15 @@
 from BKITVisitor import BKITVisitor
 from BKITParser import BKITParser
 from AST import *
+from functools import reduce
 
 
 class ASTGeneration(BKITVisitor):
     # program  : var_declare* func_declare* EOF ;
     def visitProgram(self, ctx: BKITParser.ProgramContext):
-        arr = []
-        for i in ctx.var_declare():
-            arr += self.visitVar_declare(i)
-        for i in ctx.func_declare():
-            arr += self.visitFunc_declare(i)
-        return Program(arr)
+        arrVar = reduce(lambda x, y: x + self.visitVar_declare(y), ctx.var_declare(), [])
+        arrFunc = reduce(lambda x, y: x + self.visitFunc_declare(y), ctx.func_declare(), [])
+        return Program(arrVar + arrFunc)
 
     # var_declare: VAR COLON list_var (COMMA list_var)* SEMI ;
     def visitVar_declare(self, ctx: BKITParser.Var_declareContext):
@@ -36,9 +34,7 @@ class ASTGeneration(BKITVisitor):
     # func_declare: FUNCTION COLON ID params_list? compound_stmt;
     def visitFunc_declare(self, ctx: BKITParser.Func_declareContext):
         compound = self.visitCompound_stmt(ctx.compound_stmt())
-        paraList = []
-        if ctx.getChildCount() == 5:
-            paraList = self.visitParams_list(ctx.params_list())
+        paraList = self.visitParams_list(ctx.params_list()) if ctx.params_list() else []
         return [FuncDecl(Id(ctx.ID().getText()), paraList, compound)]
 
     # list_variable: variable (COMMA variable)* ;
@@ -79,13 +75,9 @@ class ASTGeneration(BKITVisitor):
 
     # compound_stmt: BODY COLON var_declare* stmt* ENDBODY DOT ;
     def visitCompound_stmt(self, ctx: BKITParser.Compound_stmtContext):
-        arr_var = []
-        for i in ctx.var_declare():
-            arr_var += self.visitVar_declare(i)
-        arr_stmt = []
-        for i in ctx.stmt():
-            arr_stmt.append(self.visitStmt(i))
-        return (arr_var, arr_stmt)
+        arrVar = reduce(lambda x, y: x + self.visitVar_declare(y), ctx.var_declare(), [])
+        arrStmt = [self.visitStmt(i) for i in ctx.stmt()]
+        return (arrVar, arrStmt)
 
     # stmt: assign_stmt|if_stmt|for_stmt|while_stmt|do_while_stmt|break_stmt|continue_stmt|call_stmt|return_stmt;
     def visitStmt(self, ctx: BKITParser.StmtContext):
@@ -99,36 +91,26 @@ class ASTGeneration(BKITVisitor):
 
     # if_stmt: IF exp THEN var_declare* stmt* (ELSEIF exp THEN var_declare* stmt*)* (ELSE var_declare* stmt*)? ENDIF DOT ;
     def visitIf_stmt(self, ctx: BKITParser.If_stmtContext):
-        cexp = 0
-        cvar = 0
-        cstmt = 0
-        arrExp = [] 
+        expr = ""
         arrVar = []
         arrStmt = []
         ifstmt = []
-        elsestmt = []
-        elseif = 0
         for i in range(ctx.getChildCount()):
-            if ctx.getChild(i) == ctx.exp(cexp):
-                arrExp.append(str(self.visitExp(ctx.exp(cexp))))
-                cexp += 1
-            elif ctx.getChild(i) == ctx.var_declare(cvar):
-                arrVar += self.visitVar_declare(ctx.var_declare(cvar))
-                cvar += 1
-            elif ctx.getChild(i) == ctx.stmt(cstmt):
-                arrStmt.append(str(self.visitStmt(ctx.stmt(cstmt))))
-                cstmt += 1
-            elif ctx.getChild(i) == ctx.ELSEIF(elseif) or ctx.getChild(i) == ctx.ELSE():
-                ifstmt.append((arrExp[0], arrVar, arrStmt))
-                arrExp = []
+            if ctx.getChild(i) in ctx.exp():
+                expr = self.visitExp(ctx.getChild(i))
+            elif ctx.getChild(i) in ctx.var_declare():
+                arrVar += self.visitVar_declare(ctx.getChild(i))
+            elif ctx.getChild(i) in ctx.stmt():
+                arrStmt.append(self.visitStmt(ctx.getChild(i)))
+            elif ctx.getChild(i) in ctx.ELSEIF() or ctx.getChild(i) == ctx.ELSE():
+                ifstmt.append((expr, arrVar, arrStmt))
+                expr = ""
                 arrVar = []
                 arrStmt = []
-                elseif += 1
         if ctx.ELSE():
-            elsestmt = [arrVar, arrStmt]
-            return If(ifstmt, elsestmt)
-        ifstmt.append((arrExp[0], arrVar, arrStmt))
-        return If(ifstmt, elsestmt)
+            return If(ifstmt, [arrVar, arrStmt])
+        ifstmt.append((expr, arrVar, arrStmt))
+        return If(ifstmt, [])
         
     # for_stmt: FOR LP ID EQUAL exp COMMA exp COMMA exp RP DO var_declare* stmt* ENDFOR DOT ;
     def visitFor_stmt(self, ctx: BKITParser.For_stmtContext):
@@ -136,34 +118,21 @@ class ASTGeneration(BKITVisitor):
         expr1 = self.visitExp(ctx.exp(0))
         expr2 = self.visitExp(ctx.exp(1))
         expr3 = self.visitExp(ctx.exp(2))
-        arrVar = []
-        for i in ctx.var_declare():
-            arrVar += self.visitVar_declare(i)
-        arrStmt = []
-        for i in ctx.stmt():
-            arrStmt.append(self.visitStmt(i))
-        loop = (arrVar, arrStmt)
-        return For(idx1, expr1, expr2, expr3, loop)
+        arrVar = reduce(lambda x, y: x + self.visitVar_declare(y), ctx.var_declare(), [])
+        arrStmt = [self.visitStmt(i) for i in ctx.stmt()]
+        return For(idx1, expr1, expr2, expr3, (arrVar, arrStmt))
 
     # while_stmt: WHILE exp DO var_declare* stmt* ENDWHILE DOT ;
     def visitWhile_stmt(self, ctx: BKITParser.While_stmtContext):
+        arrVar = reduce(lambda x, y: x + self.visitVar_declare(y), ctx.var_declare(), [])
+        arrStmt = [self.visitStmt(i) for i in ctx.stmt()]
         expr = self.visitExp(ctx.exp())
-        arrVar = []
-        for i in ctx.var_declare():
-            arrVar += self.visitVar_declare(i)
-        arrStmt = []
-        for i in ctx.stmt():
-            arrStmt.append(self.visitStmt(i))
         return While(expr, (arrVar, arrStmt))
 
     # do_while_stmt: DO var_declare* stmt* WHILE exp ENDDO DOT ;
     def visitDo_while_stmt(self, ctx: BKITParser.Do_while_stmtContext):
-        arrVar = []
-        for i in ctx.var_declare():
-            arrVar += self.visitVar_declare(i)
-        arrStmt = []
-        for i in ctx.stmt():
-            arrStmt.append(self.visitStmt(i))
+        arrVar = reduce(lambda x, y: x + self.visitVar_declare(y), ctx.var_declare(), [])
+        arrStmt = [self.visitStmt(i) for i in ctx.stmt()]
         expr = self.visitExp(ctx.exp())
         return Dowhile((arrVar, arrStmt), expr)
 
@@ -181,10 +150,7 @@ class ASTGeneration(BKITVisitor):
 
     # return_stmt: RETURN exp? SEMI ;
     def visitReturn_stmt(self, ctx: BKITParser.Return_stmtContext):
-        expr = None
-        if ctx.exp():
-            expr = self.visitExp(ctx.exp())
-        return Return(expr)
+        return Return(self.visitExp(ctx.exp())) if ctx.exp() else Return(None)
 
     # call_exp: ID LP exps_list? RP ;
     def visitCall_exp(self, ctx: BKITParser.Call_expContext):
@@ -194,10 +160,7 @@ class ASTGeneration(BKITVisitor):
 
     # exps_list: exp (COMMA exp)* ;
     def visitExps_list(self, ctx: BKITParser.Exps_listContext):
-        arr = []
-        for i in ctx.exp():
-            arr.append(self.visitExp(i))
-        return arr
+        return [self.visitExp(i) for i in ctx.exp()]
 
     # exp: exp1 (EQU | NQU | LT | GT | LTE | GTE | NOT_EQUAL | LT_DOT | GT_DOT | LTE_DOT | GTE_DOT) exp1 | exp1 ;
     def visitExp(self, ctx: BKITParser.ExpContext):
@@ -264,10 +227,9 @@ class ASTGeneration(BKITVisitor):
 
     # operands:literal | ID | call_exp | LP exp RP
     def visitOperands(self, ctx: BKITParser.OperandsContext):
-        if ctx.getChildCount() == 1:
-            if ctx.ID(): return Id(ctx.ID().getText())
-            if ctx.literal(): return self.visitLiteral(ctx.literal())
-            return self.visitCall_exp(ctx.call_exp())
+        if ctx.ID(): return Id(ctx.ID().getText())
+        if ctx.literal(): return self.visitLiteral(ctx.literal())
+        if ctx.call_exp(): return self.visitCall_exp(ctx.call_exp())
         return self.visitExp(ctx.exp())
 
     # index_exp: operands (LSB exp RSB)+ ;
