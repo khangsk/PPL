@@ -108,9 +108,9 @@ class ASTGeneration(BKITVisitor):
                 arrVar = []
                 arrStmt = []
         if ctx.ELSE():
-            return If(ifstmt, [arrVar, arrStmt])
+            return If(ifstmt, (arrVar, arrStmt))
         ifstmt.append((expr, arrVar, arrStmt))
-        return If(ifstmt, [])
+        return If(ifstmt, ([],[]))
         
     # for_stmt: FOR LP ID EQUAL exp COMMA exp COMMA exp RP DO var_declare* stmt* ENDFOR DOT ;
     def visitFor_stmt(self, ctx: BKITParser.For_stmtContext):
