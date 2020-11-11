@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(main)[],([VarDecl(Id(a)),VarDecl(Id(b),IntLiteral(5))][CallExpr(Id(input),[Id(a)]),If(UnaryOp(!,BinaryOp(+,Id(a),BinaryOp(*,Id(b),IntLiteral(10)))),[],[Return(BooleanLiteral(true))])Else([],[Return(BooleanLiteral(false))])]))])
+Program([FuncDecl(Id(main)[],([VarDecl(Id(a)),VarDecl(Id(b),IntLiteral(5))][CallStmt(Id(input),[Id(a)]),If(UnaryOp(!,BinaryOp(+,Id(a),BinaryOp(*,Id(b),IntLiteral(10)))),[],[Return(BooleanLiteral(true))])Else([],[Return(BooleanLiteral(false))])]))])

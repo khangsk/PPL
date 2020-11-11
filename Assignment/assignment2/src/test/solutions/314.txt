@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(abc)[],([][Dowhile([VarDecl(Id(abc),BooleanLiteral(false))],[CallExpr(Id(writeln),[StringLiteral(nothing to print)])],BooleanLiteral(true))]))])
+Program([FuncDecl(Id(abc)[],([][Dowhile([VarDecl(Id(abc),BooleanLiteral(false))],[CallStmt(Id(writeln),[StringLiteral(nothing to print)])],BooleanLiteral(true))]))])

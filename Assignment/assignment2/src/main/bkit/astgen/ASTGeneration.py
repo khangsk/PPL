@@ -52,7 +52,7 @@ class ASTGeneration(BKITVisitor):
     def visitVariable(self, ctx: BKITParser.VariableContext):
         if ctx.getChildCount() == 1:
             return [Id(ctx.ID().getText())]
-        arr = [IntLiteral(i.getText()) for i in ctx.INT()]
+        arr = [i.getText() for i in ctx.INT()]
         return [Id(ctx.ID().getText()), arr]
         
 
@@ -146,7 +146,10 @@ class ASTGeneration(BKITVisitor):
 
     # call_stmt: call_exp SEMI ;
     def visitCall_stmt(self, ctx: BKITParser.Call_stmtContext):
-        return self.visitCall_exp(ctx.call_exp())
+        callexp = self.visitCall_exp(ctx.call_exp())
+        method = callexp.method
+        param = callexp.param
+        return CallStmt(method, param)
 
     # return_stmt: RETURN exp? SEMI ;
     def visitReturn_stmt(self, ctx: BKITParser.Return_stmtContext):
@@ -154,9 +157,11 @@ class ASTGeneration(BKITVisitor):
 
     # call_exp: ID LP exps_list? RP ;
     def visitCall_exp(self, ctx: BKITParser.Call_expContext):
-        if ctx.getChildCount() == 3:
-            return CallExpr(Id(ctx.ID().getText()), [])
-        return CallExpr(Id(ctx.ID().getText()), self.visitExps_list(ctx.exps_list()))
+        method = Id(ctx.ID().getText())
+        param = []
+        if ctx.exps_list():
+            param = self.visitExps_list(ctx.exps_list())
+        return CallExpr(method, param)
 
     # exps_list: exp (COMMA exp)* ;
     def visitExps_list(self, ctx: BKITParser.Exps_listContext):

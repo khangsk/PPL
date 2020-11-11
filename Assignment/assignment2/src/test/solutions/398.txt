@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(function)[VarDecl(Id(j)),VarDecl(Id(brr),[IntLiteral(1000)])],([][Assign(Id(j),BinaryOp(+.,UnaryOp(-.,UnaryOp(-.,Id(i))),ArrayCell(Id(brrr),[IntLiteral(5)])))]))])
+Program([FuncDecl(Id(function)[VarDecl(Id(j)),VarDecl(Id(brr),[1000])],([][Assign(Id(j),BinaryOp(+.,UnaryOp(-.,UnaryOp(-.,Id(i))),ArrayCell(Id(brrr),[IntLiteral(5)])))]))])

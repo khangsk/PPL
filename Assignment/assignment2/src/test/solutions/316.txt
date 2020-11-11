@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(main)[],([][While(BooleanLiteral(true),[],[Continue(),CallExpr(Id(writeln),[StringLiteral(nothing to print)])])]))])
+Program([FuncDecl(Id(main)[],([][While(BooleanLiteral(true),[],[Continue(),CallStmt(Id(writeln),[StringLiteral(nothing to print)])])]))])

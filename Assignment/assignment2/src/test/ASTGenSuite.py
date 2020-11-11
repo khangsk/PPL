@@ -14,14 +14,14 @@ class ASTGenSuite(unittest.TestCase):
         expect = Program([
             VarDecl(Id("x"),[],IntLiteral(1)),
             VarDecl(Id("y"),[],None),
-            VarDecl(Id("a"),[IntLiteral(2)],IntLiteral(3)),
-            VarDecl(Id("b"),[IntLiteral(4)],None)
+            VarDecl(Id("a"),[2],IntLiteral(3)),
+            VarDecl(Id("b"),[4],None)
         ])
         self.assertTrue(TestAST.checkASTGen(input,expect,302))
     def test3_array_program(self):
         input = """Var: abc[1][2][3] = 4;"""
         expect = Program([
-            VarDecl(Id("abc"),[IntLiteral(1),IntLiteral(2),IntLiteral(3)],IntLiteral(4))
+            VarDecl(Id("abc"),[1,2,3],IntLiteral(4))
         ])
         self.assertTrue(TestAST.checkASTGen(input,expect,303))
     def test4_call_stmt(self):
@@ -38,14 +38,14 @@ class ASTGenSuite(unittest.TestCase):
                 Id("fact"),
                 [
                     VarDecl(Id("b"),[],None),
-                    VarDecl(Id("c"),[IntLiteral(1),IntLiteral(2)],None)
+                    VarDecl(Id("c"),[1,2],None)
                 ],
                 (
                     [
                         VarDecl(Id("a"),[],None)
                     ],[
                         Assign(Id("a"),IntLiteral(5)),
-                        CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" is smaller than "),Id("b")])
+                        CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" is smaller than "),Id("b")])
                     ]
                 )
             )
@@ -76,7 +76,7 @@ class ASTGenSuite(unittest.TestCase):
                                     Id("b")),
                                 [],
                                 [
-                                    CallExpr(
+                                    CallStmt(
                                         Id("writeln"),
                                         [
                                             ArrayCell(
@@ -116,12 +116,12 @@ class ASTGenSuite(unittest.TestCase):
                             (
                                 BinaryOp(">",ArrayCell(Id("a"),[Id("i")]),Id("b")),
                                 [],
-                                [CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" is larger than "),Id("b")])]
+                                [CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" is larger than "),Id("b")])]
                             ),
                             (
                                 BinaryOp("==",ArrayCell(Id("a"),[Id("i")]),Id("b")),
                                 [],
-                                [CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" equal "),Id("b")])]
+                                [CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" equal "),Id("b")])]
                             )
                         ],
                         ([],[])
@@ -150,12 +150,12 @@ class ASTGenSuite(unittest.TestCase):
                             (
                                 BinaryOp(">",ArrayCell(Id("a"),[Id("i")]),Id("b")),
                                 [],
-                                [CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" is larger than "),Id("b")])]
+                                [CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" is larger than "),Id("b")])]
                             )
                         ],
                         (
                             [],
-                            [CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" is smaller than "),Id("b")])]
+                            [CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" is smaller than "),Id("b")])]
                         )
                     )
                 ]
@@ -184,17 +184,17 @@ class ASTGenSuite(unittest.TestCase):
                             (
                                 BinaryOp(">",ArrayCell(Id("a"),[Id("i")]),Id("b")),
                                 [],
-                                [CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" is larger than "),Id("b")])]
+                                [CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" is larger than "),Id("b")])]
                             ),
                             (
                                 BinaryOp("==",ArrayCell(Id("a"),[Id("i")]),Id("b")),
                                 [],
-                                [CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" equal "),Id("b")])]
+                                [CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" equal "),Id("b")])]
                             )
                         ],
                         (
                             [],
-                            [CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" is smaller than "),Id("b")])]
+                            [CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" is smaller than "),Id("b")])]
                         )
                     )
                 ]
@@ -227,27 +227,27 @@ class ASTGenSuite(unittest.TestCase):
                             (
                                 BinaryOp(">",ArrayCell(Id("a"),[Id("i")]),Id("b")),
                                 [],
-                                [CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" is larger than "),Id("b")])]
+                                [CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" is larger than "),Id("b")])]
                             ),
                             (
                                 BinaryOp("==",ArrayCell(Id("a"),[Id("i")]),Id("b")),
                                 [],
-                                [CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" equal "),Id("b")])]
+                                [CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" equal "),Id("b")])]
                             ),
                             (
                                 BinaryOp("&&",ArrayCell(Id("a"),[Id("i")]),Id("b")),
                                 [],
-                                [CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i")])])]
+                                [CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")])])]
                             ),
                             (
                                 UnaryOp("!",ArrayCell(Id("a"),[Id("i")])),
                                 [],
-                                [CallExpr(Id("writeln"),[Id("b")])]
+                                [CallStmt(Id("writeln"),[Id("b")])]
                             )
                         ],
                         (
                             [],
-                            [CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" is smaller than "),Id("b")])]
+                            [CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" is smaller than "),Id("b")])]
                         )
                     )
                 ]
@@ -259,7 +259,7 @@ class ASTGenSuite(unittest.TestCase):
         expect = Program([
             VarDecl(
                 Id("a"),
-                [IntLiteral(3)],
+                [3],
                 ArrayLiteral([IntLiteral(1),IntLiteral(0),IntLiteral(2)])
             )
         ])
@@ -270,7 +270,7 @@ class ASTGenSuite(unittest.TestCase):
         expect = Program([
             VarDecl(
                 Id("a"),
-                [IntLiteral(3),IntLiteral(2)],
+                [3,2],
                 ArrayLiteral([
                     ArrayLiteral([IntLiteral(1),IntLiteral("0XAF")]),
                     ArrayLiteral([IntLiteral(4),IntLiteral(0)]),
@@ -304,7 +304,7 @@ class ASTGenSuite(unittest.TestCase):
                             (
                                 [],
                                 [
-                                    CallExpr(Id("writeln"),[Id("i")]),
+                                    CallStmt(Id("writeln"),[Id("i")]),
                                     Assign(
                                         Id("i"),
                                         BinaryOp("-",Id("i"),IntLiteral(1))
@@ -360,7 +360,7 @@ class ASTGenSuite(unittest.TestCase):
                                 [
                                     VarDecl(Id("abc"),[],BooleanLiteral(False))
                                 ],[
-                                    CallExpr(Id("writeln"),[StringLiteral("nothing to print")])
+                                    CallStmt(Id("writeln"),[StringLiteral("nothing to print")])
                                 ]
                             ),
                             BooleanLiteral(True)
@@ -391,7 +391,7 @@ class ASTGenSuite(unittest.TestCase):
                         ],
                         [
                             Break(),
-                            CallExpr(Id("writeln"),[StringLiteral("nothing to print")])
+                            CallStmt(Id("writeln"),[StringLiteral("nothing to print")])
                         ]),
                         BooleanLiteral(True)
                     )
@@ -417,7 +417,7 @@ class ASTGenSuite(unittest.TestCase):
                         ([],
                         [
                             Continue(),
-                            CallExpr(Id("writeln"),[StringLiteral("nothing to print")])
+                            CallStmt(Id("writeln"),[StringLiteral("nothing to print")])
                         ]
                         )
                     )]
@@ -468,7 +468,7 @@ class ASTGenSuite(unittest.TestCase):
         expect = Program([
             FuncDecl(
                 Id("main"),
-                [VarDecl(Id("a"),[IntLiteral(10)],None)],
+                [VarDecl(Id("a"),[10],None)],
                 (
                     [],
                     [
@@ -477,7 +477,7 @@ class ASTGenSuite(unittest.TestCase):
                             IntLiteral(1),
                             BinaryOp("<",Id("i"),IntLiteral(10)),
                             IntLiteral(1),
-                            ([],[CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i")])])])
+                            ([],[CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")])])])
                         )
                     ]
                 )
@@ -496,7 +496,7 @@ class ASTGenSuite(unittest.TestCase):
         expect = Program([
             FuncDecl(
                 Id("main"),
-                [VarDecl(Id("a"),[IntLiteral(10)],None)],
+                [VarDecl(Id("a"),[10],None)],
                 (
                     [],
                     [
@@ -527,7 +527,7 @@ class ASTGenSuite(unittest.TestCase):
         expect = Program([
             FuncDecl(
                 Id("main"),
-                [VarDecl(Id("a"),[IntLiteral(2),IntLiteral(10)],None)],
+                [VarDecl(Id("a"),[2,10],None)],
                 (
                     [],
                     [
@@ -545,7 +545,7 @@ class ASTGenSuite(unittest.TestCase):
                                         IntLiteral(1),
                                         ([],[
                                             Assign(ArrayCell(Id("a"),[Id("i"),Id("j")]),BinaryOp("*",ArrayCell(Id("a"),[Id("i"),Id("j")]),IntLiteral(10))),
-                                            CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i"),Id("j")])])
+                                            CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i"),Id("j")])])
                                         ])
                                     )
                                 ]
@@ -564,13 +564,13 @@ class ASTGenSuite(unittest.TestCase):
         Var: m = 1, n[2] = {   2   ,   3   };"""
         expect = Program([
             VarDecl(Id("a"),[],IntLiteral(5)),
-            VarDecl(Id("b"),[IntLiteral(2),IntLiteral(3)],ArrayLiteral([ArrayLiteral([IntLiteral(2),IntLiteral(3),IntLiteral(4)]),ArrayLiteral([IntLiteral(4),IntLiteral(5),IntLiteral(6)])])),
+            VarDecl(Id("b"),[2,3],ArrayLiteral([ArrayLiteral([IntLiteral(2),IntLiteral(3),IntLiteral(4)]),ArrayLiteral([IntLiteral(4),IntLiteral(5),IntLiteral(6)])])),
             VarDecl(Id("c"),[],None),
             VarDecl(Id("d"),[],IntLiteral(6)),
             VarDecl(Id("e"),[],None),
             VarDecl(Id("z"),[],None),
             VarDecl(Id("m"),[],IntLiteral(1)),
-            VarDecl(Id("n"),[IntLiteral(2)],ArrayLiteral([IntLiteral(2),IntLiteral(3)]))
+            VarDecl(Id("n"),[2],ArrayLiteral([IntLiteral(2),IntLiteral(3)]))
         ])
         self.assertTrue(TestAST.checkASTGen(input,expect,322))
     def test23_funct_declare_part(self):
@@ -612,7 +612,7 @@ class ASTGenSuite(unittest.TestCase):
                 Id("main"),[],(
                     [],[
                         Assign(Id("x"),IntLiteral(10)),
-                        CallExpr(Id("fact"),[Id("x")])
+                        CallStmt(Id("fact"),[Id("x")])
                     ]
                 )
             )
@@ -640,7 +640,7 @@ class ASTGenSuite(unittest.TestCase):
             EndBody."""
         expect = Program([
             VarDecl(Id("ajsd_123s"),[],StringLiteral("Khang")),
-            VarDecl(Id("u___12sA"),[IntLiteral(2)],ArrayLiteral([StringLiteral("Hoang"),StringLiteral("Gia")])),
+            VarDecl(Id("u___12sA"),[2],ArrayLiteral([StringLiteral("Hoang"),StringLiteral("Gia")])),
             VarDecl(Id("a"),[],None),
             VarDecl(Id("b"),[],None),
             VarDecl(Id("c"),[],FloatLiteral("3.e3")),
@@ -667,7 +667,7 @@ class ASTGenSuite(unittest.TestCase):
                 (
                     [],[
                     Assign(Id("x"),IntLiteral(10)),
-                    CallExpr(Id("fact"),[Id("x")])
+                    CallStmt(Id("fact"),[Id("x")])
                     ]
                 )
             )
@@ -692,7 +692,7 @@ class ASTGenSuite(unittest.TestCase):
         expect = Program([
             FuncDecl(
                 Id("foo"),[
-                VarDecl(Id("a"),[IntLiteral(5)],None),
+                VarDecl(Id("a"),[5],None),
                 VarDecl(Id("b"),[],None)],
                 (
                     [VarDecl(Id("i"),[],IntLiteral(0))],
@@ -710,7 +710,7 @@ class ASTGenSuite(unittest.TestCase):
             FuncDecl(
                 Id("main"),[],([],[
                     Assign(Id("x"),IntLiteral(10)),
-                    CallExpr(Id("fact"),[Id("x")])
+                    CallStmt(Id("fact"),[Id("x")])
                 ])
             )
         ])
@@ -732,7 +732,7 @@ class ASTGenSuite(unittest.TestCase):
         expect = Program([
             FuncDecl(
                 Id("foo"),
-                [VarDecl(Id("a"),[IntLiteral(5)],None),
+                [VarDecl(Id("a"),[5],None),
                 VarDecl(Id("b"),[],None)],
                 ([],[
                     For(
@@ -741,13 +741,13 @@ class ASTGenSuite(unittest.TestCase):
                         BinaryOp("<",Id("i"),IntLiteral(10)),
                         IntLiteral(2),
                         ([],
-                        [CallExpr(Id("writeln"),[BinaryOp("+",ArrayCell(Id("a"),[Id("i")]),Id("b"))])])
+                        [CallStmt(Id("writeln"),[BinaryOp("+",ArrayCell(Id("a"),[Id("i")]),Id("b"))])])
                     )
                 ])
             ),
             FuncDecl(Id("main"),[],([],
                 [Assign(Id("x"),IntLiteral(10)),
-                CallExpr(Id("fact"),[Id("x")])
+                CallStmt(Id("fact"),[Id("x")])
                 ]
             ))
         ])
@@ -764,7 +764,7 @@ class ASTGenSuite(unittest.TestCase):
         expect = Program([
             FuncDecl(
                 Id("foo"),
-                [VarDecl(Id("a"),[IntLiteral(5)],None),
+                [VarDecl(Id("a"),[5],None),
                 VarDecl(Id("b"),[],None)],
                 ([],[
                     For(
@@ -793,7 +793,7 @@ class ASTGenSuite(unittest.TestCase):
         expect = Program([
             FuncDecl(
                 Id("foo"),
-                [VarDecl(Id("a"),[IntLiteral(2)],None),
+                [VarDecl(Id("a"),[2],None),
                 VarDecl(Id("b"),[],None)],([],[
                     For(
                         Id("i"),
@@ -805,13 +805,13 @@ class ASTGenSuite(unittest.TestCase):
                                 [(
                                     BinaryOp(">",ArrayCell(Id("a"),[Id("i")]),Id("b")),
                                     [],
-                                    [CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" is larger than "),Id("b")])]
+                                    [CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" is larger than "),Id("b")])]
                                 ),(
                                     BinaryOp("==",ArrayCell(Id("a"),[Id("i")]),Id("b")),
                                     [],
-                                    [CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" equal "),Id("b")])]
+                                    [CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" equal "),Id("b")])]
                                 )],([],[
-                                    CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" is smaller than "),Id("b")])
+                                    CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" is smaller than "),Id("b")])
                                 ])
                             )
                         ])
@@ -834,14 +834,14 @@ class ASTGenSuite(unittest.TestCase):
         expect = Program([
             FuncDecl(
                 Id("foo"),
-                [VarDecl(Id("a"),[IntLiteral(2)],None),
+                [VarDecl(Id("a"),[2],None),
                 VarDecl(Id("b"),[],None)],
                 (
                     [VarDecl(Id("i"),[],IntLiteral(0))],
                     [While(
                         BinaryOp(">",ArrayCell(Id("a"),[Id("i")]),Id("b")),
                         ([],[
-                            CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i")])]),
+                            CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")])]),
                             Assign(Id("i"),BinaryOp("+",Id("i"),IntLiteral(1)))
                         ])
                     )]
@@ -862,7 +862,7 @@ class ASTGenSuite(unittest.TestCase):
         expect = Program([
             FuncDecl(
                 Id("foo"),
-                [VarDecl(Id("a"),[IntLiteral(2)],None),
+                [VarDecl(Id("a"),[2],None),
                 VarDecl(Id("b"),[],None)],
                 (
                     [VarDecl(Id("i"),[],IntLiteral(0))],
@@ -890,7 +890,7 @@ class ASTGenSuite(unittest.TestCase):
         expect = Program([
             FuncDecl(
                 Id("foo"),
-                [VarDecl(Id("a"),[IntLiteral(10)],None)],
+                [VarDecl(Id("a"),[10],None)],
                 (
                     [VarDecl(Id("i"),[],None)],
                     [For(
@@ -899,7 +899,7 @@ class ASTGenSuite(unittest.TestCase):
                         BinaryOp("<",Id("i"),IntLiteral(10)),
                         IntLiteral(1),
                         ([],[
-                            CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i")])]),
+                            CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")])]),
                             If(
                                 [(BinaryOp(">",ArrayCell(Id("a"),[IntLiteral(10)]),IntLiteral(5)),
                                 [],
@@ -928,7 +928,7 @@ class ASTGenSuite(unittest.TestCase):
         expect = Program([
             FuncDecl(
                 Id("foo"),
-                [VarDecl(Id("a"),[IntLiteral(10)],None)],
+                [VarDecl(Id("a"),[10],None)],
                 ([VarDecl(Id("i"),[],None)],
                 [For(
                     Id("i"),
@@ -936,7 +936,7 @@ class ASTGenSuite(unittest.TestCase):
                     BinaryOp("<",Id("i"),IntLiteral(10)),
                     IntLiteral(1),
                     ([],[
-                        CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i")])]),
+                        CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")])]),
                         If(
                             [(
                                 BinaryOp(">",ArrayCell(Id("a"),[IntLiteral(10)]),IntLiteral(5)),
@@ -963,7 +963,7 @@ class ASTGenSuite(unittest.TestCase):
                 [VarDecl(Id("x"),[],None),
                 VarDecl(Id("y"),[],None)],
                 ([],[
-                    CallExpr(Id("writeln"),[BinaryOp("*",CallExpr(Id("foo"),[BinaryOp("+",IntLiteral(2),Id("x")),BinaryOp("\.",FloatLiteral("4."),Id("y"))]),CallExpr(Id("goo"),[]))])
+                    CallStmt(Id("writeln"),[BinaryOp("*",CallExpr(Id("foo"),[BinaryOp("+",IntLiteral(2),Id("x")),BinaryOp("\.",FloatLiteral("4."),Id("y"))]),CallExpr(Id("goo"),[]))])
                 ])
             )
         ])
@@ -1054,7 +1054,7 @@ class ASTGenSuite(unittest.TestCase):
                                 [(
                                     BinaryOp("==",BinaryOp("%",Id("n"),Id("i")),IntLiteral(0)),
                                     [],
-                                    [CallExpr(Id("writeln"),[Id("i")])]
+                                    [CallStmt(Id("writeln"),[Id("i")])]
                                 )],([],[])
                             )
                         ])
@@ -1064,7 +1064,7 @@ class ASTGenSuite(unittest.TestCase):
             FuncDecl(
                 Id("main"),[],(
                     [VarDecl(Id("x"),[],None)],
-                    [CallExpr(Id("input"),[Id("x")]),CallExpr(Id("printDivivsors"),[Id("x")])]
+                    [CallStmt(Id("input"),[Id("x")]),CallStmt(Id("printDivivsors"),[Id("x")])]
                 )
             )
         ])
@@ -1211,8 +1211,8 @@ class ASTGenSuite(unittest.TestCase):
                 VarDecl(Id("exp"),[],None)],([],[
                     Assign(Id("base"),CallExpr(Id("input"),[])),
                     Assign(Id("exp"),CallExpr(Id("input"),[])),
-                    CallExpr(Id("writeln"),[CallExpr(Id("power_rep"),[Id("base"),Id("exp")])]),
-                    CallExpr(Id("writeln"),[CallExpr(Id("power_recur"),[Id("base"),Id("exp")])])
+                    CallStmt(Id("writeln"),[CallExpr(Id("power_rep"),[Id("base"),Id("exp")])]),
+                    CallStmt(Id("writeln"),[CallExpr(Id("power_recur"),[Id("base"),Id("exp")])])
                 ])
             )
         ])
@@ -1247,7 +1247,7 @@ class ASTGenSuite(unittest.TestCase):
                 ([VarDecl(Id("answer"),[],None),
                 VarDecl(Id("length"),[],None),
                 VarDecl(Id("jump_max"),[],None),
-                VarDecl(Id("arr"),[IntLiteral(10)],None),
+                VarDecl(Id("arr"),[10],None),
                 VarDecl(Id("a"),[],None),
                 VarDecl(Id("j"),[],None)],[
                     For(
@@ -1287,7 +1287,7 @@ class ASTGenSuite(unittest.TestCase):
                             [Assign(Id("answer"),BinaryOp("+",Id("answer"),IntLiteral(1)))]
                         )],([],[Assign(Id("answer"),UnaryOp("-",IntLiteral(1)))])
                     ),
-                    CallExpr(Id("writeln"),[Id("answer")])
+                    CallStmt(Id("writeln"),[Id("answer")])
                 ])
             )
         ])
@@ -1390,7 +1390,7 @@ class ASTGenSuite(unittest.TestCase):
                             UnaryOp("!",ArrayCell(Id("str"),[Id("i")])),
                             [],
                             [Assign(Id("count"),BinaryOp("+",Id("count"),IntLiteral(1))),
-                            CallExpr(Id("writeln"),[ArrayCell(Id("str"),[Id("i")])])
+                            CallStmt(Id("writeln"),[ArrayCell(Id("str"),[Id("i")])])
                             ]
                         )],([],[])
                     )])
@@ -1485,7 +1485,7 @@ class ASTGenSuite(unittest.TestCase):
             FuncDecl(
                 Id("main"),[],(
                     [VarDecl(Id("x"),[],IntLiteral(10))],
-                    [CallExpr(Id("writeln"),[CallExpr(Id("square_num"),[Id("x")])])]
+                    [CallStmt(Id("writeln"),[CallExpr(Id("square_num"),[Id("x")])])]
                 )
             )
         ])
@@ -1520,12 +1520,12 @@ class ASTGenSuite(unittest.TestCase):
                         [(
                             BinaryOp("==",CallExpr(Id("strlen"),[Id("initialString")]),IntLiteral(1)),
                             [],
-                            [CallExpr(Id("writeln"),[ArrayCell(Id("initialString"),[IntLiteral(0)])]),
+                            [CallStmt(Id("writeln"),[ArrayCell(Id("initialString"),[IntLiteral(0)])]),
                             Return(None)]
                         )],([],[])
-                    ),CallExpr(Id("writeln"),[ArrayCell(Id("initialString"),[BinaryOp("-",CallExpr(Id("strlen"),[Id("initialString")]),IntLiteral(1))])]),
+                    ),CallStmt(Id("writeln"),[ArrayCell(Id("initialString"),[BinaryOp("-",CallExpr(Id("strlen"),[Id("initialString")]),IntLiteral(1))])]),
                     Assign(ArrayCell(Id("initialString"),[BinaryOp("-",CallExpr(Id("strlen"),[Id("initialString")]),IntLiteral(1))]),IntLiteral(0)),
-                    CallExpr(Id("reverseString"),[Id("initialString")])
+                    CallStmt(Id("reverseString"),[Id("initialString")])
                 ])
             )
         ])
@@ -1554,7 +1554,7 @@ class ASTGenSuite(unittest.TestCase):
                         [(
                             BinaryOp("==",BinaryOp("%",Id("i"),IntLiteral(2)),IntLiteral(0)),
                             [],
-                            [CallExpr(Id("writeln"),[Id("i")])]
+                            [CallStmt(Id("writeln"),[Id("i")])]
                         )],([],[])
                     )])
                 )
@@ -1583,7 +1583,7 @@ class ASTGenSuite(unittest.TestCase):
             VarDecl(Id("x"),[],None),
             FuncDecl(
                 Id("tEST_function_Name_1"),
-                [VarDecl(Id("x"),[IntLiteral(100)],None)],([],[
+                [VarDecl(Id("x"),[100],None)],([],[
                     Dowhile(
                         ([],[
                             Assign(Id("x"),BinaryOp("+",Id("x"),CallExpr(Id("foo"),[BinaryOp("+.",BinaryOp("+",IntLiteral(267),ArrayCell(Id("a"),[IntLiteral(6)])),FloatLiteral("1.0"))]))),
@@ -1592,7 +1592,7 @@ class ASTGenSuite(unittest.TestCase):
                                 [(
                                     BinaryOp(">=",Id("i"),IntLiteral(9)),
                                     [],
-                                    [CallExpr(Id("writeln"),[BinaryOp("+",Id("a"),IntLiteral(7))])]
+                                    [CallStmt(Id("writeln"),[BinaryOp("+",Id("a"),IntLiteral(7))])]
                                 )],([],[])
                         )]),
                         BinaryOp("<=",Id("i"),IntLiteral(27))
@@ -1615,8 +1615,8 @@ class ASTGenSuite(unittest.TestCase):
         expect = Program(
             [FuncDecl(Id("tEST_function_Name_2"),
             [VarDecl(Id("x"),[],None),
-            VarDecl(Id("a"),[IntLiteral(69)],None),
-            VarDecl(Id("b"),[IntLiteral(1),IntLiteral(2),IntLiteral(3)],None)],([],[
+            VarDecl(Id("a"),[69],None),
+            VarDecl(Id("b"),[1,2,3],None)],([],[
                 For(
                     Id("i"),
                     IntLiteral(1),
@@ -1660,7 +1660,7 @@ class ASTGenSuite(unittest.TestCase):
                         [(
                             BinaryOp("==",BinaryOp("%",Id("i"),IntLiteral(2)),IntLiteral(0)),
                             [],
-                            [CallExpr(Id("writeln"),[BinaryOp("*",Id("a"),Id("i"))])]
+                            [CallStmt(Id("writeln"),[BinaryOp("*",Id("a"),Id("i"))])]
                         )],([],[])
                     )])
                 )
@@ -1686,7 +1686,7 @@ class ASTGenSuite(unittest.TestCase):
         """
         expect = Program([
             FuncDecl(Id("main"),[],(
-                [VarDecl(Id("arr"),[IntLiteral(10)],None)],
+                [VarDecl(Id("arr"),[10],None)],
                 [For(
                     Id("i"),
                     IntLiteral(0),
@@ -1738,13 +1738,13 @@ class ASTGenSuite(unittest.TestCase):
                 [VarDecl(Id("i"),[],None),
                 VarDecl(Id("n"),[],None)],
                 [Dowhile(
-                    ([],[CallExpr(Id("writeln"),[StringLiteral("Input n: ")]),
-                    CallExpr(Id("input"),[Id("n")]),
+                    ([],[CallStmt(Id("writeln"),[StringLiteral("Input n: ")]),
+                    CallStmt(Id("input"),[Id("n")]),
                     If(
                         [(
                             BinaryOp("<=",Id("n"),IntLiteral(0)),
                             [],
-                            [CallExpr(Id("writeln"),[StringLiteral("Input again, N must be larger than 0")])]
+                            [CallStmt(Id("writeln"),[StringLiteral("Input again, N must be larger than 0")])]
                         )],([],[]))]),
                     BinaryOp("<=",Id("n"),IntLiteral(0))),
                 Assign(Id("i"),IntLiteral(1)),
@@ -1754,7 +1754,7 @@ class ASTGenSuite(unittest.TestCase):
                             [(
                                 BinaryOp("==",BinaryOp("%",Id("n"),Id("i")),IntLiteral(0)),
                                 [],
-                                [CallExpr(Id("writeln"),[Id("i")]),
+                                [CallStmt(Id("writeln"),[Id("i")]),
                                 Assign(Id("i"),BinaryOp("+",Id("i"),IntLiteral(1)))]
                             )],([],[])
                         )]))]))])
@@ -1783,7 +1783,7 @@ class ASTGenSuite(unittest.TestCase):
                         BinaryOp("<=",Id("j"),
                         IntLiteral(9)),
                         IntLiteral(1),
-                        ([],[CallExpr(Id("writeln"),[Id("i"),Id("j"),BinaryOp("*",Id("i"),Id("j"))])]))]))]))])
+                        ([],[CallStmt(Id("writeln"),[Id("i"),Id("j"),BinaryOp("*",Id("i"),Id("j"))])]))]))]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,352))
     def test53(self):
         input = """
@@ -1851,13 +1851,13 @@ class ASTGenSuite(unittest.TestCase):
                 ])
             ),
             FuncDecl(Id("main"),[],([VarDecl(Id("n"),[],None)],[
-                CallExpr(Id("input"),[Id("n")]),
+                CallStmt(Id("input"),[Id("n")]),
                 If(
                     [(
                         CallExpr(Id("prime_number"),[Id("n")]),
                         [],
-                        [CallExpr(Id("writeln"),[Id("n"),StringLiteral("is prime number")])]
-                    )],([],[CallExpr(Id("writeln"),[Id("n"),StringLiteral("is not prime number")])]))]))])
+                        [CallStmt(Id("writeln"),[Id("n"),StringLiteral("is prime number")])]
+                    )],([],[CallStmt(Id("writeln"),[Id("n"),StringLiteral("is not prime number")])]))]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,353))
     def test54(self):
         input = """
@@ -1878,7 +1878,7 @@ class ASTGenSuite(unittest.TestCase):
         """
         expect = Program([
             FuncDecl(Id("main"),[],(
-                [VarDecl(Id("a"),[IntLiteral(10)],None),
+                [VarDecl(Id("a"),[10],None),
                 VarDecl(Id("max"),[],None)],
                 [For(
                     Id("i"),
@@ -1887,7 +1887,7 @@ class ASTGenSuite(unittest.TestCase):
                     IntLiteral(1),
                     (
                         [],
-                        [CallExpr(Id("input"),[ArrayCell(Id("a"),[Id("i")])])]
+                        [CallStmt(Id("input"),[ArrayCell(Id("a"),[Id("i")])])]
                     )),
                 Assign(Id("max"),ArrayCell(Id("a"),[IntLiteral(0)])),
                 For(
@@ -1901,7 +1901,7 @@ class ASTGenSuite(unittest.TestCase):
                                 BinaryOp("<",Id("max"),ArrayCell(Id("a"),[Id("i")])),
                                 [],
                                 [Assign(Id("max"),ArrayCell(Id("a"),[Id("i")]))])],([],[]))])),
-                CallExpr(Id("writeln"),[StringLiteral("Max number in array is: "),Id("max")])]))])
+                CallStmt(Id("writeln"),[StringLiteral("Max number in array is: "),Id("max")])]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,354))
     def test55_complex_exp_test(self):
         input = r"""
@@ -2078,8 +2078,8 @@ class ASTGenSuite(unittest.TestCase):
             EndBody.
         """
         expect = Program([
-            VarDecl(Id("string"),[IntLiteral(3)],ArrayLiteral([StringLiteral("1.23"),StringLiteral("0.e4"),StringLiteral("12e2")])),
-            FuncDecl(Id("test"),[],([VarDecl(Id("x"),[IntLiteral(3)],None),
+            VarDecl(Id("string"),[3],ArrayLiteral([StringLiteral("1.23"),StringLiteral("0.e4"),StringLiteral("12e2")])),
+            FuncDecl(Id("test"),[],([VarDecl(Id("x"),[3],None),
             VarDecl(Id("sum"),[],FloatLiteral("0."))],[
                 For(
                     Id("i"),
@@ -2130,9 +2130,9 @@ class ASTGenSuite(unittest.TestCase):
             VarDecl(Id("b"),[],None),
             VarDecl(Id("operator"),[],None),
             FuncDecl(Id("main"),[],([],[
-                CallExpr(Id("input"),[Id("a")]),
-                CallExpr(Id("input"),[Id("b")]),
-                CallExpr(Id("input"),[Id("operator")]),
+                CallStmt(Id("input"),[Id("a")]),
+                CallStmt(Id("input"),[Id("b")]),
+                CallStmt(Id("input"),[Id("operator")]),
                 If(
                     [(
                         BinaryOp("==",Id("operator"),StringLiteral("+")),
@@ -2163,7 +2163,7 @@ class ASTGenSuite(unittest.TestCase):
             EndBody.
         """
         expect = Program([
-            VarDecl(Id("arr"),[IntLiteral(3),IntLiteral(2)],ArrayLiteral([ArrayLiteral([IntLiteral(1),IntLiteral(2)]),ArrayLiteral([IntLiteral(4),IntLiteral(5)]),ArrayLiteral([IntLiteral(3),IntLiteral(5)])])),
+            VarDecl(Id("arr"),[3,2],ArrayLiteral([ArrayLiteral([IntLiteral(1),IntLiteral(2)]),ArrayLiteral([IntLiteral(4),IntLiteral(5)]),ArrayLiteral([IntLiteral(3),IntLiteral(5)])])),
             FuncDecl(Id("main"),[],([VarDecl(Id("p"),[],IntLiteral(1))],[
                 For(
                     Id("i"),
@@ -2177,7 +2177,7 @@ class ASTGenSuite(unittest.TestCase):
                             BinaryOp("<",Id("j"),IntLiteral(2)),
                             IntLiteral(1),
                             ([],[Assign(Id("p"),BinaryOp("*",Id("p"),ArrayCell(Id("arr"),[Id("i"),Id("j")])))]))])),
-                CallExpr(Id("writeln"),[Id("p")])]))])
+                CallStmt(Id("writeln"),[Id("p")])]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,367))
     def test68_no_stmt_in_body(self):
         input = r"""
@@ -2200,7 +2200,7 @@ class ASTGenSuite(unittest.TestCase):
             FuncDecl(Id("main"),[],([VarDecl(Id("s"),[],StringLiteral("this is a string containing tab \\t")),
             VarDecl(Id("a"),[],StringLiteral("0XFA1B23"))],
             [Assign(Id("s"),BinaryOp("+",Id("s"),CallExpr(Id("string"),[Id("a")]))),
-            CallExpr(Id("writeln"),[Id("s")])]))])
+            CallStmt(Id("writeln"),[Id("s")])]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,369))
     def test70_sign_operand(self):
         input = r"""
@@ -2219,7 +2219,7 @@ class ASTGenSuite(unittest.TestCase):
                 VarDecl(Id("b"),[],IntLiteral(1))],
                 [Assign(Id("a"),BinaryOp("*",Id("a"),UnaryOp("-",Id("b")))),
                 Assign(Id("a"),BinaryOp("*.",Id("a"),UnaryOp("-",Id("b")))),
-                CallExpr(Id("writeln"),[Id("a")])]))])
+                CallStmt(Id("writeln"),[Id("a")])]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,370))
     def test71(self):
         input = r"""
@@ -2251,7 +2251,7 @@ class ASTGenSuite(unittest.TestCase):
             FuncDecl(Id("main"),[],([
                 VarDecl(Id("a"),[],None),
                 VarDecl(Id("b"),[],IntLiteral(5))],[
-                    CallExpr(Id("input"),[Id("a")]),
+                    CallStmt(Id("input"),[Id("a")]),
                     If(
                         [(
                             UnaryOp("!",BinaryOp("+",Id("a"),BinaryOp("*",Id("b"),IntLiteral(10)))),
@@ -2338,16 +2338,16 @@ class ASTGenSuite(unittest.TestCase):
                 VarDecl(Id("s"),[],None),
                 VarDecl(Id("k"),[],None),
                 VarDecl(Id("result"),[],None)],[
-                    CallExpr(Id("input"),[Id("s")]),
-                    CallExpr(Id("input"),[Id("k")]),
+                    CallStmt(Id("input"),[Id("s")]),
+                    CallStmt(Id("input"),[Id("k")]),
                     Assign(Id("result"),BinaryOp("+",CallExpr(Id("string"),[Id("s")]),
                     CallExpr(Id("string"),[Id("k")]))),
                     If(
                         [(
                             CallExpr(Id("check"),[Id("result")]),
                             [],
-                            [CallExpr(Id("writeln"),[Id("result")])]
-                        )],([],[CallExpr(Id("writeln"),[StringLiteral("Nothing")])]))]))])
+                            [CallStmt(Id("writeln"),[Id("result")])]
+                        )],([],[CallStmt(Id("writeln"),[StringLiteral("Nothing")])]))]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,375))
     def test76_assign_stmt(self):
         input = """
@@ -2364,10 +2364,10 @@ class ASTGenSuite(unittest.TestCase):
             FuncDecl(Id("main"),[],([
                 VarDecl(Id("a"),[],None),
                 VarDecl(Id("b"),[],None)],[
-                    CallExpr(Id("input"),[Id("a"),Id("b")]),
+                    CallStmt(Id("input"),[Id("a"),Id("b")]),
                     Assign(Id("c"),BinaryOp("==",Id("a"),Id("b"))),
                     Assign(Id("d"),BinaryOp("+",Id("c"),BinaryOp("*.",UnaryOp("-",FloatLiteral("1.23")),UnaryOp("-",FloatLiteral("3e4"))))),
-                    CallExpr(Id("writeln"),[Id("d")])]))])
+                    CallStmt(Id("writeln"),[Id("d")])]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,376))
     def test77_call_stmt(self):
         input = r"""
@@ -2384,7 +2384,7 @@ class ASTGenSuite(unittest.TestCase):
         """
         expect = Program([
             FuncDecl(Id("main"),[],([],[
-                CallExpr(Id("foo"),[BinaryOp("+",IntLiteral(3),BinaryOp("*",ArrayCell(Id("x"),[Id("i")]),CallExpr(Id("y"),[IntLiteral(3),CallExpr(Id("z"),[IntLiteral(4)])])))]),
+                CallStmt(Id("foo"),[BinaryOp("+",IntLiteral(3),BinaryOp("*",ArrayCell(Id("x"),[Id("i")]),CallExpr(Id("y"),[IntLiteral(3),CallExpr(Id("z"),[IntLiteral(4)])])))]),
                 If(
                     [(
                         UnaryOp("!",Id("foo")),
@@ -2396,7 +2396,7 @@ class ASTGenSuite(unittest.TestCase):
                     IntLiteral(0),
                     BinaryOp("<",Id("i"),IntLiteral(100)),
                     IntLiteral(2),
-                    ([],[CallExpr(Id("writeln"),[BinaryOp("*",CallExpr(Id("sqrt"),[Id("i")]),ArrayCell(Id("test"),[IntLiteral(3),CallExpr(Id("foo"),[IntLiteral(4)])]))])]))]))])
+                    ([],[CallStmt(Id("writeln"),[BinaryOp("*",CallExpr(Id("sqrt"),[Id("i")]),ArrayCell(Id("test"),[IntLiteral(3),CallExpr(Id("foo"),[IntLiteral(4)])]))])]))]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,377))
     def test78_all(self):
         input = r"""
@@ -2454,18 +2454,18 @@ class ASTGenSuite(unittest.TestCase):
                                 [Return(BooleanLiteral(False))]
                             )],([],[]))])),
                 Return(BooleanLiteral(True))])),
-            FuncDecl(Id("main"),[],([VarDecl(Id("a"),[IntLiteral(100)],None)],[
+            FuncDecl(Id("main"),[],([VarDecl(Id("a"),[100],None)],[
                 For(
                     Id("i"),
                     IntLiteral(0),
                     BinaryOp("<",Id("i"),IntLiteral(100)),
                     IntLiteral(1),
-                    ([],[CallExpr(Id("input"),[ArrayCell(Id("a"),[Id("i")])]),
+                    ([],[CallStmt(Id("input"),[ArrayCell(Id("a"),[Id("i")])]),
                     If(
                         [(
                             BinaryOp("&&",CallExpr(Id("prime_number"),[ArrayCell(Id("a"),[Id("i")])]),BinaryOp("!=",BinaryOp("%",ArrayCell(Id("a"),[Id("i")]),IntLiteral(2)),IntLiteral(0))),
                             [],
-                            [CallExpr(Id("writeln"),[ArrayCell(Id("a"),[Id("i")])])]
+                            [CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")])])]
                         )],([],[]))]))]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,378))
     def test79_all(self):
@@ -2505,13 +2505,13 @@ class ASTGenSuite(unittest.TestCase):
         """
         expect = Program([
             VarDecl(Id("a"),[],IntLiteral(5)),
-            VarDecl(Id("b"),[IntLiteral(2),IntLiteral(3)],ArrayLiteral([ArrayLiteral([IntLiteral(2),IntLiteral(3),IntLiteral(4)]),ArrayLiteral([IntLiteral(4),IntLiteral(5),IntLiteral(6)])])),
+            VarDecl(Id("b"),[2,3],ArrayLiteral([ArrayLiteral([IntLiteral(2),IntLiteral(3),IntLiteral(4)]),ArrayLiteral([IntLiteral(4),IntLiteral(5),IntLiteral(6)])])),
             VarDecl(Id("c"),[],None),
             VarDecl(Id("d"),[],IntLiteral(6)),
             VarDecl(Id("e"),[],None),
             VarDecl(Id("f"),[],None),
             VarDecl(Id("m"),[],None),
-            VarDecl(Id("n"),[IntLiteral(10)],None),
+            VarDecl(Id("n"),[10],None),
             FuncDecl(Id("fact"),[VarDecl(Id("n"),[],None)],([],[
                 If(
                     [(
@@ -2537,8 +2537,8 @@ class ASTGenSuite(unittest.TestCase):
                         IntLiteral(0),
                         BinaryOp("<",Id("i"),IntLiteral(10)),
                         IntLiteral(2),
-                        ([],[CallExpr(Id("writeln"),[Id("i")])])),
-                    Assign(Id("x"),IntLiteral(10)),CallExpr(Id("fact"),[Id("x")])]))])
+                        ([],[CallStmt(Id("writeln"),[Id("i")])])),
+                    Assign(Id("x"),IntLiteral(10)),CallStmt(Id("fact"),[Id("x")])]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,379))
     def test80_var(self):
         input = """
@@ -2548,12 +2548,12 @@ class ASTGenSuite(unittest.TestCase):
             Var: e[0x1234], f[0X8765];
         """
         expect = Program([
-            VarDecl(Id("a"),[IntLiteral("0x1"),IntLiteral("0x2"),IntLiteral("0x3"),IntLiteral("0x4"),IntLiteral("0x5"),IntLiteral("0x6"),IntLiteral("0x7"),IntLiteral("0x8"),IntLiteral("0x9")],None),
-            VarDecl(Id("b"),[IntLiteral("0xA"),IntLiteral("0xB"),IntLiteral("0xC"),IntLiteral("0xD"),IntLiteral("0xE"),IntLiteral("0xF")],None),
-            VarDecl(Id("c"),[IntLiteral("0x10000000")],None),
-            VarDecl(Id("d"),[IntLiteral("0XABCDEF")],None),
-            VarDecl(Id("e"),[IntLiteral("0x1234")],None),
-            VarDecl(Id("f"),[IntLiteral("0X8765")],None)])
+            VarDecl(Id("a"),["0x1","0x2","0x3","0x4","0x5","0x6","0x7","0x8","0x9"],None),
+            VarDecl(Id("b"),["0xA","0xB","0xC","0xD","0xE","0xF"],None),
+            VarDecl(Id("c"),["0x10000000"],None),
+            VarDecl(Id("d"),["0XABCDEF"],None),
+            VarDecl(Id("e"),["0x1234"],None),
+            VarDecl(Id("f"),["0X8765"],None)])
         self.assertTrue(TestAST.checkASTGen(input,expect,380))
     def test81_var(self):
         input = r"""
@@ -2563,8 +2563,8 @@ class ASTGenSuite(unittest.TestCase):
             """
         expect = Program([
             VarDecl(Id("a"),[],IntLiteral(1)),
-            VarDecl(Id("a"),[IntLiteral(1)],ArrayLiteral([IntLiteral(1)])),
-            VarDecl(Id("a"),[IntLiteral(1),IntLiteral(2)],ArrayLiteral([ArrayLiteral([IntLiteral(1)]),ArrayLiteral([IntLiteral(2)])]))])
+            VarDecl(Id("a"),[1],ArrayLiteral([IntLiteral(1)])),
+            VarDecl(Id("a"),[1,2],ArrayLiteral([ArrayLiteral([IntLiteral(1)]),ArrayLiteral([IntLiteral(2)])]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,381))
     def test82(self):
         input = r"""
@@ -2678,7 +2678,7 @@ class ASTGenSuite(unittest.TestCase):
                                                         VarDecl(Id("c"),[],None)
                                                     ],
                                                     [
-                                                        CallExpr(Id("foo"),[])
+                                                        CallStmt(Id("foo"),[])
                                                     ]
                                                 ),(
                                                     Id("d"),
@@ -2699,7 +2699,7 @@ class ASTGenSuite(unittest.TestCase):
                                                         ([
                                                             VarDecl(Id("a"),[],None),
                                                             VarDecl(Id("b"),[],IntLiteral(2)),
-                                                            VarDecl(Id("a"),[IntLiteral(1),IntLiteral(2)],ArrayLiteral([IntLiteral(1),IntLiteral(2)]))
+                                                            VarDecl(Id("a"),[1,2],ArrayLiteral([IntLiteral(1),IntLiteral(2)]))
                                                         ],[
                                                             Break()
                                                         ])
@@ -2868,8 +2868,8 @@ class ASTGenSuite(unittest.TestCase):
                         (Id("a"),
                         [VarDecl(Id("a"),[],None),
                         VarDecl(Id("b"),[],None)],
-                        [CallExpr(Id("foo1"),[]),
-                        CallExpr(Id("foo2"),[]),
+                        [CallStmt(Id("foo1"),[]),
+                        CallStmt(Id("foo2"),[]),
                         Assign(Id("a"),BooleanLiteral(False)),
                         Assign(Id("b"),BooleanLiteral(True))])
                     ],([],[])
@@ -2892,7 +2892,7 @@ class ASTGenSuite(unittest.TestCase):
             EndBody.
         """
         expect = Program([
-            VarDecl(Id("a"),[IntLiteral(2),IntLiteral(2)],ArrayLiteral([ArrayLiteral([IntLiteral(0),FloatLiteral("0E123")]),ArrayLiteral([IntLiteral("0XFFF"),IntLiteral("0x12FA")])])),
+            VarDecl(Id("a"),[2,2],ArrayLiteral([ArrayLiteral([IntLiteral(0),FloatLiteral("0E123")]),ArrayLiteral([IntLiteral("0XFFF"),IntLiteral("0x12FA")])])),
             VarDecl(Id("b"),[],None),
             VarDecl(Id("c"),[],StringLiteral("nothing")),
             FuncDecl(Id("main"),[VarDecl(Id("x"),[],None)],([],[
@@ -2908,7 +2908,7 @@ class ASTGenSuite(unittest.TestCase):
                         BinaryOp("+",Id("j"),IntLiteral(1)),
                         ([],[
                             Assign(Id("x"),BinaryOp("+",Id("x"),ArrayCell(Id("a"),[Id("i"),Id("j")]))),
-                            CallExpr(Id("writeln"),[Id("b"),Id("c"),Id("x")])]))])),
+                            CallStmt(Id("writeln"),[Id("b"),Id("c"),Id("x")])]))])),
                 Return(Id("x"))]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,392))
     def test93(self):
@@ -2929,20 +2929,20 @@ class ASTGenSuite(unittest.TestCase):
             EndBody.
         """
         expect = Program([
-            VarDecl(Id("a"),[IntLiteral(2)],ArrayLiteral([StringLiteral("Hoang"),StringLiteral("Gia")])),
+            VarDecl(Id("a"),[2],ArrayLiteral([StringLiteral("Hoang"),StringLiteral("Gia")])),
             FuncDecl(Id("main"),[VarDecl(Id("x"),[],None)],([],[
-                CallExpr(Id("input"),[Id("x")]),
+                CallStmt(Id("input"),[Id("x")]),
                 If(
                     [(
                         BinaryOp("==",CallExpr(Id("int"),[Id("x")]),IntLiteral(0)),
                         [],
-                        [CallExpr(Id("writeln"),[ArrayCell(Id("a"),[CallExpr(Id("int"),[Id("x")])])])]
+                        [CallStmt(Id("writeln"),[ArrayCell(Id("a"),[CallExpr(Id("int"),[Id("x")])])])]
                     ),(
                         BinaryOp("==",CallExpr(Id("int"),[Id("x")]),IntLiteral(1)),
                         [],
-                        [CallExpr(Id("writeln"),[BinaryOp("+",ArrayCell(Id("a"),[CallExpr(Id("int"),[Id("x")])]),StringLiteral("Khang"))])]
+                        [CallStmt(Id("writeln"),[BinaryOp("+",ArrayCell(Id("a"),[CallExpr(Id("int"),[Id("x")])]),StringLiteral("Khang"))])]
                     )],([],[
-                        CallExpr(Id("writeln"),[BinaryOp("+",BinaryOp("+",ArrayCell(Id("a"),[IntLiteral(0)]),ArrayCell(Id("a"),[IntLiteral(1)])),StringLiteral("Khang"))])])),
+                        CallStmt(Id("writeln"),[BinaryOp("+",BinaryOp("+",ArrayCell(Id("a"),[IntLiteral(0)]),ArrayCell(Id("a"),[IntLiteral(1)])),StringLiteral("Khang"))])])),
                 Return(IntLiteral(0))]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,393))
     def test94(self):
@@ -2988,15 +2988,15 @@ class ASTGenSuite(unittest.TestCase):
                         BinaryOp("<",Id("i"),Id("size")),
                         BinaryOp("+.",Id("i"),FloatLiteral("1.0e0")),
                         ([],[
-                            CallExpr(Id("printf"),[StringLiteral("%d "),ArrayCell(Id("arr"),[Id("i")])])
+                            CallStmt(Id("printf"),[StringLiteral("%d "),ArrayCell(Id("arr"),[Id("i")])])
                         ])),
-                    CallExpr(Id("printf"),[StringLiteral("n")])])),
+                    CallStmt(Id("printf"),[StringLiteral("n")])])),
             FuncDecl(Id("main"),[],([],[
                 Assign(ArrayCell(Id("arr"),[IntLiteral(1)]),ArrayLiteral([IntLiteral(64),IntLiteral(25),IntLiteral(12),IntLiteral(22),IntLiteral(11)])),
                 Assign(Id("n"),BinaryOp("\\",CallExpr(Id("sizeof"),[Id("arr")]),CallExpr(Id("sizeof"),[ArrayCell(Id("arr"),[IntLiteral(0)])]))),
-                CallExpr(Id("selectionSort"),[Id("arr"),Id("n")]),
-                CallExpr(Id("printf"),[StringLiteral("Sorted array: n")]),
-                CallExpr(Id("printArray"),[Id("arr"),Id("n")]),
+                CallStmt(Id("selectionSort"),[Id("arr"),Id("n")]),
+                CallStmt(Id("printf"),[StringLiteral("Sorted array: n")]),
+                CallStmt(Id("printArray"),[Id("arr"),Id("n")]),
                 Return(IntLiteral(0))]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,395))
     def test96_comment(self):
@@ -3050,7 +3050,7 @@ class ASTGenSuite(unittest.TestCase):
                 """
         expect = Program([
             FuncDecl(Id("convertNumber_continue"),[
-                VarDecl(Id("x"),[IntLiteral(6),IntLiteral(7)],None)],([],[
+                VarDecl(Id("x"),[6,7],None)],([],[
                     While(
                         BinaryOp(">",Id("remainder"),IntLiteral(0)),
                         ([],[
@@ -3083,7 +3083,7 @@ class ASTGenSuite(unittest.TestCase):
         expect = Program([
             FuncDecl(Id("function"),[
                 VarDecl(Id("j"),[],None),
-                VarDecl(Id("brr"),[IntLiteral(1000)],None)],([],[
+                VarDecl(Id("brr"),[1000],None)],([],[
                     Assign(Id("j"),BinaryOp("+.",UnaryOp("-.",UnaryOp("-.",Id("i"))),ArrayCell(Id("brrr"),[IntLiteral(5)])))]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,398))
     def test99_long_program(self):
@@ -3132,7 +3132,7 @@ class ASTGenSuite(unittest.TestCase):
             FuncDecl(
                 Id("function"),[
                     VarDecl(Id("j"),[],None),
-                    VarDecl(Id("brr"),[IntLiteral(1000)],None)],([],[
+                    VarDecl(Id("brr"),[1000],None)],([],[
                         For(
                             Id("j"),
                             IntLiteral(0),
@@ -3164,15 +3164,15 @@ class ASTGenSuite(unittest.TestCase):
                         IntLiteral(0),
                         BinaryOp("<",Id("i"),Id("n")),
                         IntLiteral(1),
-                        ([],[CallExpr(Id("print"),[Id("str")])]))])),
+                        ([],[CallStmt(Id("print"),[Id("str")])]))])),
             FuncDecl(Id("main"),[
-                VarDecl(Id("argv"),[IntLiteral(1000)],None),
+                VarDecl(Id("argv"),[1000],None),
                 VarDecl(Id("argc"),[],None)],([],[
-                    CallExpr(Id("function"),[BinaryOp("+",Id("argc"),IntLiteral(1)),Id("argv")]),
+                    CallStmt(Id("function"),[BinaryOp("+",Id("argc"),IntLiteral(1)),Id("argv")]),
                     Dowhile(
                         ([],[
-                            CallExpr(Id("print"),[StringLiteral("\\n\\r")]),
-                            CallExpr(Id("super_print"),[StringLiteral("Hello World\\n")])]),
+                            CallStmt(Id("print"),[StringLiteral("\\n\\r")]),
+                            CallStmt(Id("super_print"),[StringLiteral("Hello World\\n")])]),
                         BooleanLiteral(True))]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,399))
     def test100_long_program(self):
@@ -3211,7 +3211,7 @@ class ASTGenSuite(unittest.TestCase):
             FuncDecl(
                 Id("function"),[
                 VarDecl(Id("j"),[],None),
-                VarDecl(Id("brr"),[IntLiteral(1000)],None)],
+                VarDecl(Id("brr"),[1000],None)],
                 ([],[
                     For(
                         Id("j"),
@@ -3241,9 +3241,9 @@ class ASTGenSuite(unittest.TestCase):
             ),
             FuncDecl(
                 Id("main"),
-                [VarDecl(Id("argv"),[IntLiteral(1000)],None),
+                [VarDecl(Id("argv"),[1000],None),
                 VarDecl(Id("argc"),[],None)],
-                ([],[CallExpr(Id("function"),[Id("argc"),Id("argv")])])
+                ([],[CallStmt(Id("function"),[Id("argc"),Id("argv")])])
             )
         ])
         self.assertTrue(TestAST.checkASTGen(input,expect,400))
