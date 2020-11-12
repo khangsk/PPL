@@ -52,7 +52,7 @@ class ASTGeneration(BKITVisitor):
     def visitVariable(self, ctx: BKITParser.VariableContext):
         if ctx.getChildCount() == 1:
             return [Id(ctx.ID().getText())]
-        arr = [i.getText() for i in ctx.INT()]
+        arr = [self.convertInt(i.getText()) for i in ctx.INT()]
         return [Id(ctx.ID().getText()), arr]
         
 
@@ -67,12 +67,14 @@ class ASTGeneration(BKITVisitor):
 
     # literal:  INT | FLOAT | BOOLEAN | STRING | array;
     def visitLiteral(self, ctx: BKITParser.LiteralContext):
-        if ctx.INT(): return IntLiteral(ctx.INT().getText())
-        elif ctx.FLOAT(): return FloatLiteral(ctx.FLOAT().getText())
-        elif ctx.BOOLEAN(): return BooleanLiteral(ctx.BOOLEAN().getText())
+        if ctx.INT(): return IntLiteral(self.convertInt(ctx.INT().getText()))
+        elif ctx.FLOAT(): return FloatLiteral(float(ctx.FLOAT().getText()))
+        elif ctx.BOOLEAN(): return BooleanLiteral(True) if ctx.BOOLEAN().getText() == "True" else BooleanLiteral(False)
         elif ctx.STRING(): return StringLiteral(ctx.STRING().getText())
         else: return self.visitArray(ctx.array())
-
+    
+    def convertInt(self, s):
+        return int(s, 8) if 'o' in s or 'O' in s else int(s,16) if 'x' in s or 'X' in s else int(s)
     # compound_stmt: BODY COLON var_declare* stmt* ENDBODY DOT ;
     def visitCompound_stmt(self, ctx: BKITParser.Compound_stmtContext):
         arrVar = reduce(lambda x, y: x + self.visitVar_declare(y), ctx.var_declare(), [])

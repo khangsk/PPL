@@ -1,1 +1,1 @@
-Program([VarDecl(Id(a),[0x1,0x2,0x3,0x4,0x5,0x6,0x7,0x8,0x9]),VarDecl(Id(b),[0xA,0xB,0xC,0xD,0xE,0xF]),VarDecl(Id(c),[0x10000000]),VarDecl(Id(d),[0XABCDEF]),VarDecl(Id(e),[0x1234]),VarDecl(Id(f),[0X8765])])
+Program([VarDecl(Id(a),[1,2,3,4,5,6,7,8,9]),VarDecl(Id(b),[10,11,12,13,14,15]),VarDecl(Id(c),[268435456]),VarDecl(Id(d),[11259375]),VarDecl(Id(e),[4660]),VarDecl(Id(f),[34661])])
