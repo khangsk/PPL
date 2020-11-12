@@ -1,1 +1,1 @@
-Program([FuncDecl(Id(power_recur)[VarDecl(Id(base)),VarDecl(Id(exp))],([][If(BinaryOp(==,Id(exp),IntLiteral(0)),[],[Return(IntLiteral(1))])Else([],[]),Return(BinaryOp(*,Id(base),CallExpr(Id(power_recur),[Id(base),BinaryOp(-,Id(exp),IntLiteral(1))])))]))])
+Program([FuncDecl(Id(power_recur)[VarDecl(Id(base)),VarDecl(Id(exp))],([][If(BinaryOp(==,Id(exp),IntLiteral(0)),[],[Return(IntLiteral(1))]),Return(BinaryOp(*,Id(base),CallExpr(Id(power_recur),[Id(base),BinaryOp(-,Id(exp),IntLiteral(1))])))]))])

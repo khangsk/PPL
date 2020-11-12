@@ -90,7 +90,7 @@ class ASTGenSuite(unittest.TestCase):
                                         ]
                             )
                         ],
-                        ([],[])
+                        []
                     )
                 ]
             ))
@@ -124,7 +124,7 @@ class ASTGenSuite(unittest.TestCase):
                                 [CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")]),StringLiteral(" equal "),Id("b")])]
                             )
                         ],
-                        ([],[])
+                        []
                     )
                 ]
             ))
@@ -904,7 +904,7 @@ class ASTGenSuite(unittest.TestCase):
                                 [(BinaryOp(">",ArrayCell(Id("a"),[IntLiteral(10)]),IntLiteral(5)),
                                 [],
                                 [Break()])],
-                                ([],[])
+                                []
                             )
                         ])
                     )]
@@ -943,7 +943,7 @@ class ASTGenSuite(unittest.TestCase):
                                 [],
                                 [Continue()]
                             )],
-                            ([],[])
+                            []
                         )
                     ])
                 )])
@@ -1016,7 +1016,7 @@ class ASTGenSuite(unittest.TestCase):
                             [],
                             [Assign(Id("a"),CallExpr(Id("int_of_string"),[CallExpr(Id("read"),[])])),
                             Assign(Id("b"),BinaryOp("+.",CallExpr(Id("float_of_string"),[Id("a")]),FloatLiteral("2.0")))]
-                        )],([],[])
+                        )],[]
                     )
                 ])
             )
@@ -1055,7 +1055,7 @@ class ASTGenSuite(unittest.TestCase):
                                     BinaryOp("==",BinaryOp("%",Id("n"),Id("i")),IntLiteral(0)),
                                     [],
                                     [CallStmt(Id("writeln"),[Id("i")])]
-                                )],([],[])
+                                )],[]
                             )
                         ])
                     )
@@ -1095,7 +1095,7 @@ class ASTGenSuite(unittest.TestCase):
                             BinaryOp("==",Id("exp"),IntLiteral(0)),
                             [],
                             [Return(IntLiteral(1))]
-                        )],([],[])
+                        )],[]
                     ),
                     For(
                         Id("i"),
@@ -1130,7 +1130,7 @@ class ASTGenSuite(unittest.TestCase):
                             BinaryOp("==",Id("exp"),IntLiteral(0)),
                             [],
                             [Return(IntLiteral(1))]
-                        )],([],[])
+                        )],[]
                     ),
                     Return(BinaryOp("*",Id("base"),CallExpr(Id("power_recur"),[Id("base"),BinaryOp("-",Id("exp"),IntLiteral(1))])))
                 ])
@@ -1179,7 +1179,7 @@ class ASTGenSuite(unittest.TestCase):
                             BinaryOp("==",Id("exp"),IntLiteral(0)),
                             [],
                             [Return(IntLiteral(1))]
-                        )],([],[])
+                        )],[]
                     ),
                     For(
                         Id("i"),
@@ -1200,7 +1200,7 @@ class ASTGenSuite(unittest.TestCase):
                             BinaryOp("==",Id("exp"),IntLiteral(0)),
                             [],
                             [Return(IntLiteral(1))]
-                        )],([],[])
+                        )],[]
                     ),
                     Return(BinaryOp("*",Id("base"),CallExpr(Id("power_recur"),[Id("base"),BinaryOp("-",Id("exp"),IntLiteral(1))])))
                 ])
@@ -1269,7 +1269,7 @@ class ASTGenSuite(unittest.TestCase):
                                     [],
                                     [Assign(Id("a"),ArrayCell(Id("arr"),[Id("i")])),
                                     Assign(Id("answer"),BinaryOp("+",Id("answer"),IntLiteral(1)))]
-                                )],([],[])
+                                )],[]
                             )
                         ])
                     ),
@@ -1278,7 +1278,7 @@ class ASTGenSuite(unittest.TestCase):
                             BinaryOp("!=",Id("j"),BinaryOp("-",Id("length"),IntLiteral(1))),
                             [],
                             [Assign(Id("answer"),UnaryOp("-",IntLiteral(1)))]
-                        )],([],[])
+                        )],[]
                     ),
                     If(
                         [(
@@ -1339,14 +1339,14 @@ class ASTGenSuite(unittest.TestCase):
                                     [],
                                     [Assign(Id("check"),BooleanLiteral(True)),
                                     Break()]
-                                )],([],[])
+                                )],[]
                             ),
                             If(
                                 [(
                                     Id("check"),
                                     [],
                                     [Assign(Id("check"),BooleanLiteral(False))]
-                                )],([],[])
+                                )],[]
                             ),
                             Continue()])
                         ),
@@ -1392,7 +1392,7 @@ class ASTGenSuite(unittest.TestCase):
                             [Assign(Id("count"),BinaryOp("+",Id("count"),IntLiteral(1))),
                             CallStmt(Id("writeln"),[ArrayCell(Id("str"),[Id("i")])])
                             ]
-                        )],([],[])
+                        )],[]
                     )])
                 ),
                 Return(Id("count"))
@@ -1428,21 +1428,21 @@ class ASTGenSuite(unittest.TestCase):
                             BinaryOp("==",Id("a"),Id("b")),
                             [],
                             [Return(Id("a"))]
-                        )],([],[])
+                        )],[]
                     ),
                     If(
                         [(
                             BinaryOp(">",Id("a"),Id("b")),
                             [],
                             [Assign(Id("a"),BinaryOp("%",Id("a"),Id("b")))]
-                        )],([],[])
+                        )],[]
                     ),
                     If(
                         [(
                             BinaryOp("==",Id("a"),IntLiteral(0)),
                             [],
                             [Return(Id("b"))]
-                        )],([],[])
+                        )],[]
                     ),
                     Return(CallExpr(Id("uoc_chung_lon_nhat"),[Id("b"),Id("a")]))
                 ])
@@ -1515,14 +1515,14 @@ class ASTGenSuite(unittest.TestCase):
                             BinaryOp("==",Id("initialString"),Id("nullptr")),
                             [],
                             [Return(None)]
-                        )],([],[])
+                        )],[]
                     ),If(
                         [(
                             BinaryOp("==",CallExpr(Id("strlen"),[Id("initialString")]),IntLiteral(1)),
                             [],
                             [CallStmt(Id("writeln"),[ArrayCell(Id("initialString"),[IntLiteral(0)])]),
                             Return(None)]
-                        )],([],[])
+                        )],[]
                     ),CallStmt(Id("writeln"),[ArrayCell(Id("initialString"),[BinaryOp("-",CallExpr(Id("strlen"),[Id("initialString")]),IntLiteral(1))])]),
                     Assign(ArrayCell(Id("initialString"),[BinaryOp("-",CallExpr(Id("strlen"),[Id("initialString")]),IntLiteral(1))]),IntLiteral(0)),
                     CallStmt(Id("reverseString"),[Id("initialString")])
@@ -1555,7 +1555,7 @@ class ASTGenSuite(unittest.TestCase):
                             BinaryOp("==",BinaryOp("%",Id("i"),IntLiteral(2)),IntLiteral(0)),
                             [],
                             [CallStmt(Id("writeln"),[Id("i")])]
-                        )],([],[])
+                        )],[]
                     )])
                 )
             ]))
@@ -1593,7 +1593,7 @@ class ASTGenSuite(unittest.TestCase):
                                     BinaryOp(">=",Id("i"),IntLiteral(9)),
                                     [],
                                     [CallStmt(Id("writeln"),[BinaryOp("+",Id("a"),IntLiteral(7))])]
-                                )],([],[])
+                                )],[]
                         )]),
                         BinaryOp("<=",Id("i"),IntLiteral(27))
                     )
@@ -1628,7 +1628,7 @@ class ASTGenSuite(unittest.TestCase):
                                 BinaryOp(">=",ArrayCell(Id("arr"),[IntLiteral(7)]),CallExpr(Id("foo"),[IntLiteral(3)])),
                                 [],
                                 [Break()]
-                            )],([],[])
+                            )],[]
                         )
                     ])
                 )
@@ -1661,7 +1661,7 @@ class ASTGenSuite(unittest.TestCase):
                             BinaryOp("==",BinaryOp("%",Id("i"),IntLiteral(2)),IntLiteral(0)),
                             [],
                             [CallStmt(Id("writeln"),[BinaryOp("*",Id("a"),Id("i"))])]
-                        )],([],[])
+                        )],[]
                     )])
                 )
             ]))
@@ -1704,7 +1704,7 @@ class ASTGenSuite(unittest.TestCase):
                                     [VarDecl(Id("temp"),[],None)],
                                     [Assign(Id("temp"),ArrayCell(Id("arr"),[Id("i")])),
                                     Assign(ArrayCell(Id("arr"),[Id("i")]),ArrayCell(Id("arr"),[Id("j")])),
-                                    Assign(ArrayCell(Id("arr"),[Id("j")]),Id("temp"))])],([],[])
+                                    Assign(ArrayCell(Id("arr"),[Id("j")]),Id("temp"))])],[]
                                 )])
                         )]
                     )
@@ -1745,7 +1745,7 @@ class ASTGenSuite(unittest.TestCase):
                             BinaryOp("<=",Id("n"),IntLiteral(0)),
                             [],
                             [CallStmt(Id("writeln"),[StringLiteral("Input again, N must be larger than 0")])]
-                        )],([],[]))]),
+                        )],[])]),
                     BinaryOp("<=",Id("n"),IntLiteral(0))),
                 Assign(Id("i"),IntLiteral(1)),
                 While(
@@ -1756,7 +1756,7 @@ class ASTGenSuite(unittest.TestCase):
                                 [],
                                 [CallStmt(Id("writeln"),[Id("i")]),
                                 Assign(Id("i"),BinaryOp("+",Id("i"),IntLiteral(1)))]
-                            )],([],[])
+                            )],[]
                         )]))]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,351))
     def test52(self):
@@ -1832,7 +1832,7 @@ class ASTGenSuite(unittest.TestCase):
                                     [(
                                         BinaryOp("==",BinaryOp("%",Id("n"),IntLiteral(2)),IntLiteral(0)),
                                         [],
-                                        [Return(BooleanLiteral(False))])],([],[])),
+                                        [Return(BooleanLiteral(False))])],[]),
                                 For(
                                     Id("i"),
                                     IntLiteral(3),
@@ -1844,9 +1844,9 @@ class ASTGenSuite(unittest.TestCase):
                                                 BinaryOp("==",BinaryOp("%",Id("n"),Id("i")),IntLiteral(0)),
                                                 [],
                                                 [Return(BooleanLiteral(False))]
-                                            )],([],[])
+                                            )],[]
                                         )
-                                    ]))])],([],[])),
+                                    ]))])],[]),
                     Return(BooleanLiteral(True))
                 ])
             ),
@@ -1900,7 +1900,7 @@ class ASTGenSuite(unittest.TestCase):
                             [(
                                 BinaryOp("<",Id("max"),ArrayCell(Id("a"),[Id("i")])),
                                 [],
-                                [Assign(Id("max"),ArrayCell(Id("a"),[Id("i")]))])],([],[]))])),
+                                [Assign(Id("max"),ArrayCell(Id("a"),[Id("i")]))])],[])])),
                 CallStmt(Id("writeln"),[StringLiteral("Max number in array is: "),Id("max")])]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,354))
     def test55_complex_exp_test(self):
@@ -1990,7 +1990,7 @@ class ASTGenSuite(unittest.TestCase):
                         BinaryOp("<=.",Id("a"),Id("b")),
                         [],
                         [Return(BooleanLiteral(True))]
-                    )],([],[]))]))])
+                    )],[])]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,359))
     def test60_relational(self):
         input = r"""
@@ -2008,7 +2008,7 @@ class ASTGenSuite(unittest.TestCase):
                         BinaryOp("||",BinaryOp("||",BinaryOp("&&",BinaryOp("==",Id("a"),Id("b")),BinaryOp("!=",Id("a"),Id("c"))),BinaryOp(">",Id("a"),Id("b"))),BinaryOp("<",Id("a"),Id("c"))),
                         [],
                         [Return(BooleanLiteral(True))]
-                    )],([],[]))]))])
+                    )],[])]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,360))
     def test61_relational(self):
         input = r"""
@@ -2025,7 +2025,7 @@ class ASTGenSuite(unittest.TestCase):
                     [(
                         BinaryOp("&&",BinaryOp("||",BinaryOp("&&",BinaryOp(">.",Id("a"),Id("b")),BinaryOp("<.",Id("a"),Id("b"))),BinaryOp("<=",Id("a"),Id("d"))),BinaryOp(">=",Id("a"),Id("e"))),
                         [],
-                        [Return(BooleanLiteral(True))])],([],[]))]))])
+                        [Return(BooleanLiteral(True))])],[])]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,361))
     def test62_coercions(self):
         input = r"""
@@ -2298,7 +2298,7 @@ class ASTGenSuite(unittest.TestCase):
                         UnaryOp("!",Id("b")),
                         [],
                         [Return(Id("c"))]
-                    )],([],[])),
+                    )],[]),
                     Return(BinaryOp("+",CallExpr(Id("float"),[Id("a___b")]),Id("c")))]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,374))
     def test75(self):
@@ -2332,7 +2332,7 @@ class ASTGenSuite(unittest.TestCase):
                     [(
                         BinaryOp("==",Id("a"),Id("b")),
                         [],
-                        [Return(BooleanLiteral(True))])],([],[])),
+                        [Return(BooleanLiteral(True))])],[]),
                 Return(BooleanLiteral(False))])),
             FuncDecl(Id("main"),[],([
                 VarDecl(Id("s"),[],None),
@@ -2390,7 +2390,7 @@ class ASTGenSuite(unittest.TestCase):
                         UnaryOp("!",Id("foo")),
                         [],
                         [Return(BooleanLiteral(False))]
-                    )],([],[])),
+                    )],[]),
                 For(
                     Id("i"),
                     IntLiteral(0),
@@ -2434,13 +2434,13 @@ class ASTGenSuite(unittest.TestCase):
                         BinaryOp("<",Id("n"),IntLiteral(2)),
                         [],
                         [Return(BooleanLiteral(False))]
-                    )],([],[])),
+                    )],[]),
                 If(
                     [(
                         BinaryOp("||",BinaryOp("==",Id("n"),IntLiteral(2)),BinaryOp("==",Id("n"),IntLiteral(3))),
                         [],
                         [Return(BooleanLiteral(True))]
-                    )],([],[])),
+                    )],[]),
                 For(
                     Id("i"),
                     IntLiteral(2),
@@ -2452,7 +2452,7 @@ class ASTGenSuite(unittest.TestCase):
                                 BinaryOp("==",BinaryOp("%",Id("n"),Id("i")),IntLiteral(0)),
                                 [],
                                 [Return(BooleanLiteral(False))]
-                            )],([],[]))])),
+                            )],[])])),
                 Return(BooleanLiteral(True))])),
             FuncDecl(Id("main"),[],([VarDecl(Id("a"),[100],None)],[
                 For(
@@ -2466,7 +2466,7 @@ class ASTGenSuite(unittest.TestCase):
                             BinaryOp("&&",CallExpr(Id("prime_number"),[ArrayCell(Id("a"),[Id("i")])]),BinaryOp("!=",BinaryOp("%",ArrayCell(Id("a"),[Id("i")]),IntLiteral(2)),IntLiteral(0))),
                             [],
                             [CallStmt(Id("writeln"),[ArrayCell(Id("a"),[Id("i")])])]
-                        )],([],[]))]))]))])
+                        )],[])]))]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,378))
     def test79_all(self):
         input = r"""
@@ -2531,7 +2531,7 @@ class ASTGenSuite(unittest.TestCase):
                             [Assign(Id("a"),
                             CallExpr(Id("int_of_string"),[CallExpr(Id("read"),[])])),
                             Assign(Id("b"),BinaryOp("+.",CallExpr(Id("float_of_int"),[Id("a")]),FloatLiteral(2.0)))])],
-                            ([],[])),
+                            []),
                     For(
                         Id("i"),
                         IntLiteral(0),
@@ -2846,7 +2846,7 @@ class ASTGenSuite(unittest.TestCase):
                         (BooleanLiteral(True),[],[]),
                         (BooleanLiteral(True),[],[]),
                         (BooleanLiteral(True),[],[])
-                    ],([],[]))]))])
+                    ],[])]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,390))
     def test91(self):
         input = r"""
@@ -2872,7 +2872,7 @@ class ASTGenSuite(unittest.TestCase):
                         CallStmt(Id("foo2"),[]),
                         Assign(Id("a"),BooleanLiteral(False)),
                         Assign(Id("b"),BooleanLiteral(True))])
-                    ],([],[])
+                    ],[]
         )]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,391))
     def test92(self):
