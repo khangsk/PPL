@@ -1907,12 +1907,12 @@ class ASTGenSuite(unittest.TestCase):
         input = r"""
         Function: foo 
         Body: 
-            a = 1 + 1.23 *. abc \. id[12[123][2][moreid]];
+            a = 1 + 1.23 *. abc \. id[12];
             b = 1.E-12  =/= foo(123);
         EndBody."""
         expect = Program([
             FuncDecl(Id("foo"),[],([],[
-                Assign(Id("a"),BinaryOp("+",IntLiteral(1),BinaryOp("\.",BinaryOp("*.",FloatLiteral(1.23),Id("abc")),ArrayCell(Id("id"),[ArrayCell(IntLiteral(12),[IntLiteral(123),IntLiteral(2),Id("moreid")])])))),
+                Assign(Id("a"),BinaryOp("+",IntLiteral(1),BinaryOp("\.",BinaryOp("*.",FloatLiteral(1.23),Id("abc")),ArrayCell(Id("id"),[IntLiteral(12)])))),
                 Assign(Id("b"),BinaryOp("=/=",FloatLiteral(1e-12),CallExpr(Id("foo"),[IntLiteral(123)])))
             ]))
         ])
@@ -2048,7 +2048,7 @@ class ASTGenSuite(unittest.TestCase):
             Body:
                 Var: sum = 0;
                 For (i = num, i < sqr(num), 2) Do
-                    sum = 123[1[1][1][1][1][1][1][1]][i];
+                    sum = a[1][1][1][1][1][1][1][i];
                 EndFor.
                 Return sum;
             EndBody."""
@@ -2060,7 +2060,7 @@ class ASTGenSuite(unittest.TestCase):
                         Id("num"),
                         BinaryOp("<",Id("i"),CallExpr(Id("sqr"),[Id("num")])),
                         IntLiteral(2),
-                        ([],[Assign(Id("sum"),ArrayCell(IntLiteral(123),[ArrayCell(IntLiteral(1),[IntLiteral(1),IntLiteral(1),IntLiteral(1),IntLiteral(1),IntLiteral(1),IntLiteral(1),IntLiteral(1)]),Id("i")]))]
+                        ([],[Assign(Id("sum"),ArrayCell(Id("a"),[IntLiteral(1),IntLiteral(1),IntLiteral(1),IntLiteral(1),IntLiteral(1),IntLiteral(1),IntLiteral(1),Id("i")]))]
                         )),
                     Return(Id("sum"))]))])
         self.assertTrue(TestAST.checkASTGen(input,expect,363))
@@ -2971,7 +2971,7 @@ class ASTGenSuite(unittest.TestCase):
  
             Function: main
             Body:
-                arr[1] = {64, 25, 12, 22, 11};
+                arr[5] = {64, 25, 12, 22, 11};
                 n = sizeof(arr)\sizeof(arr[0]);
                 selectionSort(arr, n);
                 printf("Sorted array: n");
@@ -2992,7 +2992,7 @@ class ASTGenSuite(unittest.TestCase):
                         ])),
                     CallStmt(Id("printf"),[StringLiteral("n")])])),
             FuncDecl(Id("main"),[],([],[
-                Assign(ArrayCell(Id("arr"),[IntLiteral(1)]),ArrayLiteral([IntLiteral(64),IntLiteral(25),IntLiteral(12),IntLiteral(22),IntLiteral(11)])),
+                Assign(ArrayCell(Id("arr"),[IntLiteral(5)]),ArrayLiteral([IntLiteral(64),IntLiteral(25),IntLiteral(12),IntLiteral(22),IntLiteral(11)])),
                 Assign(Id("n"),BinaryOp("\\",CallExpr(Id("sizeof"),[Id("arr")]),CallExpr(Id("sizeof"),[ArrayCell(Id("arr"),[IntLiteral(0)])]))),
                 CallStmt(Id("selectionSort"),[Id("arr"),Id("n")]),
                 CallStmt(Id("printf"),[StringLiteral("Sorted array: n")]),
