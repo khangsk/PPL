@@ -10,7 +10,7 @@
  
             Function: main
             Body:
-                arr[5] = {64, 25, 12, 22, 11};
+                arr[1] = {64, 25, 12, 22, 11};
                 n = sizeof(arr)\sizeof(arr[0]);
                 selectionSort(arr, n);
                 printf("Sorted array: n");
