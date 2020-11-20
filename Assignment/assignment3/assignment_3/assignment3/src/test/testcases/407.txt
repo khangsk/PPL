@@ -1,0 +1,11 @@
+
+            procedure main();
+            begin
+                putBoolLn(layer());
+            end
+            FUNCTION layer(): BOOLEAN;
+            begin
+                return false;
+            end
+            var myBear, layER: Boolean;
+        

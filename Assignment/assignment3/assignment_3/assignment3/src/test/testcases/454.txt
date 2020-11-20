@@ -1,0 +1,13 @@
+
+            procedure main();
+            var T: integer;
+            begin
+                T := foo()[0];
+                return;
+            end
+            function foo():array [1 .. 10] of integer;
+            var x: array[1 .. 11] of integer;
+            begin
+                return x;
+            end
+        

@@ -1,0 +1,6 @@
+
+            VAR luan, otr: integer;
+                oTr, __trluan__: boolean;
+            procedure main();
+            begin end
+        

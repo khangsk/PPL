@@ -1,0 +1,14 @@
+
+            function abc(x:integer):real;
+            var m: real;
+            begin
+                m := abc(1) + m;
+                m := m MOD xyz(abc(2), 1.5, getFloat(), getInt(), "oanhtrinhcute") / 11.111999;
+                return m;
+            end
+            procedure main();
+            var n:real;
+            begin
+                n := n / abc(123) * 4;
+            end
+        

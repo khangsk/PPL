@@ -1,0 +1,12 @@
+
+            function getArray(x:array[0 .. 0] of integer):array[0 .. 0] of integer;
+            begin
+                return x;
+            end
+            procedure main();
+            var y: array [0 .. 0] of integer;
+            begin
+                y := getArray(y);
+                return;
+            end
+        

@@ -1,0 +1,13 @@
+
+            procedure main();
+            begin
+                oanhtrinh();
+            end
+            procedure oanhtrinh();
+            begin
+            end
+            PROCEDURE OANHTRINH();
+            var i, am, luan: boolean;
+            begin
+            end
+        

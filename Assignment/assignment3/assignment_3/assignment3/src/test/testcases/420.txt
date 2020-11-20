@@ -1,0 +1,10 @@
+
+            function MAIN(x, y: integer):integer;
+            begin
+                return x - 1611931 + fx();
+            end
+            function fx():integer;
+            begin
+                return MAIN(0, 0);
+            end
+        

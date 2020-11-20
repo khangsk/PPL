@@ -1,0 +1,13 @@
+
+            procedure otr();
+            begin
+            end
+            procedure main();
+            begin
+                if otr = (-2.5 - 1.5) then
+                    return;
+                else
+                    otr();
+                return;
+            end
+        

@@ -1,0 +1,15 @@
+
+            procedure main();
+            begin
+                HCMUT(getINT(), GETint(), gETInt());
+                HCMUT(getint(), GETINT(), gEtInT());
+            end
+            procedure HCMUT(a,b,c:integer);
+            begin
+                for a := b + c downTO b <= c do
+                begin
+                    break;
+                end
+                return;
+            end
+        

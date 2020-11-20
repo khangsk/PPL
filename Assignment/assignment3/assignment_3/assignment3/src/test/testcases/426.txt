@@ -1,0 +1,9 @@
+
+            var otr, trl: array [1 .. 0] of integer;
+            procedure maIN();
+            begin
+                putFloat(trl[10]);
+                putFloatLn(otr(trl));
+                putStringLn("False");
+            end
+        

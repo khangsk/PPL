@@ -1,0 +1,15 @@
+
+            procedure main();
+            begin end
+            procedure MT16TN(leader:String);
+            var isBao: boolean;
+                i: real;
+            begin
+                with j, i: integer; do
+                begin
+                    for i := j to j div 10 do
+                        if isBao then break;
+                    return leader;
+                end
+            end
+        

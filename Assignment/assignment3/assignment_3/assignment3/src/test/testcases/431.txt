@@ -1,0 +1,11 @@
+
+            procedure main();
+            begin
+                while 2 <> (3.5 / 4 / Getfloat moD 0) do
+                begin
+                    begin
+                        begin end
+                    end
+                end
+            end
+        

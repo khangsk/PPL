@@ -1,0 +1,10 @@
+
+            procedure PUTSTRING(p:integer;q:real);
+            begin
+                putSTring("abc");
+                return;
+            end
+            procedure main();
+            begin
+            end
+        

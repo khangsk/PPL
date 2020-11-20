@@ -1,0 +1,17 @@
+
+            procedure main();
+            begin
+                if 2 > 3 then
+                begin
+                    if 2 > 4 then
+                        return;
+                    return;
+                end
+                while True do
+                begin
+                    if 10 < 11 then return;
+                    return;
+                end
+                return (getInt() > getFloat()) and (16111998 < 11111999);
+            end
+        

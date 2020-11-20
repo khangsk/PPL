@@ -1,0 +1,10 @@
+
+            procedure oanhtrinh();
+            begin
+                trongluan();
+            end
+            procedure trongluan();
+            begin
+                oanhtrinh();
+            end
+        

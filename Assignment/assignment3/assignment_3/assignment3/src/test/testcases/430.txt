@@ -1,0 +1,23 @@
+
+            procedure KTRolster(Smeb, Score, Ucal, Deft, Mata: String);
+            begin
+                putString("KTRolster members: ");
+                print(Smeb, ", ");
+                print(Score, ", ");
+                print(Ucal, ", ");
+                print(Deft, ", ");
+                print(Mata, ", ");
+                return;
+            end
+            procedure main();
+            var i,j,k: integer;
+            begin
+                KTRolster("Smeb", "Score", "Ucal", "Deft", "Mata");
+                if i > k then
+                    if j > k then
+                        putBoolLn(False);
+                    else
+                        if k <> i then
+                            putFloatLn(11+12+13+14);
+            end
+        

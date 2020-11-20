@@ -1,0 +1,17 @@
+
+            var t: array[1 .. 2] of real;
+            procedure main();
+            var foo: real;
+            begin
+                foo := f(1);
+                foo := func(t);
+            end
+            function f(bc:integer):real;
+            begin
+                return bc;
+            end
+            function Func(ab: array[1 .. 2] of real):integer;
+            begin
+                return ab[10];
+            end
+        

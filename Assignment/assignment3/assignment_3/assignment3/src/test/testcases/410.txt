@@ -1,0 +1,10 @@
+
+            var oanhtrinh, trongluan: array[0 .. 9] of STRING;
+            procedure main();
+            begin
+                return;
+            end
+            procedure oanhtrinh();
+            begin
+            end
+        

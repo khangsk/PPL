@@ -1,0 +1,14 @@
+
+            var girl, boy, gay: boolean;
+            procedure MAIN();
+            var gay: array[1 .. 10] of real;
+            begin
+                IF gay then 
+                begin
+                    PutString("You are are a gay");
+                    PutString("Please afk");
+                end
+                putStringLn("You are are not gay");
+                putStringLn("Come here");
+            end
+        

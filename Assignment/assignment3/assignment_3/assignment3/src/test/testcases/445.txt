@@ -1,0 +1,7 @@
+
+            var abc: string;
+            procedure main();
+            begin
+                abc := "I love OT";
+            end
+        

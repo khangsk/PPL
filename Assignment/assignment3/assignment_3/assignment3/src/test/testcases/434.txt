@@ -1,0 +1,19 @@
+
+            var otr, trl: string;
+            procedure main();
+            var love: boolean;
+            begin
+                if love and True then
+                begin
+                    putSTRINGLN("Oanh Trinh, I love you");
+                    return;
+                end
+                else
+                    putSTRING("Oanh Trinh, I still love you");
+                trl(trl, love, otr);
+                while love do
+                begin
+                    while love do begin main(); end
+                end
+            end
+        
