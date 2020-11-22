@@ -8,7 +8,5 @@
         EndBody.
         Function: foo
         Body:
-            Return 1;
+            Return True;
         EndBody.
-        
-                

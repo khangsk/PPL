@@ -208,22 +208,22 @@ class CheckSuite(unittest.TestCase):
     #     expect = str(TypeMismatchInStatement(Assign(Id('a'),Id('b'))))
     #     self.assertTrue(TestChecker.test(input,expect,418))
 
-    # def test19(self):
-    #     input = """
-    #     Var: a;
-    #     Function: foo
-    #     Body:
-    #         Return 1;
-    #     EndBody.
-    #     Function: main
-    #     Body:
-    #         a = foo();
-    #         a = "sk";
-    #     EndBody.
+    def test19(self):
+        input = """
+        Var: a;
+        Function: foo
+        Body:
+            Return 1;
+        EndBody.
+        Function: main
+        Body:
+            a = foo();
+            a = "sk";
+        EndBody.
         
-    #             """
-    #     expect = str(TypeMismatchInStatement(Assign(Id('a'),StringLiteral("sk"))))
-    #     self.assertTrue(TestChecker.test(input,expect,419))
+                """
+        expect = str(TypeMismatchInStatement(Assign(Id('a'),StringLiteral("sk"))))
+        self.assertTrue(TestChecker.test(input,expect,419))
     
     def test20(self):
         input = """
@@ -236,10 +236,8 @@ class CheckSuite(unittest.TestCase):
         EndBody.
         Function: foo
         Body:
-            Return 1;
-        EndBody.
-        
-                """
+            Return True;
+        EndBody."""
         expect = str(TypeMismatchInStatement(Assign(Id('a'),BooleanLiteral(True))))
         self.assertTrue(TestChecker.test(input,expect,420))
     

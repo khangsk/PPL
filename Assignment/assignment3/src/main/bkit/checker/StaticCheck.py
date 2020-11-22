@@ -360,14 +360,8 @@ class StaticChecker(BaseVisitor):
     
     def visitAssign(self, ast, param):
         scope, loop, funcName = param
-        # for x in scope:
-        #     print(x)
         lhsType = self.visit(ast.lhs, (scope, funcName))
         rhsType = self.visit(ast.rhs, (scope, funcName))
-        # for x in scope:
-        #     print(1, x, type(rhsType))
-        # if type(ast.lhs) is Id:
-        # print(lhsType is Unknown, rhsType is IntType)
         if type(lhsType) is Unknown:
             if type(rhsType) is Unknown:
                 raise TypeCannotBeInferred(ast)
@@ -409,9 +403,7 @@ class StaticChecker(BaseVisitor):
                     elif type(ast.rhs) is CallExpr:
                         if scope[i].name == ast.rhs.method.name:
                             scope[i] = Symbol(scope[i].name, mtype=rhsType, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
-        #     if rhsType == None:
-        # for i in scope:
-        #     print(type(ast.rhs), i)
+
         return (ast, None)
     
     def visitIf(self, ast, param):
@@ -432,6 +424,7 @@ class StaticChecker(BaseVisitor):
         for i in range(len(scope)):
             if scope[i].name == funcName:
                 scope[i] = Symbol(scope[i].name, mtype=ret, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
+                break
         return (ast, None)
     
     def visitDowhile(self, ast, param):
@@ -446,7 +439,7 @@ class StaticChecker(BaseVisitor):
             if func[0].name.name == ast.method.name:
                 if not func[1]:
                     func[1] = True
-                scope = (self.visit(func[0], scope)).copy()
+                self.getTypeFunc(func[0], scope)
                 break
         symbol = self.handleCall(ast, scope, funcName, Function())
         for i in range(len(scope)):
@@ -463,10 +456,20 @@ class StaticChecker(BaseVisitor):
             if func[0].name.name == ast.method.name:
                 if not func[1]:
                     func[1] = True
-                scope = (self.visit(func[0], scope)).copy()
+                self.getTypeFunc(func[0], scope)
                 break
         symbol = self.handleCall(ast, scope, funcName, Function())
         return symbol.mtype
+    
+    def getTypeFunc(self, func, scope):
+        tempScope = self.visit(func, scope)
+        for i in range(len(scope)):
+            if scope[i].name == func.name.name:
+                for j in tempScope:
+                    if func.name.name == j.name and type(scope[i].kind) == type(j.kind):
+                        scope[i] = Symbol(scope[i].name, mtype=j.mtype, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
+                        break
+                break
     
     def visitId(self, ast, param):
         scope, funcName = param
