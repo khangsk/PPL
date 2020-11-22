@@ -1,5 +1,5 @@
 from main.bkit.utils.AST import ArrayCell, BooleanLiteral, CallStmt, IntLiteral, StringLiteral
-from main.bkit.checker.StaticError import NoEntryPoint, Redeclared, TypeCannotBeInferred, TypeMismatchInExpression, TypeMismatchInStatement
+from main.bkit.checker.StaticError import NoEntryPoint, Parameter, Redeclared, TypeCannotBeInferred, TypeMismatchInExpression, TypeMismatchInStatement, Variable
 import unittest
 from TestUtils import TestChecker
 from StaticError import *
@@ -208,38 +208,79 @@ class CheckSuite(unittest.TestCase):
     #     expect = str(TypeMismatchInStatement(Assign(Id('a'),Id('b'))))
     #     self.assertTrue(TestChecker.test(input,expect,418))
 
-    def test19(self):
-        input = """
-        Var: a;
-        Function: foo
-        Body:
-            Return 1;
-        EndBody.
-        Function: main
-        Body:
-            a = foo();
-            a = "sk";
-        EndBody.
+    # def test19(self):
+    #     input = """
+    #     Var: a;
+    #     Function: foo
+    #     Body:
+    #         Return 1;
+    #     EndBody.
+    #     Function: main
+    #     Body:
+    #         a = foo();
+    #         a = "sk";
+    #     EndBody.
         
-                """
-        expect = str(TypeMismatchInStatement(Assign(Id('a'),StringLiteral("sk"))))
-        self.assertTrue(TestChecker.test(input,expect,419))
+    #             """
+    #     expect = str(TypeMismatchInStatement(Assign(Id('a'),StringLiteral("sk"))))
+    #     self.assertTrue(TestChecker.test(input,expect,419))
     
-    def test20(self):
+    # def test20(self):
+    #     input = """
+        
+    #     Var: a;
+    #     Function: main
+    #     Body:
+    #         a = foo();
+    #     EndBody.
+    #     Function: foo
+    #     Body:
+    #         Return 1;
+    #     EndBody.
+        
+    #     """
+    #     expect = str(TypeMismatchInStatement(Assign(Id('a'),BooleanLiteral(True))))
+    #     self.assertTrue(TestChecker.test(input,expect,420))
+
+    # def test21(self):
+    #     input = """
+    #     Var: a;
+    #     Function: main
+    #     Parameter: b
+    #     Body:
+    #         Var: b;
+    #     EndBody.
+    #     """
+    #     expect = str(Redeclared(Variable(), 'b'))
+    #     self.assertTrue(TestChecker.test(input,expect,421))
+
+
+    def test22(self):
         input = """
-        Var: a, b;
-        Function: main
-        Body:
-            b = 1;
-            a = foo();
-            a = True;
-        EndBody.
+        Var: x[2] = {{1,2},{3,2}}, a;
         Function: foo
         Body:
-            Return True;
-        EndBody."""
+           
+            Return x;
+        EndBody.
+        Function: main
+        Body:
+           
+        EndBody.
+        """
         expect = str(TypeMismatchInStatement(Assign(Id('a'),BooleanLiteral(True))))
-        self.assertTrue(TestChecker.test(input,expect,420))
+        self.assertTrue(TestChecker.test(input,expect,422))
+
+    # def test23(self):
+    #     input = """
+    #     Function: main
+    #     Parameter: b, b[5][6];
+    #     Body:
+            
+    #     EndBody.
+    #     """
+    #     expect = str(Redeclared(Parameter(), 'b'))
+    #     self.assertTrue(TestChecker.test(input,expect,423))
     
 
     

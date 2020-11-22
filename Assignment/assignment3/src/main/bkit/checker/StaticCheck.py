@@ -4,8 +4,8 @@
 """
 from abc import ABC, abstractmethod, ABCMeta
 from dataclasses import dataclass
-from main.bkit.checker.StaticError import Function, Variable
-from main.bkit.utils.AST import ArrayCell, CallExpr, FuncDecl, printlist
+from main.bkit.checker.StaticError import Function, Parameter, Variable
+from main.bkit.utils.AST import ArrayCell, ArrayLiteral, CallExpr, FuncDecl, printlist
 from typing import List, Tuple
 from AST import *
 from Visitor import *
@@ -156,24 +156,10 @@ class Symbol:
             elif type(value) is FloatLiteral: mtype = FloatType()
             elif type(value) is StringLiteral: mtype = StringType()
             elif type(value) is BooleanLiteral: mtype = BoolType()
-            else:
-                t = value
-                eleType = ''
-                while type(t.value) == list:
-                    t = t.value[0]
-                    if type(t.value) == int:
-                        eleType = IntType()
-                        break
-                    if type(t.value) == float:
-                        eleType = FloatType()
-                        break
-                    if type(t.value) == str:
-                        eleType = StringType()
-                        break
-                    if type(t.value) == bool:
-                        eleType = BoolType()
-                        break
-                mtype = ArrayType(dimen, eleType)
+            else: 
+                mtype = Utils.getArrayType(value)
+                if not Checker.sameDimen(dimen, mtype.dimen):
+                    raise 
         else:
             if len(dimen) > 0:
                 mtype = ArrayType(dimen, Unknown())
@@ -205,8 +191,44 @@ class Utils:
     @staticmethod
     def merge(curScope, newScope):
         return reduce(lambda lst, sym: lst if Utils.isExisten(lst, sym) else lst+ [sym], curScope, newScope)
+    
+    @staticmethod
+    def typeElementArray(arr):
+        if not arr:
+            return True
+        typ = type(arr[0])
+        for i in range(1, len(arr)):
+            if typ is not type(arr[i]):
+                return False
+        return True
 
-
+    @staticmethod
+    def getArrayType(ast):
+        arr = []
+        stack = [ast]
+        temp = []
+        check = 0
+        while stack:
+            check += 1
+            if type(stack[0]) is not ArrayLiteral:
+                if not Utils.typeElementArray(stack):
+                    raise InvalidArrayLiteral(ast)
+                return ArrayType(arr, type(stack[0]))
+            x = stack.pop(0)
+            if check == 1:
+                arr.append(len(x.value))
+            else:
+                if arr[-1] != len(x.value):
+                    raise InvalidArrayLiteral(ast)
+            if not Utils.typeElementArray(x.value):
+                raise InvalidArrayLiteral(ast)
+            if type(x) is ArrayLiteral:
+                # if len(x) != arr[-1]
+                temp += x.value
+                if not stack:
+                    stack = temp.copy()
+                    temp = []
+                    check = 0
 
 class Checker:
     @staticmethod
@@ -231,10 +253,37 @@ class Checker:
             raise Undeclared(kind, name)
         return res
     
+    @staticmethod
+    def handleReturnStmts(listStmt):
+        for i in range(0, len(stmts)-1):
+            if Checker.isStopTypeStatment(stmts[i][1]):
+                raise UnreachableStatement(stmts[i+1][0])
+        return None if stmts == [] else stmts[-1][1]
 
     @staticmethod
     def isStopTypeStatment(retType):
         return Checker.isReturnType(retType) or type(retType) in [Break, Continue]
+    
+    @staticmethod
+    def matchType(a, b):
+        if type(a) is ArrayType and type(b) is ArrayType:
+            return Checker.matchArray(a, b)
+        if type(a) is ArrayType or type(b) is ArrayType:
+            return False
+        if type(a) is type(b):
+            return True
+        return False
+
+    @staticmethod
+    def matchArray(a, b):
+        return type(a.eletype) == type(b.eletype) and Checker.sameDimen(a.dimen, b.dimen)
+
+    @staticmethod
+    def sameDimen(a, b):
+        if len(a) != len(b): return False
+        for i in range(len(a)):
+            if a[i] != b[i]: return False
+        return True
 
 class Graph:
     link = {}
@@ -301,8 +350,6 @@ class StaticChecker(BaseVisitor):
         Graph.initialize()
         return self.visit(self.ast, self.global_envi)
 
-    listFunction = []
-
     def visitProgram(self, ast, c):
         symbols = [Symbol.fromDecl(x).toGlobal() for x in ast.decl]
         scope = Checker.checkRedeclared(c, symbols)
@@ -315,9 +362,6 @@ class StaticChecker(BaseVisitor):
         Graph.setDefaultVisitedNodes([x.name for x in c])
         for x in ast.decl:
             if type(x) is FuncDecl:
-                self.listFunction.append([x, False]) 
-        for x in ast.decl:
-            if type(x) is FuncDecl:
                 scope = (self.visit(x, scope)).copy()
 
         
@@ -325,17 +369,14 @@ class StaticChecker(BaseVisitor):
         return Symbol.fromVarDecl(ast)
     
     def visitFuncDecl(self, ast, scope):
-        listParam = [self.visit(x, scope) for x in ast.param]
+        listParam = []
+        for x in ast.param:
+            sym = self.visit(x, scope)
+            listParam.append(Symbol(sym.name, mtype=sym.mtype, kind=Parameter()))
         listLocalVar = [self.visit(x, scope) for x in ast.body[0]]
         listNewSymbols = listParam + listLocalVar
         localScope = Checker.checkRedeclared([], listNewSymbols)
         newScope = Utils.merge(scope, localScope)
-        # Visit statments with params: (scope, loop, funcName)
-        # stmts = []
-        # for x in ast.body[1]:
-        #     temp = self.visit(x, (newScope, False, ast.name.name))
-        #     newScope = temp[1]
-        #     stmts.append(temp[0])
         stmts = [self.visit(x, (newScope, False, ast.name.name)) for x in ast.body[1]]
         return list(filter(lambda x: x.isGlobal, newScope))
         # retType =     
@@ -345,6 +386,18 @@ class StaticChecker(BaseVisitor):
     
     def visitUnaryOp(self, ast, param):
         return None
+    
+    def visitCallExpr(self, ast, param):
+        scope, funcName = param
+        symbol = self.handleCall(ast, scope, funcName, Function())
+        return symbol.mtype
+    
+    def visitId(self, ast, param):
+        scope, funcName = param
+        symbol = Checker.checkUndeclared(scope, ast.name, Variable())
+        # print(symbol)
+        return symbol.mtype
+
     
     def visitArrayCell(self, ast, param):
         scope, funcName = param
@@ -360,8 +413,14 @@ class StaticChecker(BaseVisitor):
     
     def visitAssign(self, ast, param):
         scope, loop, funcName = param
+        # for x in scope:
+        #     print(x)
         lhsType = self.visit(ast.lhs, (scope, funcName))
         rhsType = self.visit(ast.rhs, (scope, funcName))
+        print(ast.rhs)
+        print(rhsType)
+        # if type(ast.lhs) is Id:
+        # print(lhsType is Unknown, rhsType is IntType)
         if type(lhsType) is Unknown:
             if type(rhsType) is Unknown:
                 raise TypeCannotBeInferred(ast)
@@ -374,6 +433,7 @@ class StaticChecker(BaseVisitor):
                         if scope[i].name == ast.lhs.name:
                             scope[i] = Symbol(scope[i].name, mtype=rhsType, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
                     elif type(ast.lhs) is ArrayCell:
+                        print("yes")
                         if type(ast.lhs.arr) is Id:
                             if scope[i].name == ast.lhs.arr.name:
                                 scope[i] = Symbol(scope[i].name, mtype=rhsType, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
@@ -403,11 +463,30 @@ class StaticChecker(BaseVisitor):
                     elif type(ast.rhs) is CallExpr:
                         if scope[i].name == ast.rhs.method.name:
                             scope[i] = Symbol(scope[i].name, mtype=rhsType, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
-
+        #     if rhsType == None:
+        # for i in scope:
+        #     print(i)
         return (ast, None)
     
     def visitIf(self, ast, param):
-        return None
+        scope, loop, funcName = param
+        for x in ast.ifthenStmt:
+            condType = self.visit(x[0], param)
+            if type(condType) is not BoolType:
+                raise TypeMismatchInStatement(ast)
+            listLocalVar = [self.visit(i, scope) for i in x[1]]
+            localScope = Checker.checkRedeclared([], listLocalVar)
+            newScope = Utils.merge(scope, localScope)
+            listStmt = []
+            for i in x[2]:
+                listStmt.append(self.visit(i, (newScope, False, funcName)))
+                for j in newScope:
+                    if j.isGlobal:
+                        for k in range(len(scope)):
+                            if scope[k].name == j.name:
+                                scope[k] = Symbol(scope[k].name, mtype=j.mtype, kind=scope[k].kind, isGlobal=scope[k].isGlobal)
+                                break
+            ret = Checker.handleReturnStmts(listStmt)
     
     def visitFor(self, ast, param):
         return None
@@ -423,9 +502,11 @@ class StaticChecker(BaseVisitor):
         ret = self.visit(ast.expr, (scope, funcName)) if ast.expr else VoidType()
         for i in range(len(scope)):
             if scope[i].name == funcName:
-                scope[i] = Symbol(scope[i].name, mtype=ret, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
-                break
-        return (ast, None)
+                if type(scope[i].mtype) is Unknown:
+                    scope[i] = Symbol(scope[i].name, mtype=ret, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
+                elif not Checker.matchType(scope[i].mtype, ret):
+                        raise TypeMismatchInStatement(ast)
+        return (ast, ret)
     
     def visitDowhile(self, ast, param):
         return None
@@ -435,12 +516,6 @@ class StaticChecker(BaseVisitor):
 
     def visitCallStmt(self, ast, param):
         scope, loop, funcName = param
-        for func in self.listFunction:
-            if func[0].name.name == ast.method.name:
-                if not func[1]:
-                    func[1] = True
-                self.getTypeFunc(func[0], scope)
-                break
         symbol = self.handleCall(ast, scope, funcName, Function())
         for i in range(len(scope)):
             if scope[i].name == ast.method.name:
@@ -450,37 +525,11 @@ class StaticChecker(BaseVisitor):
                     raise TypeMismatchInStatement(ast)
         return (ast, None)
     
-    def visitCallExpr(self, ast, param):
-        scope, funcName = param
-        for func in self.listFunction:
-            if func[0].name.name == ast.method.name:
-                if not func[1]:
-                    func[1] = True
-                self.getTypeFunc(func[0], scope)
-                break
-        symbol = self.handleCall(ast, scope, funcName, Function())
-        return symbol.mtype
-    
-    def getTypeFunc(self, func, scope):
-        tempScope = self.visit(func, scope)
-        for i in range(len(scope)):
-            if scope[i].name == func.name.name:
-                for j in tempScope:
-                    if func.name.name == j.name and type(scope[i].kind) == type(j.kind):
-                        scope[i] = Symbol(scope[i].name, mtype=j.mtype, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
-                        break
-                break
-    
-    def visitId(self, ast, param):
-        scope, funcName = param
-        symbol = Checker.checkUndeclared(scope, ast.name, Variable())
-        return symbol.mtype
-    
     def handleCall(self, ast, scope, funcName, kind):
         symbol = Checker.checkUndeclared(scope, ast.method.name, kind)
         Graph.add(funcName, ast.method.name)
         paramType = [self.visit(x, (scope, funcName)) for x in ast.param]
-        
+
         return symbol
     
     def visitIntLiteral(self, ast, param):
@@ -496,4 +545,4 @@ class StaticChecker(BaseVisitor):
         return StringType()
 
     def visitArrayLiteral(self, ast, param):
-        return ArrayType()
+        return Utils.getArrayType(ast)

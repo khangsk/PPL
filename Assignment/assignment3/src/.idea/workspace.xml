@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="22b2e3cc-a038-4134-bb0d-97aa37d3010e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../../assignment2/target/BKIT.interp" beforeDir="false" afterPath="$PROJECT_DIR$/../../assignment2/target/BKIT.interp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../assignment2/target/BKITLexer.interp" beforeDir="false" afterPath="$PROJECT_DIR$/../../assignment2/target/BKITLexer.interp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/bkit/checker/StaticCheck.py" beforeDir="false" afterPath="$PROJECT_DIR$/main/bkit/checker/StaticCheck.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/CheckSuite.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/CheckSuite.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/solutions/420.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test/solutions/420.txt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+  </component>
+  <component name="JupyterTrust" id="9c8e8f56-f87b-49ea-a255-d4951fc93c2f" />
+  <component name="ProjectId" id="1ke5Tli9iNF0lBwccDNo1qIhtzS" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="22b2e3cc-a038-4134-bb0d-97aa37d3010e" name="Default Changelist" comment="" />
+      <created>1606048236280</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1606048236280</updated>
+      <workItem from="1606048240072" duration="19000" />
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
