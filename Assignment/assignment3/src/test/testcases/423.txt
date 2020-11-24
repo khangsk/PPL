@@ -1,6 +1,6 @@
 
         Function: main
-        Parameter: b, b[5][6];
+        Parameter: b, b[5][6]
         Body:
             
         EndBody.

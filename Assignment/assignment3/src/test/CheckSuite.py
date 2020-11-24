@@ -1,5 +1,5 @@
-from main.bkit.utils.AST import ArrayCell, BooleanLiteral, CallStmt, IntLiteral, StringLiteral
-from main.bkit.checker.StaticError import NoEntryPoint, Parameter, Redeclared, TypeCannotBeInferred, TypeMismatchInExpression, TypeMismatchInStatement, Variable
+from main.bkit.utils.AST import ArrayCell, BooleanLiteral, CallExpr, CallStmt, IntLiteral, StringLiteral
+from main.bkit.checker.StaticError import InvalidArrayLiteral, NoEntryPoint, Parameter, Redeclared, TypeCannotBeInferred, TypeMismatchInExpression, TypeMismatchInStatement, Variable
 import unittest
 from TestUtils import TestChecker
 from StaticError import *
@@ -239,7 +239,7 @@ class CheckSuite(unittest.TestCase):
     #     EndBody.
         
     #     """
-    #     expect = str(TypeMismatchInStatement(Assign(Id('a'),BooleanLiteral(True))))
+    #     expect = str(TypeCannotBeInferred(Assign(Id('a'),CallExpr(Id('foo'),[]))))
     #     self.assertTrue(TestChecker.test(input,expect,420))
 
     # def test21(self):
@@ -255,26 +255,26 @@ class CheckSuite(unittest.TestCase):
     #     self.assertTrue(TestChecker.test(input,expect,421))
 
 
-    def test22(self):
-        input = """
-        Var: x[2] = {{1,2},{3,2}}, a;
-        Function: foo
-        Body:
+    # def test22(self):
+    #     input = """
+    #     Var: x[2] = {{1,2},{3,2.1}}, a;
+    #     Function: foo
+    #     Body:
            
-            Return x;
-        EndBody.
-        Function: main
-        Body:
+    #         Return x;
+    #     EndBody.
+    #     Function: main
+    #     Body:
            
-        EndBody.
-        """
-        expect = str(TypeMismatchInStatement(Assign(Id('a'),BooleanLiteral(True))))
-        self.assertTrue(TestChecker.test(input,expect,422))
+    #     EndBody.
+    #     """
+    #     expect = str(InvalidArrayLiteral(ArrayLiteral([ArrayLiteral([IntLiteral(1),IntLiteral(2)]),ArrayLiteral([IntLiteral(3),FloatLiteral(2.1)])])))
+    #     self.assertTrue(TestChecker.test(input,expect,422))
 
     # def test23(self):
     #     input = """
     #     Function: main
-    #     Parameter: b, b[5][6];
+    #     Parameter: b, b[5][6]
     #     Body:
             
     #     EndBody.
@@ -282,19 +282,32 @@ class CheckSuite(unittest.TestCase):
     #     expect = str(Redeclared(Parameter(), 'b'))
     #     self.assertTrue(TestChecker.test(input,expect,423))
     
+    def test24(self):
+        input = """
+        Var: a[2], c;
+        Function: main
+        Parameter: b[5][6]
+        Body:
+            a[2] = {1,2};
+            c = 1;
+        EndBody.
+        """
+        expect = str(Redeclared(Parameter(), 'b'))
+        self.assertTrue(TestChecker.test(input,expect,424))
+    
 
     
 
 
 
-    # # def test11_call_stmt(self):
-    # #     input = """Function: main
-    # #                Body: 
-    # #                     foo(1, 2);
-    # #                EndBody.
-    # #                Function: foo
-    # #                Parameter: a, b
-    # #                Body:
-    # #                EndBody."""
-    # #     expect = str(Redeclared(Function(),"foo"))
-    # #     self.assertTrue(TestChecker.test(input,expect,411))
+    # def test11_call_stmt(self):
+    #     input = """Function: main
+    #                Body: 
+    #                     foo(1, 2);
+    #                EndBody.
+    #                Function: foo
+    #                Parameter: a, b
+    #                Body:
+    #                EndBody."""
+    #     expect = str(Redeclared(Function(),"foo"))
+    #     self.assertTrue(TestChecker.test(input,expect,411))
