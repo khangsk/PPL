@@ -284,15 +284,15 @@ class CheckSuite(unittest.TestCase):
     
     def test24(self):
         input = """
-        Var: a[2], c;
+        Var: a[2][2], c;
         Function: main
-        Parameter: b[5][6]
+        Parameter: b[2][3]
         Body:
-            a[2] = {1,2};
-            c = 1;
+            a = {{1,2},{3,4}};
+            b = a;
         EndBody.
         """
-        expect = str(Redeclared(Parameter(), 'b'))
+        expect = str(TypeCannotBeInferred(Assign(Id("b"),Id("a"))))
         self.assertTrue(TestChecker.test(input,expect,424))
     
 

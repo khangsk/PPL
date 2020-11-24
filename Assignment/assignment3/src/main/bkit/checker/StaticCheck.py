@@ -4,8 +4,8 @@
 """
 from abc import ABC, abstractmethod, ABCMeta
 from dataclasses import dataclass
-from main.bkit.checker.StaticError import Function, InvalidArrayLiteral, Parameter, TypeMismatchInExpression, Variable
-from main.bkit.utils.AST import ArrayCell, ArrayLiteral, CallExpr, FuncDecl, printlist
+from main.bkit.checker.StaticError import Function, InvalidArrayLiteral, Parameter, TypeCannotBeInferred, TypeMismatchInExpression, Variable
+from main.bkit.utils.AST import ArrayCell, ArrayLiteral, BooleanLiteral, CallExpr, FloatLiteral, FuncDecl, IntLiteral, StringLiteral, printlist
 from typing import List, Tuple
 from AST import *
 from Visitor import *
@@ -216,7 +216,14 @@ class Utils:
             if type(stack[0]) is not ArrayLiteral:
                 if not Utils.typeElementArray(stack):
                     raise InvalidArrayLiteral(ast)
-                return ArrayType(arr, type(stack[0]))
+                if type(stack[0]) is IntLiteral:
+                    return ArrayType(arr, IntType())
+                elif type(stack[0]) is FloatLiteral:
+                    return ArrayType(arr, FloatType())
+                elif type(stack[0]) is BooleanLiteral:
+                    return ArrayType(arr, BoolType())
+                elif type(stack[0]) is StringLiteral:
+                    return ArrayType(arr, StringType())
             x = stack.pop(0)
             if check == 1:
                 arr.append(len(x.value))
@@ -233,6 +240,7 @@ class Utils:
                 check = 0
     @staticmethod
     def updateScope(scope, typ, x):
+        print(typ)
         s = ''
         if type(x) is Id:
             s = x.name
@@ -245,8 +253,26 @@ class Utils:
             s = x.method.name
         for i in range(len(scope)):
             if scope[i].name == s:
-                scope[i] = Symbol(scope[i].name, mtype=typ, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
+                scope[i] = Symbol(scope[i].name, mtype=typ, param=scope[i].param, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
+    @staticmethod
+    def getElementType():
+        pass
     
+    @staticmethod
+    def getSymbol(scope, x):
+        s = ''
+        if type(x) is Id:
+            s = x.name
+        elif type(x) is ArrayCell:
+            if type(x.arr) is Id:
+                s = x.arr.name
+            elif type(x.arr) is CallExpr:
+                s = x.arr.method.name
+        elif type(x) is CallExpr:
+            s = x.method.name
+        for i in scope:
+            if i.name == s:
+                return i
 
 
 class Checker:
@@ -465,6 +491,10 @@ class StaticChecker(BaseVisitor):
     def visitArrayCell(self, ast, param):
         scope, funcName = param
         arr = self.visit(ast.arr, (scope, funcName))
+        if type(arr) not in [ArrayType, Unknown]:
+            raise TypeMismatchInExpression(ast)
+        if type(arr) is Unknown:
+            Utils.updateScope(scope, ArrayType([], Unknown), ast.arr)
         if type(arr) is not ArrayType:
             raise TypeMismatchInExpression(ast)
         for x in ast.idx:
@@ -482,20 +512,40 @@ class StaticChecker(BaseVisitor):
         if type(lhsType) is Unknown:
             if type(rhsType) is Unknown:
                 raise TypeCannotBeInferred(ast)
-            else:
-                lhsType = rhsType
-                if type(lhsType) is VoidType:
+            elif type(rhsType) is VoidType:
                     raise TypeMismatchInStatement(ast)
-                Utils.updateScope(scope, lhsType, ast.lhs)
-        else:
-            if type(lhsType) is VoidType:
+            elif type(rhsType) is ArrayType:
+                # type mismatch or type cannot be inferred
                 raise TypeMismatchInStatement(ast)
-            if type(rhsType) is not Unknown:
-                if type(lhsType) is not type(rhsType):
-                    raise TypeMismatchInStatement(ast)
             else:
-                rhsType = lhsType
-                Utils.updateScope(scope, rhsType, ast.rhs)
+                Utils.updateScope(scope, rhsType, ast.lhs)
+        elif type(lhsType) is ArrayType:
+            if type(rhsType) is ArrayType:
+                sym = Utils.getSymbol(scope, ast.lhs)
+                if sym.mtype.dimen == rhsType.dimen:
+                    if type(sym.mtype.eletype) is Unknown and type(rhsType.eletype) is Unknown:
+                        raise TypeCannotBeInferred(ast)
+                    elif type(sym.mtype.eletype) is Unknown and type(rhsType.eletype) is not Unknown:
+                        Utils.updateScope(scope, rhsType, Id(sym.name))
+                    elif type(sym.mtype.eletype) is not Unknown and type(rhsType.eletype) is Unknown:
+                        Utils.updateScope(scope, lhsType, Id(sym.name))
+                    else:
+                        raise TypeCannotBeInferred(ast)
+                else:
+                    raise TypeCannotBeInferred(ast)
+            else:
+                # type mismatch or type cannot be inferred
+                raise TypeMismatchInStatement(ast)
+        elif type(lhsType) is VoidType:
+            raise TypeMismatchInStatement(ast)
+        else:
+            if type(rhsType) is ArrayType:
+                    # type mismatch or type cannot be inferred
+                raise TypeMismatchInStatement(ast)
+            elif type(rhsType) is not Unknown and type(lhsType) is not type(rhsType):
+                raise TypeMismatchInStatement(ast) 
+            else:
+                Utils.updateScope(scope, lhsType, ast.rhs)
         #     if rhsType == None:
         # for i in scope:
         #     print(i)

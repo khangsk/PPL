@@ -1,1 +1,1 @@
-Invalid Array Literal: VarDecl(Id(a),[2],ArrayLiteral(ArrayLiteral(IntLiteral(1)),ArrayLiteral(IntLiteral(2))))
+Type Cannot Be Inferred: Assign(Id(b),Id(a))
