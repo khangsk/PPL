@@ -172,7 +172,7 @@ class Symbol:
         if len(decl.param) > 0:
             listTypeParam = [Symbol.fromVarDecl(x).mtype for x in decl.param]
             return Symbol(decl.name.name, param=listTypeParam, isGlobal=True)
-        return Symbol(decl.name.name, isGlobal=True)
+        return Symbol(decl.name.name, param=[],isGlobal=True)
 
     @staticmethod
     def fromDecl(decl):
