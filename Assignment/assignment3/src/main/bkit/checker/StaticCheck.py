@@ -4,14 +4,11 @@
 """
 from abc import ABC, abstractmethod, ABCMeta
 from dataclasses import dataclass
-from main.bkit.checker.StaticError import Function, InvalidArrayLiteral, Parameter, TypeCannotBeInferred, TypeMismatchInExpression, TypeMismatchInStatement, UnreachableFunction, UnreachableStatement, Variable
-from main.bkit.utils.AST import ArrayCell, ArrayLiteral, BooleanLiteral, CallExpr, FloatLiteral, FuncDecl, IntLiteral, StringLiteral, printlist
 from typing import List, Tuple
 from AST import *
 from Visitor import *
 from StaticError import *
 from functools import *
-
 
 class Type(ABC):
     __metaclass__ = ABCMeta
@@ -273,6 +270,12 @@ class Utils:
         for i in scope:
             if i.name == s:
                 return i
+    
+    @staticmethod
+    def updateScopeToGlobal(scope, newScope):
+        for j in newScope:
+            if j.isGlobal:
+                Utils.updateScope(scope, j.mtype, Id(j.name))
 
 class Checker:
     @staticmethod
@@ -418,6 +421,10 @@ class StaticChecker(BaseVisitor):
         localScope = Checker.checkRedeclared([], listNewSymbols)
         newScope = Utils.merge(scope, localScope)
         stmts = [self.visit(x, (newScope, False, ast.name.name)) for x in ast.body[1]]
+        ret = Checker.handleReturnStmts(stmts)
+        typeFunc = Utils.getSymbol(newScope, ast.name).mtype
+        if type(typeFunc) in [IntType, FloatType, BoolType, StringType, ArrayType] and type(ret) not in [IntType, FloatType, BoolType, StringType, ArrayType]:
+            raise FunctionNotReturn(ast.name.name)
         return list(filter(lambda x: x.isGlobal, newScope))    
     
     def visitBinaryOp(self, ast, param):
@@ -599,11 +606,9 @@ class StaticChecker(BaseVisitor):
         localScope = Checker.checkRedeclared([], listLocalVar)
         newScope = Utils.merge(scope, localScope)
         listStmt = []
-        for i in ast.elseStmt[0]:
+        for i in ast.elseStmt[1]:
             listStmt.append(self.visit(i, (newScope, False, funcName)))
-            for j in newScope:
-                if j.isGlobal:
-                    Utils.updateScope(scope, j.mtype, Id(j.name))
+            Utils.updateScopeToGlobal(scope, newScope)
         ret.append(Checker.handleReturnStmts(listStmt))
         sym = Utils.getSymbol(scope, Id(funcName))
         if any(x is None for x in ret): return (ast, None)
@@ -611,8 +616,37 @@ class StaticChecker(BaseVisitor):
         return (ast, Break())
     
     def visitFor(self, ast, param):
-        return None
-    
+        scope, loop, funcName = param
+        idx1 = Checker.checkUndeclared(scope, ast.idx1.name, Identifier())
+        if type(idx1.mtype) is Unknown:
+            Utils.updateScope(scope, IntType(), ast.idx1)
+        elif type(idx1.mtype) is not IntType:
+            raise TypeMismatchInStatement(ast)
+        e1Type = self.visit(ast.expr1, (scope, funcName))
+        if type(e1Type) is Unknown:
+            Utils.updateScope(scope, IntType(), ast.expr1)
+        elif type(e1Type) is not IntType:
+            raise TypeMismatchInStatement(ast)
+        e2Type = self.visit(ast.expr2, (scope, funcName))
+        if type(e2Type) is Unknown:
+            Utils.updateScope(scope, BoolType(), ast.expr1)
+        elif type(e2Type) is not BoolType:
+            raise TypeMismatchInStatement(ast)
+        e3Type = self.visit(ast.expr3, (scope, funcName))
+        if type(e3Type) is Unknown:
+            Utils.updateScope(scope, IntType(), ast.expr1)
+        elif type(e3Type) is not IntType:
+            raise TypeMismatchInStatement(ast)
+        listLocalVar = [self.visit(i, scope) for i in ast.loop[0]]
+        localScope = Checker.checkRedeclared([], listLocalVar)
+        newScope = Utils.merge(scope, localScope)
+        listStmt = []
+        for i in ast.loop[1]:
+            listStmt.append(self.visit(i, (newScope, True, funcName)))
+            Utils.updateScopeToGlobal(scope, newScope)
+        Checker.handleReturnStmts(listStmt)
+        return (ast, None)
+        
     def visitContinue(self, ast, param):
         scope, loop, funcName = param
         if not loop: raise NotInLoop(ast)
@@ -645,10 +679,38 @@ class StaticChecker(BaseVisitor):
         return (ast, ret)
     
     def visitDowhile(self, ast, param):
-        return None
+        scope, loop, funcName = param
+        listLocalVar = [self.visit(i, scope) for i in ast.sl[0]]
+        localScope = Checker.checkRedeclared([], listLocalVar)
+        newScope = Utils.merge(scope, localScope)
+        listStmt = []
+        for i in ast.sl[1]:
+            listStmt.append(self.visit(i, (newScope, True, funcName)))
+            Utils.updateScopeToGlobal(scope, newScope)
+        Checker.handleReturnStmts(listStmt)
+        eType = self.visit(ast.exp, (scope, funcName))
+        if type(eType) is Unknown:
+            Utils.updateScope(scope, BoolType(), ast.exp)
+        elif type(eType) is not BoolType:
+            raise TypeMismatchInStatement(ast)
+        return (ast, None)
 
     def visitWhile(self, ast, param):
-        return None
+        scope, loop, funcName = param
+        eType = self.visit(ast.exp, (scope, funcName))
+        if type(eType) is Unknown:
+            Utils.updateScope(scope, BoolType(), ast.exp)
+        elif type(eType) is not BoolType:
+            raise TypeMismatchInStatement(ast)
+        listLocalVar = [self.visit(i, scope) for i in ast.sl[0]]
+        localScope = Checker.checkRedeclared([], listLocalVar)
+        newScope = Utils.merge(scope, localScope)
+        listStmt = []
+        for i in ast.sl[1]:
+            listStmt.append(self.visit(i, (newScope, True, funcName)))
+            Utils.updateScopeToGlobal(scope, newScope)
+        Checker.handleReturnStmts(listStmt)
+        return (ast, None)
 
     def visitCallStmt(self, ast, param):
         scope, loop, funcName = param
