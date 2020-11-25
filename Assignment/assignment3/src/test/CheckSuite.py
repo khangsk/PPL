@@ -282,18 +282,88 @@ class CheckSuite(unittest.TestCase):
     #     expect = str(Redeclared(Parameter(), 'b'))
     #     self.assertTrue(TestChecker.test(input,expect,423))
     
-    def test24(self):
+    # def test24(self):
+    #     input = """
+    #     Var: a[2][2], c = 1;
+    #     Function: main
+    #     Parameter: b[2][3]
+    #     Body:
+    #         a[2][2] = {{1,2},{3,4}};
+    #         b = a[2][2] + c;
+    #     EndBody.
+    #     """
+    #     expect = str(TypeCannotBeInferred(Assign(Id("b"),Id("a"))))
+    #     self.assertTrue(TestChecker.test(input,expect,424))
+
+    # def test25(self):
+    #     input = """
+    #     Function: foo
+    #     Parameter: a
+    #     Body:
+    #         a = 1;
+    #         Return a;
+    #     EndBody.
+    #     Function: main
+    #     Parameter: b
+    #     Body:
+    #         foo();
+    #     EndBody.
+    #     """
+    #     expect = str(TypeMismatchInStatement(CallStmt(Id('foo'),[])))
+    #     self.assertTrue(TestChecker.test(input,expect,425))
+
+    # def test26(self):
+    #     input = """
+    #     Function: foo
+    #     Parameter: a
+    #     Body:
+    #         a = 1;
+    #         Return;
+    #     EndBody.
+    #     Function: main
+    #     Parameter: b
+    #     Body:
+    #         main();
+    #         foo();
+    #         Return b;
+    #     EndBody.
+    #     """
+    #     expect = str(TypeMismatchInStatement(Return(Id('b'))))
+    #     self.assertTrue(TestChecker.test(input,expect,426))
+
+    # def test27(self):
+    #     input = """
+    #     Function: main
+    #     Parameter: y, a, x
+    #     Body:
+    #         y = a + foo(x);
+    #     EndBody.
+    #     Function: foo
+    #     Parameter: a
+    #     Body:
+    #         Return;
+    #     EndBody.
+    #     """
+    #     expect = str(TypeCannotBeInferred(CallExpr(Id('foo'),[Id('x')])))
+    #     self.assertTrue(TestChecker.test(input,expect,427))
+    
+    def test28(self):
         input = """
-        Var: a[2][2], c;
         Function: main
-        Parameter: b[2][3]
+        Parameter: y, a, x
         Body:
-            a = {{1,2},{3,4}};
-            b = a;
+            x = 1;
+            y = a + foo(x);
+        EndBody.
+        Function: foo
+        Parameter: a
+        Body:
+            a = False;
+            Return a;
         EndBody.
         """
-        expect = str(TypeCannotBeInferred(Assign(Id("b"),Id("a"))))
-        self.assertTrue(TestChecker.test(input,expect,424))
+        expect = str(TypeMismatchInStatement(Return(Id('a'))))
+        self.assertTrue(TestChecker.test(input,expect,428))
     
 
     

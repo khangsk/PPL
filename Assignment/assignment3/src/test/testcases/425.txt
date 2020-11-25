@@ -1,12 +1,13 @@
 
-        Var: x[2] = {{1,2},{3,2.1}}, a;
         Function: foo
+        Parameter: a
         Body:
-           
-            Return x;
+            a = 1;
+            Return a;
         EndBody.
         Function: main
+        Parameter: b
         Body:
-           
+            foo();
         EndBody.
         

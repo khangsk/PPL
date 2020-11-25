@@ -1,9 +1,9 @@
 
-        Var: a[2][2], c;
+        Var: a[2][2], c = 1;
         Function: main
         Parameter: b[2][3]
         Body:
-            a = {{1,2},{3,4}};
-            b = a;
+            a[2][2] = {{1,2},{3,4}};
+            b = a[2][2] + c;
         EndBody.
         
