@@ -86,24 +86,6 @@ class MType:
     restype: Type
     def __str__(self):
         return 'MType(' + printList(self.intype) + ',' + str(self.restype) + ')'
-
-class ExpUtils:
-    @staticmethod
-    def isNaNType(expType):
-        return type(expType) not in [IntType, FloatType]
-
-    @staticmethod
-    def isOpForInt(operator):
-        return str(operator) in ['+', '-', '*', '\\', '%', '==', '!=', '>', '<', '>=', '<=']
-    
-    @staticmethod
-    def isOpForFloat(operator):
-        return str(operator) in ['+.', '-.', '*.', '\\.', '=/=', '>.', '<.', '>=.', '<=.']
-
-    @staticmethod
-    def mergeNumberType(lType, rType):
-        return FloatType() if FloatType in [type(x) for x in [lType, rType]] else IntType()
-
 class Symbol:
     def __init__(self, name, dimen=None, mtype=Unknown(), param=None,value=None, kind=Function(), isGlobal=False):
         self.name = name
@@ -123,15 +105,8 @@ class Symbol:
     def toTuple(self):
         return (str(self.name), type(self.getKind()))
 
-    def toTupleString(self):
-        return (str(self.name), str(self.mtype))
-
     def toParam(self):
         self.kind = Parameter()
-        return self
-
-    def toVar(self):
-        self.kind = Variable()
         return self
 
     def toGlobal(self):
@@ -415,7 +390,10 @@ class StaticChecker(BaseVisitor):
         return Symbol.fromVarDecl(ast)
     
     def visitFuncDecl(self, ast, scope):
+        sym = Utils.getSymbol(scope, ast.name)
         listParam = [self.visit(x, scope).toParam() for x in ast.param]
+        for i in range(len(listParam)):
+            listParam[i].mtype = sym.param[i]
         listLocalVar = [self.visit(x, scope) for x in ast.body[0]]
         listNewSymbols = listParam + listLocalVar
         localScope = Checker.checkRedeclared([], listNewSymbols)
@@ -501,21 +479,27 @@ class StaticChecker(BaseVisitor):
         # print(symbol)
         return symbol.mtype
 
-    
     def visitArrayCell(self, ast, param):
         scope, funcName = param
         arr = self.visit(ast.arr, (scope, funcName))
         if type(arr) not in [ArrayType, Unknown]:
             raise TypeMismatchInExpression(ast)
-        if type(arr) is Unknown:
-            Utils.updateScope(scope, ArrayType([], Unknown), ast.arr)
-        if type(arr) is not ArrayType:
+        if type(arr) is Unknown and type(ast.arr) is CallExpr:
+            Utils.updateScope(scope, ArrayType([], Unknown()), ast.arr)
+            arr = ArrayType([], Unknown())
+        elif type(arr) is not ArrayType:
             raise TypeMismatchInExpression(ast)
         for x in ast.idx:
             idx = self.visit(x, (scope, funcName))
-            if type(idx) is not IntType:
+            if type(idx) is Unknown:
+                Utils.updateScope(scope, IntType(), x)
+            elif type(idx) is not IntType:
                 raise TypeMismatchInExpression(ast)
         return arr
+    
+    def constantExpr(self, ast, param):
+        scope, funcName = param
+        if type(self.visit(ast, (scope, funcName))) is not IntType: return False
     
     def visitAssign(self, ast, param):
         scope, loop, funcName = param
@@ -536,8 +520,12 @@ class StaticChecker(BaseVisitor):
         elif type(lhsType) is ArrayType:
             sym = Utils.getSymbol(scope, ast.lhs)
             if type(ast.lhs) is ArrayCell:
-                paramLeft = [x.value for x in ast.lhs.idx]
-                if len(sym.mtype.dimen) == len(paramLeft):
+                if type(sym.kind) is Function:
+                    sym.mtype.dimen = []
+                    for x in ast.lhs.idx:
+                        if type(x) is IntLiteral: sym.mtype.dimen.append(x.value + 1)
+                        else: sym.mtype.dimen.append(-1)
+                if len(sym.mtype.dimen) == len(ast.lhs.idx):
                     if type(lhsType.eletype) is Unknown:
                         if type(rhsType) is Unknown:
                             raise TypeCannotBeInferred(ast)
@@ -550,7 +538,7 @@ class StaticChecker(BaseVisitor):
                             raise TypeMismatchInStatement(ast)
                         elif type(rhsType) is Unknown:
                             Utils.updateScope(scope, type(lhsType.eletype), ast.rhs)
-                        else:
+                        elif type(rhsType) is not type(lhsType.eletype):
                             raise TypeMismatchInStatement(ast)
                 else:
                     raise TypeMismatchInExpression(ast.lhs)

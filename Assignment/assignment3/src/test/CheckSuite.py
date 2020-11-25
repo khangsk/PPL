@@ -360,7 +360,7 @@ class CheckSuite(unittest.TestCase):
             Return a;
         EndBody.
         """
-        expect = str(TypeMismatchInStatement(Return(Id('a'))))
+        expect = str(TypeMismatchInStatement(Assign(Id('a'), BooleanLiteral(False))))
         self.assertTrue(TestChecker.test(input,expect,428))
     
     def test29(self):
@@ -418,7 +418,66 @@ class CheckSuite(unittest.TestCase):
         """
         expect = str(UnreachableStatement(Assign(Id('x'),BinaryOp('+',Id('x'),IntLiteral(1)))))
         self.assertTrue(TestChecker.test(input,expect,430))
+    # def test31(self):
+    #     input = """
+    #     Var: x[2][2] = {{1,2},{3,4}};
+    #     Function: main
+    #     Body:
+    #         Var: n;
+    #        x[n][3-4] = 1;
+    #     EndBody.
+    #     """
+    #     expect = str(TypeMismatchInStatement(Assign(Id("b"),ArrayLiteral([ArrayLiteral([IntLiteral(1),IntLiteral(2)]),ArrayLiteral([IntLiteral(3),IntLiteral(4)])]))))
+    #     self.assertTrue(TestChecker.test(input,expect,431))
     
+    # def test32(self):
+    #     input = """
+    #     Function: main
+    #     Body:
+    #         Var: n;
+    #         foo()[n][2] = 1;
+    #     EndBody.
+    #     Function: foo
+    #     Body:
+    #         Return {1,2};
+    #     EndBody.
+    #     """
+    #     expect = str(TypeMismatchInStatement(Assign(Id("b"),ArrayLiteral([ArrayLiteral([IntLiteral(1),IntLiteral(2)]),ArrayLiteral([IntLiteral(3),IntLiteral(4)])]))))
+    #     self.assertTrue(TestChecker.test(input,expect,432))
+
+    def test_inferred_parameter_type_2(self):
+        """More complex program"""
+        input = """Function: main 
+                       Body:
+                           foo(1,2);
+                       EndBody.
+
+                    Function: foo 
+                    Parameter: x,y
+                       Body:
+                            x = x + y;
+                            Return 1;
+                       EndBody.
+                """
+        expect = str(TypeMismatchInStatement(Return(IntLiteral(1))))
+        self.assertTrue(TestChecker.test(input, expect, 444))
+
+    def test_inferred_parameter_type(self):
+        """More complex program"""
+        input = """Function: main 
+                       Body:
+                           foo(1,2);
+                       EndBody.
+
+                    Function: foo 
+                    Parameter: x,y
+                       Body:
+                            x = 1.1;
+                            y = 2;
+                       EndBody.
+                """
+        expect = str(TypeMismatchInStatement(Assign(Id('x'), FloatLiteral(1.1))))
+        self.assertTrue(TestChecker.test(input, expect, 443))
 
 
 
