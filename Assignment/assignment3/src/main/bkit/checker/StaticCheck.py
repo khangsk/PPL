@@ -365,18 +365,18 @@ class StaticChecker(BaseVisitor):
     def __init__(self, ast):
         self.ast = ast
         self.global_envi = [
-            Symbol("int_of_float", MType([FloatType()], IntType()), isGlobal=True),
-            Symbol("float_of_int", MType([IntType()], FloatType()), isGlobal=True),
-            Symbol("int_of_string", MType([StringType()], IntType()), isGlobal=True),
-            Symbol("string_of_int", MType([IntType()], StringType()), isGlobal=True),
-            Symbol("float_of_string", MType([StringType()], FloatType()), isGlobal=True),
-            Symbol("string_of_float", MType([FloatType()], StringType()), isGlobal=True),
-            Symbol("bool_of_string", MType([StringType()], BoolType()), isGlobal=True),
-            Symbol("string_of_bool", MType([BoolType()], StringType()), isGlobal=True),
-            Symbol("read", MType([], StringType()), isGlobal=True),
-            Symbol("printLn", MType([], VoidType()), isGlobal=True),
-            Symbol("printStr", MType([StringType()], VoidType()), isGlobal=True),
-            Symbol("printStrLn", MType([StringType()], VoidType()), isGlobal=True)]
+            Symbol("int_of_float", param=[FloatType()], mtype=IntType(), isGlobal=True),
+            Symbol("float_of_int", param=[IntType()], mtype=FloatType(), isGlobal=True),
+            Symbol("int_of_string", param=[StringType()], mtype=IntType(), isGlobal=True),
+            Symbol("string_of_int", param=[IntType()], mtype=StringType(), isGlobal=True),
+            Symbol("float_of_string", param=[StringType()], mtype=FloatType(), isGlobal=True),
+            Symbol("string_of_float", param=[FloatType()], mtype=StringType(), isGlobal=True),
+            Symbol("bool_of_string", param=[StringType()], mtype=BoolType(), isGlobal=True),
+            Symbol("string_of_bool", param=[BoolType()], mtype=StringType(), isGlobal=True),
+            Symbol("read", param=[], mtype=StringType(), isGlobal=True),
+            Symbol("printLn", param=[], mtype=VoidType(), isGlobal=True),
+            Symbol("printStr", param=[StringType()], mtype=VoidType(), isGlobal=True),
+            Symbol("printStrLn", param=[StringType()], mtype=VoidType(), isGlobal=True)]
 
 
     def check(self):
@@ -476,7 +476,7 @@ class StaticChecker(BaseVisitor):
     
     def visitCallExpr(self, ast, param):
         scope, funcName = param
-        symbol = self.handleCall(ast, scope, funcName, Function())
+        symbol = self.handleCall(ast, scope, funcName, 'void')
         return symbol.mtype
     
     def visitId(self, ast, param):
@@ -518,22 +518,42 @@ class StaticChecker(BaseVisitor):
             else:
                 Utils.updateScope(scope, rhsType, ast.lhs)
         elif type(lhsType) is ArrayType:
-            if type(rhsType) is ArrayType:
-                sym = Utils.getSymbol(scope, ast.lhs)
-                if sym.mtype.dimen == rhsType.dimen:
-                    if type(sym.mtype.eletype) is Unknown and type(rhsType.eletype) is Unknown:
-                        raise TypeCannotBeInferred(ast)
-                    elif type(sym.mtype.eletype) is Unknown and type(rhsType.eletype) is not Unknown:
-                        Utils.updateScope(scope, rhsType, Id(sym.name))
-                    elif type(sym.mtype.eletype) is not Unknown and type(rhsType.eletype) is Unknown:
-                        Utils.updateScope(scope, lhsType, Id(sym.name))
-                    elif type(sym.mtype.eletype) is not type(rhsType.eletype):
-                        raise TypeMismatchInStatement(ast)
+            sym = Utils.getSymbol(scope, ast.lhs)
+            if type(ast.lhs) is ArrayCell:
+                paramLeft = [x.value for x in ast.lhs.idx]
+                if len(sym.mtype.dimen) == len(paramLeft):
+                    if type(lhsType.eletype) is Unknown:
+                        if type(rhsType) is Unknown:
+                            raise TypeCannotBeInferred(ast)
+                        elif type(rhsType) in [ArrayType, VoidType]:
+                            raise TypeMismatchInStatement(ast)
+                        else:
+                            Utils.updateScope(scope, ArrayType(sym.mtype.dimen, rhsType), ast.lhs.arr)
+                    else:
+                        if type(rhsType) in [ArrayType, VoidType]:
+                            raise TypeMismatchInStatement(ast)
+                        elif type(rhsType) is Unknown:
+                            Utils.updateScope(scope, type(lhsType.eletype), ast.rhs)
+                        else:
+                            raise TypeMismatchInStatement(ast)
                 else:
-                    raise TypeCannotBeInferred(ast)
+                    raise TypeMismatchInExpression(ast.lhs)
             else:
-                # type mismatch or type cannot be inferred
-                raise TypeMismatchInStatement(ast)
+                if type(rhsType) is ArrayType:
+                    if sym.mtype.dimen == rhsType.dimen:
+                        if type(sym.mtype.eletype) is Unknown and type(rhsType.eletype) is Unknown:
+                            raise TypeCannotBeInferred(ast)
+                        elif type(sym.mtype.eletype) is Unknown and type(rhsType.eletype) is not Unknown:
+                            Utils.updateScope(scope, rhsType, Id(sym.name))
+                        elif type(sym.mtype.eletype) is not Unknown and type(rhsType.eletype) is Unknown:
+                            Utils.updateScope(scope, lhsType, Id(Utils.getSymbol(scope, ast.rhs).name))
+                        elif type(sym.mtype.eletype) is not type(rhsType.eletype):
+                            raise TypeMismatchInStatement(ast)
+                    else:
+                        raise TypeCannotBeInferred(ast)
+                else:
+                    # type mismatch or type cannot be inferred
+                    raise TypeMismatchInStatement(ast)
         elif type(lhsType) is VoidType:
             raise TypeMismatchInStatement(ast)
         else:
@@ -606,7 +626,7 @@ class StaticChecker(BaseVisitor):
 
     def visitCallStmt(self, ast, param):
         scope, loop, funcName = param
-        symbol = self.handleCall(ast, scope, funcName, Function())
+        symbol = self.handleCall(ast, scope, funcName, 'function')
         s = Utils.getSymbol(scope, ast.method)
         if type(s.mtype) is Unknown:
             Utils.updateScope(scope, VoidType(), Id(s.name))
@@ -615,32 +635,32 @@ class StaticChecker(BaseVisitor):
         return (ast, None)
     
     def handleCall(self, ast, scope, funcName, kind):
-        symbol = Checker.checkUndeclared(scope, ast.method.name, kind)
+        symbol = Checker.checkUndeclared(scope, ast.method.name, Function())
         paramType = [self.visit(x, (scope, funcName)) for x in ast.param]
         if len(symbol.param) != len(paramType): 
-            raise TypeMismatchInStatement(ast) if type(kind) is Function else TypeMismatchInExpression(ast)   
+            raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)   
         elif len(paramType) > 0:
             if type(symbol.param[0]) is Unknown or (type(symbol.param[0]) is ArrayType and type(symbol.param[0].eletype) is Unknown):
                 for i in range(len(paramType)):
                     if type(paramType[i]) is VoidType:
-                        raise TypeMismatchInStatement(ast) if type(kind) is Function else TypeMismatchInExpression(ast)
+                        raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
                     if type(paramType[i]) is Unknown or (type(paramType[i]) is ArrayType and type(paramType[i].eletype) is Unknown):
                         raise TypeCannotBeInferred(ast)
                     if (type(symbol.param[i]) is Unknown and type(paramType[i]) is ArrayType) or (type(symbol.param[i]) is ArrayType and type(paramType[i]) is Unknown):
-                        raise TypeMismatchInStatement(ast) if type(kind) is Function else TypeMismatchInExpression(ast)
+                        raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
                 Utils.updateScope(scope, None, Id(symbol.name), paramType=paramType)
             else: 
                 for i in range(len(paramType)):
                     if type(paramType[i]) is Unknown:
                         if type(symbol.param[i]) in [ArrayType, VoidType]:
-                            raise TypeMismatchInStatement(ast) if type(kind) is Function else TypeMismatchInExpression(ast)
+                            raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
                         Utils.updateScope(scope, None, ast.param[i], paramType=symbol.param[i])
                     elif type(paramType[i]) is ArrayType and type(paramType[i].eletype) is Unknown:
                         if type(symbol.param[i]) is not ArrayType:
-                            raise TypeMismatchInStatement(ast) if type(kind) is Function else TypeMismatchInExpression(ast)
+                            raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
                         Utils.updateScope(scope, None, ast.param[i], paramType=symbol.param[i])
                     elif not Checker.matchType(symbol.param[i], paramType[i]):
-                        raise TypeMismatchInStatement(ast) if type(kind) is Function else TypeMismatchInExpression(ast) 
+                        raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast) 
 
 
 
