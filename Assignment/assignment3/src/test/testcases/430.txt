@@ -1,0 +1,24 @@
+
+        Function: foo
+        Body:
+           Var: x;
+           x = main() + 1;
+           If x > 1 Then
+                Return 1;
+                x = x + 1;
+            Else
+             x = 0;
+             EndIf.
+
+        EndBody.
+        Function: main
+        Body:
+            Var: x;
+            x = foo() + 1;
+            kkk();
+            Return 1;
+        EndBody.
+        Function: kkk
+        Body:
+        EndBody.
+        

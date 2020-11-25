@@ -4,7 +4,7 @@
 """
 from abc import ABC, abstractmethod, ABCMeta
 from dataclasses import dataclass
-from main.bkit.checker.StaticError import Function, InvalidArrayLiteral, Parameter, TypeCannotBeInferred, TypeMismatchInExpression, TypeMismatchInStatement, UnreachableFunction, Variable
+from main.bkit.checker.StaticError import Function, InvalidArrayLiteral, Parameter, TypeCannotBeInferred, TypeMismatchInExpression, TypeMismatchInStatement, UnreachableFunction, UnreachableStatement, Variable
 from main.bkit.utils.AST import ArrayCell, ArrayLiteral, BooleanLiteral, CallExpr, FloatLiteral, FuncDecl, IntLiteral, StringLiteral, printlist
 from typing import List, Tuple
 from AST import *
@@ -294,16 +294,21 @@ class Checker:
         return res
     
     @staticmethod
-    def handleReturnStmts(listStmt):
+    def handleReturnStmts(stmts):
+        # stmts: (stmt, type) with type: None, VoidType, (...)Type, Break
         for i in range(0, len(stmts)-1):
             if Checker.isStopTypeStatment(stmts[i][1]):
-                raise UnreachableStatement(stmts[i+1][0])
+                raise UnreachableStatement((stmts[i+1][0]))
         return None if stmts == [] else stmts[-1][1]
 
     @staticmethod
     def isStopTypeStatment(retType):
         return Checker.isReturnType(retType) or type(retType) in [Break, Continue]
-    
+
+    @staticmethod
+    def isReturnType(retType):
+        return type(retType) in [IntType, FloatType, BoolType, StringType, ArrayType, VoidType]
+
     @staticmethod
     def matchType(a, b):
         if type(a) is ArrayType and type(b) is ArrayType:
@@ -429,6 +434,8 @@ class StaticChecker(BaseVisitor):
                 raise TypeMismatchInExpression(ast)
             elif type(rType) is Unknown:
                 Utils.updateScope(scope, IntType(), ast.right)
+            if op in ['==', '!=', '>', '<', '>=', '<=']:
+                return BoolType()
             return IntType()
         elif op in ['+.', '-.', '*.', '\\.', '=/=', '>.', '<.', '>=.', '<=.']:
             if type(ltype) not in [FloatType, Unknown]:
@@ -439,6 +446,8 @@ class StaticChecker(BaseVisitor):
                 raise TypeMismatchInExpression(ast)
             elif type(rType) is Unknown:
                 Utils.updateScope(scope, FloatType(), ast.right)
+            if op in ['=/=', '>.', '<.', '>=.', '<=.']:
+                return BoolType()
             return FloatType()
         elif op in ['&&', '||']:
             if type(ltype) not in [BoolType, Unknown]:
@@ -571,8 +580,9 @@ class StaticChecker(BaseVisitor):
     
     def visitIf(self, ast, param):
         scope, loop, funcName = param
+        ret = []
         for x in ast.ifthenStmt:
-            condType = self.visit(x[0], param)
+            condType = self.visit(x[0], (scope, funcName))
             if type(condType) is not BoolType:
                 raise TypeMismatchInStatement(ast)
             listLocalVar = [self.visit(i, scope) for i in x[1]]
@@ -583,20 +593,36 @@ class StaticChecker(BaseVisitor):
                 listStmt.append(self.visit(i, (newScope, False, funcName)))
                 for j in newScope:
                     if j.isGlobal:
-                        for k in range(len(scope)):
-                            if scope[k].name == j.name:
-                                scope[k] = Symbol(scope[k].name, mtype=j.mtype, kind=scope[k].kind, isGlobal=scope[k].isGlobal)
-                                break
-            ret = Checker.handleReturnStmts(listStmt)
+                        Utils.updateScope(scope, j.mtype, Id(j.name))
+            ret.append(Checker.handleReturnStmts(listStmt))
+        listLocalVar = [self.visit(i, scope) for i in ast.elseStmt[0]]
+        localScope = Checker.checkRedeclared([], listLocalVar)
+        newScope = Utils.merge(scope, localScope)
+        listStmt = []
+        for i in ast.elseStmt[0]:
+            listStmt.append(self.visit(i, (newScope, False, funcName)))
+            for j in newScope:
+                if j.isGlobal:
+                    Utils.updateScope(scope, j.mtype, Id(j.name))
+        ret.append(Checker.handleReturnStmts(listStmt))
+        sym = Utils.getSymbol(scope, Id(funcName))
+        if any(x is None for x in ret): return (ast, None)
+        if all(type(x) not in [Break, Continue] for x in ret): return (ast, sym.mtype)
+        return (ast, Break())
     
     def visitFor(self, ast, param):
         return None
     
     def visitContinue(self, ast, param):
-        return None
+        scope, loop, funcName = param
+        if not loop: raise NotInLoop(ast)
+        return (ast, Continue())
     
     def visitBreak(self, ast, param):
-        return None
+        scope, loop, funcName = param
+        if not loop: raise NotInLoop(ast)
+        return (ast, Break())
+
     
     def visitReturn(self, ast, param):
         scope, loop, funcName = param
@@ -661,8 +687,6 @@ class StaticChecker(BaseVisitor):
                         Utils.updateScope(scope, None, ast.param[i], paramType=symbol.param[i])
                     elif not Checker.matchType(symbol.param[i], paramType[i]):
                         raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast) 
-
-
 
         Graph.add(funcName, ast.method.name)
         return symbol
