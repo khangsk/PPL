@@ -3,6 +3,6 @@
         Function: main
         Body:
             Var: n;
-           x[n][3-4] = 1;
+           x[n][3\4+1*2-10%4+2] = 1;
         EndBody.
         

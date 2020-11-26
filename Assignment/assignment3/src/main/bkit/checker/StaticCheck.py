@@ -300,7 +300,30 @@ class Checker:
     @staticmethod
     def matchArray(a, b):
         return type(a.eletype) == type(b.eletype) and a.dimen == b.dimen
-            
+
+    @staticmethod
+    def constantExpr(x, y):
+        if type(x) is BinaryOp:
+            if x.op not in ['+','-','*','\\','%']:
+                y.append(x.op)
+            left = Checker.constantExpr(x.left, y)
+            right = Checker.constantExpr(x.right, y)
+            if x.op == '+': return left + right
+            elif x.op == '-': return left - right
+            elif x.op == '*': return left * right
+            elif x.op == '\\': return left // right
+            elif x.op == '%': 
+                return left % right     
+        elif type(x) is UnaryOp:
+            if x.op != '-':
+                y.append(x.op)
+            val = Checker.constantExpr(x.body, y)
+            if x.op == '-': return -val
+        elif type(x) is IntLiteral:
+            return x.value
+        else:
+            y.append(x)
+
 class Graph:
     link = {}
     visited = {}
@@ -489,6 +512,14 @@ class StaticChecker(BaseVisitor):
             arr = ArrayType([], Unknown())
         elif type(arr) is not ArrayType:
             raise TypeMismatchInExpression(ast)
+        listDimen = arr.dimen
+        for i in range(len(listDimen)):
+            check = []
+            val = Checker.constantExpr(ast.idx[i], check)
+            print(check, val)
+            if len(check) == 0:
+                if val < 0 or val >= listDimen[i]:
+                    raise IndexOutOfRange(ast)
         for x in ast.idx:
             idx = self.visit(x, (scope, funcName))
             if type(idx) is Unknown:
@@ -496,10 +527,6 @@ class StaticChecker(BaseVisitor):
             elif type(idx) is not IntType:
                 raise TypeMismatchInExpression(ast)
         return arr
-    
-    def constantExpr(self, ast, param):
-        scope, funcName = param
-        if type(self.visit(ast, (scope, funcName))) is not IntType: return False
     
     def visitAssign(self, ast, param):
         scope, loop, funcName = param
