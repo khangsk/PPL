@@ -1,2 +1,6 @@
-Var: main;
-                
+Function: main
+                   Body: 
+                        Var: a, b;
+                        a = bool_of_string("True");
+                        b = a + "123";
+                   EndBody.

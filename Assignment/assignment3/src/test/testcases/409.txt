@@ -1,5 +1,6 @@
-Var: foo;
-                    Function: main
+Function: main
                    Body: 
-                        foo();
+                        Var: a;
+                        a = float_of_string("12.");
+                        a = 1;
                    EndBody.

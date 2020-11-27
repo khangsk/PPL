@@ -1,9 +1,1 @@
-
-        Var: a = 1;
-        Function: main
-        Parameter: b
-        Body:
-            b = True;
-            a = b;
-        EndBody.
-                
+Program([FuncDecl(Id(main)[],([][CallStmt(Id(printStrLn),[])]))])

@@ -1,13 +1,1 @@
-
-        Var: a;
-        Function: foo
-        Body:
-            Return 1;
-        EndBody.
-        Function: main
-        Body:
-            a = foo();
-            a = "sk";
-        EndBody.
-        
-                
+Var: a[2][2] = {{1,2},{3,4}};

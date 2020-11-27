@@ -1,0 +1,14 @@
+
+                Var: x[3][2] = { { 1,2 }, { 2,3} , {3,4}   };
+               Function: main
+               Parameter: y, a
+               Body:
+                    Return x;
+               EndBody.
+
+               Function: foo
+               Parameter: a[3][2]
+               Body:
+                   a = main(1,2);
+               EndBody.
+               

@@ -1,10 +1,4 @@
-
-        Var: x = 1;
-        Function: main
-        Parameter: a, b[1]
-        Body:
-            a = True;
-            b[1] = x;
-            b[0] = a;
-        EndBody.
-                
+Function: main  
+                   Body:
+                        printStrLn();
+                    EndBody.

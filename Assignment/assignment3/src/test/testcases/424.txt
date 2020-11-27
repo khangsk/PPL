@@ -1,9 +1,5 @@
-Function: main
-                   Body: 
-                        foo(1, 2);
-                   EndBody.
-                   Function: foo
-                   Parameter: a, b
-                   Body:
-                        Return a;
-                   EndBody.
+Var: main;
+                    Function: foo
+                    Body:
+                    EndBody.
+                

@@ -1,1 +1,5 @@
-Var: a[2][2] = {{1,2},{3,4}};
+Function: main
+                   Body: 
+                        Var: a = 1.1;
+                        a = float_of_int(12.0);
+                   EndBody.

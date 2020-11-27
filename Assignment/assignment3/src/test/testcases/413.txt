@@ -1,7 +1,4 @@
-
-        Function: main
-        Parameter: a, b
-        Body:
-            a[b] = 1;
-        EndBody.
-                
+Function: main
+                   Body: 
+                        foo();
+                   EndBody.

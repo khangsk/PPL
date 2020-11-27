@@ -1,8 +1,17 @@
-
-        Var: x[2][2] = {{1,2},{3,4}};
-        Function: main
-        Body:
-            Var: n;
-           x[n][3\4+1*2-10%4+2] = 1;
-        EndBody.
-        
+Var: x;
+                    Function: main
+                   Body: 
+                        x = 1;
+                        x = foo(1);
+                        xx();
+                   EndBody.
+                   Function: xx
+                   Parameter: a
+                   Body:
+                        foo(1);
+                    EndBody.
+                   Function: foo
+                   Parameter: k
+                   Body:
+                        printStrLn(k);
+                   EndBody.

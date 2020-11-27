@@ -1,11 +1,9 @@
 
+        Var: a = 1;
         Function: main
+        Parameter: b
         Body:
-            Var: n;
-            foo()[n][2] = 1;
+            b = True;
+            a = b;
         EndBody.
-        Function: foo
-        Body:
-            Return {1,2};
-        EndBody.
-        
+                

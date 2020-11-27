@@ -1,1 +1,1 @@
-Type Cannot Be Inferred: Assign(Id(a),Id(b))
+Type Mismatch In Expression: CallExpr(Id(string_of_bool),[StringLiteral(True)])

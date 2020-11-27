@@ -1,8 +1,5 @@
-Var: foo;
-                    Function: main
+Function: main
                    Body: 
-                        foo();
-                   EndBody.
-                   Function: foo
-                   Body:
+                        Var: a;
+                        a = string_of_float(True);
                    EndBody.

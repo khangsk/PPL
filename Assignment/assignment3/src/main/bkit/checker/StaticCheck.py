@@ -423,8 +423,9 @@ class StaticChecker(BaseVisitor):
         newScope = Utils.merge(scope, localScope)
         stmts = [self.visit(x, (newScope, False, ast.name.name)) for x in ast.body[1]]
         ret = Checker.handleReturnStmts(stmts)
-        typeFunc = Utils.getSymbol(newScope, ast.name).mtype
-        if type(typeFunc) in [IntType, FloatType, BoolType, StringType, ArrayType] and type(ret) not in [IntType, FloatType, BoolType, StringType, ArrayType]:
+        newFunc = Utils.getSymbol(newScope, ast.name)
+        if type(newFunc.mtype) is Unknown: newFunc.mtype = VoidType()
+        if type(newFunc.mtype) in [IntType, FloatType, BoolType, StringType, ArrayType] and type(ret) not in [IntType, FloatType, BoolType, StringType, ArrayType]:
             raise FunctionNotReturn(ast.name.name)
         return list(filter(lambda x: x.isGlobal, newScope))    
     
@@ -516,7 +517,6 @@ class StaticChecker(BaseVisitor):
         for i in range(len(listDimen)):
             check = []
             val = Checker.constantExpr(ast.idx[i], check)
-            print(check, val)
             if len(check) == 0:
                 if val < 0 or val >= listDimen[i]:
                     raise IndexOutOfRange(ast)
@@ -541,7 +541,11 @@ class StaticChecker(BaseVisitor):
                     raise TypeMismatchInStatement(ast)
             elif type(rhsType) is ArrayType:
                 # type mismatch or type cannot be inferred
-                raise TypeMismatchInStatement(ast)
+                if type(rhsType.eletype) is Unknown:
+                    raise TypeCannotBeInferred(ast)
+                if len(rhsType.dimen) != len(ast.rhs.idx):
+                    raise TypeMismatchInStatement(ast)
+                Utils.updateScope(scope, rhsType.eletype, ast.lhs)
             else:
                 Utils.updateScope(scope, rhsType, ast.lhs)
         elif type(lhsType) is ArrayType:

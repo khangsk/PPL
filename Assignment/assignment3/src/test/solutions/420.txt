@@ -1,1 +1,1 @@
-Type Cannot Be Inferred: Assign(Id(a),CallExpr(Id(foo),[]))
+Redeclared Function: main

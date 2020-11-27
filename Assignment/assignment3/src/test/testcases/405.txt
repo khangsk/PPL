@@ -1,1 +1,5 @@
-Program([FuncDecl(Id(main)[],([][CallStmt(Id(printStrLn),[])]))])
+Function: main
+                   Body: 
+                        Var: a = 1.1;
+                        a = int_of_float(123.0);
+                   EndBody.

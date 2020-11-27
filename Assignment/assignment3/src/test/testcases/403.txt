@@ -1,1 +1,4 @@
-Program([FuncDecl(Id(main)[],([][CallStmt(Id(foo),[])]))])
+Function: main
+                   Body: 
+                        printStr();
+                   EndBody.

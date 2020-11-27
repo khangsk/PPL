@@ -1,8 +1,4 @@
-
-        Var: a;
-        Function: main
-        Parameter: b
-        Body:
-            Var: b;
-        EndBody.
-        
+Function: foo
+                   Body: 
+                    main();
+                   EndBody.

@@ -1,0 +1,13 @@
+
+        Var: a;
+        Function: foo
+        Body:
+            Return 1;
+        EndBody.
+        Function: main
+        Body:
+            a = foo();
+            a = "sk";
+        EndBody.
+        
+                
