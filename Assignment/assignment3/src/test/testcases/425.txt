@@ -1,13 +1,7 @@
 
-        Function: foo
-        Parameter: a
-        Body:
-            a = 1;
-            Return a;
-        EndBody.
         Function: main
-        Parameter: b
+        Parameter: a, b
         Body:
-            foo();
+            a = b;
         EndBody.
-        
+                

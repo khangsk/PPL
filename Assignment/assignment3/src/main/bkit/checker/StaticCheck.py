@@ -225,7 +225,10 @@ class Utils:
         for i in range(len(scope)):
             if scope[i].name == s:
                 if paramType is None:
-                    scope[i] = Symbol(scope[i].name, mtype=typ, param=scope[i].param, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
+                    if type(x) is ArrayCell:
+                        scope[i] = Symbol(scope[i].name, mtype=ArrayType(scope[i].mtype.dimen, typ), param=scope[i].param, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
+                    else:
+                        scope[i] = Symbol(scope[i].name, mtype=typ, param=scope[i].param, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
                 else:
                     scope[i] = Symbol(scope[i].name, mtype=scope[i].mtype, param=paramType, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
                 break
@@ -248,8 +251,9 @@ class Utils:
     
     @staticmethod
     def updateScopeToGlobal(scope, newScope):
+        temp = [x.name for x in scope]
         for j in newScope:
-            if j.isGlobal:
+            if j.name in temp:
                 Utils.updateScope(scope, j.mtype, Id(j.name))
 
 class Checker:
@@ -526,7 +530,7 @@ class StaticChecker(BaseVisitor):
                 Utils.updateScope(scope, IntType(), x)
             elif type(idx) is not IntType:
                 raise TypeMismatchInExpression(ast)
-        return arr
+        return arr.eletype
     
     def visitAssign(self, ast, param):
         scope, loop, funcName = param
@@ -609,7 +613,9 @@ class StaticChecker(BaseVisitor):
         ret = []
         for x in ast.ifthenStmt:
             condType = self.visit(x[0], (scope, funcName))
-            if type(condType) is not BoolType:
+            if type(condType) is Unknown:
+                Utils.updateScope(scope, BoolType(), x[0])
+            elif type(condType) is not BoolType:
                 raise TypeMismatchInStatement(ast)
             listLocalVar = [self.visit(i, scope) for i in x[1]]
             localScope = Checker.checkRedeclared([], listLocalVar)
