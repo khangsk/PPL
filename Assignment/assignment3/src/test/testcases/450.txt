@@ -10,7 +10,7 @@
                                 b = b + 10;
                             EndIf.
                         Else
-                            Return True;
+                            Return 1;
                         EndIf.
                     EndIf. 
                     Return;
