@@ -255,6 +255,15 @@ class Utils:
         for j in newScope:
             if j.name in temp:
                 Utils.updateScope(scope, j.mtype, Id(j.name))
+    
+    @staticmethod
+    def updateParam(scope, listNameParam, funcName):
+        sym = Utils.getSymbol(scope, Id(funcName))
+        for i in scope:
+            if type(i.kind) is Parameter:
+                for j in range(len(listNameParam)):
+                    if listNameParam[j] == i.name:
+                        sym.param[j] = i.mtype
 
 class Checker:
     @staticmethod
@@ -425,7 +434,11 @@ class StaticChecker(BaseVisitor):
         listNewSymbols = listParam + listLocalVar
         localScope = Checker.checkRedeclared([], listNewSymbols)
         newScope = Utils.merge(scope, localScope)
-        stmts = [self.visit(x, (newScope, False, ast.name.name)) for x in ast.body[1]]
+        listNameParam = [x.name for x in listParam]
+        stmts = []
+        for x in ast.body[1]:
+            stmts.append(self.visit(x, (newScope, False, ast.name.name)))
+            Utils.updateParam(newScope, listNameParam, ast.name.name)
         ret = Checker.handleReturnStmts(stmts)
         newFunc = Utils.getSymbol(newScope, ast.name)
         if type(newFunc.mtype) is Unknown: newFunc.mtype = VoidType()
@@ -518,6 +531,8 @@ class StaticChecker(BaseVisitor):
         elif type(arr) is not ArrayType:
             raise TypeMismatchInExpression(ast)
         listDimen = arr.dimen
+        if len(listDimen) != len(ast.idx):
+            raise TypeMismatchInExpression(ast)
         for i in range(len(listDimen)):
             check = []
             val = Checker.constantExpr(ast.idx[i], check)

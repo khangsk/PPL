@@ -731,6 +731,99 @@ class CheckSuite(unittest.TestCase):
         expect = str(TypeMismatchInStatement(CallStmt(Id('foo'),[IntLiteral(5), IntLiteral(2)])))
         self.assertTrue(TestChecker.test(input, expect, 453))
     
+    def test54(self):
+        """More complex program"""
+        input = """
+                Function: foo
+                Parameter: a[2][2],b
+                Body:
+                    a[1] = 1;
+                    a[1][1] = b + 2;
+                    Return b;
+                EndBody.
+                Function: main
+                Body:
+                    foo(5,2);
+                EndBody.
+               """
+        expect = str(TypeMismatchInExpression(ArrayCell(Id('a'),[IntLiteral(1)])))
+        self.assertTrue(TestChecker.test(input, expect, 454))
+    
+    def test55(self):
+        """More complex program"""
+        input = """
+                Function: main
+                Body:
+                    Var: x;
+                    foo(5,x);
+                EndBody.
+                Function: foo
+                Parameter: x,y
+                Body:
+                EndBody.
+               """
+        expect = str(TypeCannotBeInferred(CallStmt(Id('foo'),[IntLiteral(5),Id('x')])))
+        self.assertTrue(TestChecker.test(input, expect, 455))
+    
+    def test56(self):
+        """More complex program"""
+        input = """
+                Function: main
+                Body:
+                    Var: x;
+                    x = 1 + 2;
+                    foo(5,x);
+                EndBody.
+                Function: foo
+                Parameter: x,y
+                Body:
+                    Return True;
+                EndBody.
+               """
+        expect = str(TypeMismatchInStatement(Return(BooleanLiteral(True))))
+        self.assertTrue(TestChecker.test(input, expect, 456))
+    
+    def test57(self):
+        """More complex program"""
+        input = """
+                Function: foo
+                Parameter: x,y
+                Body:
+                    x = 2;
+                    y = 1;
+                    Return;
+                EndBody.
+                Function: main
+                Body:
+                    Var: x;
+                    x = 1 + 2;
+                    foo(5.1,x);
+                EndBody.
+               """
+        expect = str(TypeMismatchInStatement(CallStmt(Id('foo'),[FloatLiteral(5.1), Id('x')])))
+        self.assertTrue(TestChecker.test(input, expect, 457))
+    
+    def test58(self):
+        """More complex program"""
+        input = """
+                 Function: main
+                Body:
+                    Var: x;
+                    x = 1 + 2;
+                    foo(5.1,x);
+                EndBody.
+                Function: foo
+                Parameter: x,y
+                Body:
+                    x = 2;
+                    y = 1;
+                    Return;
+                EndBody.
+                
+               """
+        expect = str(TypeMismatchInStatement(Assign(Id('x'),IntLiteral(2))))
+        self.assertTrue(TestChecker.test(input, expect, 458))
+
     # def test50(self):
     #     input = """
     #     Function: foo
