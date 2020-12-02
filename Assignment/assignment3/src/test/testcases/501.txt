@@ -1,0 +1,8 @@
+
+                  Function: main
+                  Parameter: x,y,z,int_of_float
+                  Body:
+                      x = 1;
+                      x = int_of_float(1.1);
+                  EndBody.
+                  

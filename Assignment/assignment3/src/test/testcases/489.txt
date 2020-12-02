@@ -1,0 +1,17 @@
+
+                  Function: foo
+                  Parameter: x,y
+                  Body:
+                      x = 1.1;
+                      y = False;
+                      Return { True };
+                  EndBody.
+                  
+                  Function: main
+                  Parameter: x, y
+                  Body:
+                      foo(x,y)[0] = False;
+                      x = False;
+                  EndBody.
+
+                  

@@ -1,0 +1,10 @@
+
+                  Var: x = { { { 1,2,3 } , { 2,3,4 } } , { { 1,2,3 } , { 2,3,4 } } };
+                  Function: main
+                  Parameter: z, y
+                  Body:
+                      Var: a[2][2][3];
+                      a = x;
+                      a[1][2][3] = True;
+                  EndBody.
+                  

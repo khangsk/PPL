@@ -1,0 +1,22 @@
+
+                  Function: fact
+                  Parameter: m,n,p
+                  Body:
+                        m = 1;
+                        n = "string";
+                        p = string_of_int(m);
+                  EndBody.
+
+                  Function: main
+                  Parameter: x,y,z
+                  Body:
+                       fact(x,y, foo());
+                       x = x + 9;
+                       y = "False";
+                  EndBody.
+                  
+                  Function: foo
+                  Body:
+                       Return 1;
+                  EndBody.
+                  

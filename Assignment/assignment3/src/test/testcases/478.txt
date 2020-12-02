@@ -1,0 +1,20 @@
+
+                  Function: main
+                  Parameter: k
+                  Body:
+                       While foo(1,2,3) Do   
+                       EndWhile.
+                       
+                       While k Do   
+                       EndWhile.
+                        
+                  EndBody.
+
+                  Function: foo
+                  Parameter: k, a, i
+                  Body:
+                        Var: x;
+                        x = { {1,2} };
+                        Return 1;
+                  EndBody.
+                  

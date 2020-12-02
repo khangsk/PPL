@@ -1,4 +1,6 @@
-Function: main
-                   Body: 
-                        read(1);
-                   EndBody.
+
+            Var: x,y,x=10;
+            Function: main
+                Body:
+                EndBody.
+        

@@ -1,0 +1,13 @@
+
+                   Var: bool_of_string;
+                  Function: main
+                  Parameter: y, a, i
+                  Body:
+                        a = 1.1 +. foo()[2];
+                  EndBody.
+
+                  Function: foo
+                  Body:
+                        Return {1.1,2.2};
+                  EndBody.
+                  

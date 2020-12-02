@@ -211,7 +211,7 @@ class Utils:
                 temp = []
                 check = 0
     @staticmethod
-    def updateScope(scope, typ, x, paramType=None):
+    def updateScope(scope, typ, x):
         s = ''
         if type(x) is Id:
             s = x.name
@@ -224,13 +224,19 @@ class Utils:
             s = x.method.name
         for i in range(len(scope)):
             if scope[i].name == s:
-                if paramType is None:
-                    if type(x) is ArrayCell:
-                        scope[i] = Symbol(scope[i].name, mtype=ArrayType(scope[i].mtype.dimen, typ), param=scope[i].param, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
-                    else:
-                        scope[i] = Symbol(scope[i].name, mtype=typ, param=scope[i].param, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
+                if type(x) is ArrayCell:
+                    scope[i] = Symbol(scope[i].name, mtype=ArrayType(scope[i].mtype.dimen, typ), param=scope[i].param, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
                 else:
-                    scope[i] = Symbol(scope[i].name, mtype=scope[i].mtype, param=paramType, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
+                    scope[i] = Symbol(scope[i].name, mtype=typ, param=scope[i].param, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
+                break
+    
+    @staticmethod
+    def updateTypeParam(scope, name, paramType, idx):
+        for i in range(len(scope)):
+            if scope[i].name == name:
+                temp = [x for x in scope[i].param]
+                temp[idx] = paramType
+                scope[i] = Symbol(scope[i].name, mtype=scope[i].mtype, param=temp, kind=scope[i].kind, isGlobal=scope[i].isGlobal)
                 break
     
     @staticmethod
@@ -449,13 +455,13 @@ class StaticChecker(BaseVisitor):
     def visitBinaryOp(self, ast, param):
         scope, funcName = param
         op = ast.op
-        ltype = self.visit(ast.left, (scope, funcName))
-        rType = self.visit(ast.right, (scope, funcName))
         if op in ['+', '-', '*', '\\', '%', '==', '!=', '>', '<', '>=', '<=']:
+            ltype = self.visit(ast.left, (scope, funcName))
             if type(ltype) not in [IntType, Unknown]:
                 raise TypeMismatchInExpression(ast)
             elif type(ltype) is Unknown:
                 Utils.updateScope(scope, IntType(), ast.left)
+            rType = self.visit(ast.right, (scope, funcName))
             if type(rType) not in [IntType, Unknown]:
                 raise TypeMismatchInExpression(ast)
             elif type(rType) is Unknown:
@@ -464,10 +470,12 @@ class StaticChecker(BaseVisitor):
                 return BoolType()
             return IntType()
         elif op in ['+.', '-.', '*.', '\\.', '=/=', '>.', '<.', '>=.', '<=.']:
+            ltype = self.visit(ast.left, (scope, funcName))
             if type(ltype) not in [FloatType, Unknown]:
                 raise TypeMismatchInExpression(ast)
             elif type(ltype) is Unknown:
                 Utils.updateScope(scope, FloatType(), ast.left)
+            rType = self.visit(ast.right, (scope, funcName))
             if type(rType) not in [FloatType, Unknown]:
                 raise TypeMismatchInExpression(ast)
             elif type(rType) is Unknown:
@@ -476,10 +484,12 @@ class StaticChecker(BaseVisitor):
                 return BoolType()
             return FloatType()
         elif op in ['&&', '||']:
+            ltype = self.visit(ast.left, (scope, funcName))
             if type(ltype) not in [BoolType, Unknown]:
                 raise TypeMismatchInExpression(ast)
             elif type(ltype) is Unknown:
                 Utils.updateScope(scope, BoolType(), ast.left)
+            rType = self.visit(ast.right, (scope, funcName))
             if type(rType) not in [BoolType, Unknown]:
                 raise TypeMismatchInExpression(ast)
             elif type(rType) is Unknown:
@@ -551,8 +561,6 @@ class StaticChecker(BaseVisitor):
         scope, loop, funcName = param
         lhsType = self.visit(ast.lhs, (scope, funcName))
         rhsType = self.visit(ast.rhs, (scope, funcName))
-        # if type(ast.lhs) is Id:
-        # print(lhsType is Unknown, rhsType is IntType)
         if type(lhsType) is Unknown:
             if type(rhsType) is Unknown:
                 raise TypeCannotBeInferred(ast)
@@ -562,6 +570,8 @@ class StaticChecker(BaseVisitor):
                 # type mismatch or type cannot be inferred
                 if type(rhsType.eletype) is Unknown:
                     raise TypeCannotBeInferred(ast)
+                if type(Utils.getSymbol(scope, ast.lhs).kind) is not Function:
+                    raise TypeMismatchInStatement(ast)
                 if len(rhsType.dimen) != len(ast.rhs.idx):
                     raise TypeMismatchInStatement(ast)
                 Utils.updateScope(scope, rhsType.eletype, ast.lhs)
@@ -571,6 +581,7 @@ class StaticChecker(BaseVisitor):
             sym = Utils.getSymbol(scope, ast.lhs)
             if type(ast.lhs) is ArrayCell:
                 if type(sym.kind) is Function:
+                    # need the teacher to explain
                     sym.mtype.dimen = []
                     for x in ast.lhs.idx:
                         if type(x) is IntLiteral: sym.mtype.dimen.append(x.value + 1)
@@ -768,28 +779,36 @@ class StaticChecker(BaseVisitor):
         if len(symbol.param) != len(paramType): 
             raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)   
         elif len(paramType) > 0:
-            if type(symbol.param[0]) is Unknown or (type(symbol.param[0]) is ArrayType and type(symbol.param[0].eletype) is Unknown):
-                for i in range(len(paramType)):
-                    if type(paramType[i]) is VoidType:
+            # (type(symbol.param[i]) is ArrayType and type(symbol.param[i].eletype) is Unknown)
+            #  or (type(paramType[i]) is ArrayType and type(paramType[i].eletype) is Unknown)
+            # if (type(symbol.param[i]) is Unknown and type(paramType[i]) is ArrayType) or (type(symbol.param[i]) is ArrayType and type(paramType[i]) is Unknown):
+            #             raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
+            for i in range(len(paramType)):
+                if type(symbol.param[i]) is Unknown:
+                    if type(paramType[i]) in [VoidType, ArrayType]:
                         raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
-                    if type(paramType[i]) is Unknown or (type(paramType[i]) is ArrayType and type(paramType[i].eletype) is Unknown):
+                    elif type(paramType[i]) is Unknown:
                         raise TypeCannotBeInferred(ast)
-                    if (type(symbol.param[i]) is Unknown and type(paramType[i]) is ArrayType) or (type(symbol.param[i]) is ArrayType and type(paramType[i]) is Unknown):
+                    else:
+                        Utils.updateTypeParam(scope, ast.method.name, paramType[i], i)
+                elif type(symbol.param[i]) is ArrayType:
+                    if type(paramType[i]) is not ArrayType:
                         raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
-                Utils.updateScope(scope, None, Id(symbol.name), paramType=paramType)
-            else: 
-                for i in range(len(paramType)):
-                    if type(paramType[i]) is Unknown:
-                        if type(symbol.param[i]) in [ArrayType, VoidType]:
-                            raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
-                        Utils.updateScope(scope, None, ast.param[i], paramType=symbol.param[i])
-                    elif type(paramType[i]) is ArrayType and type(paramType[i].eletype) is Unknown:
-                        if type(symbol.param[i]) is not ArrayType:
-                            raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
-                        Utils.updateScope(scope, None, ast.param[i], paramType=symbol.param[i])
-                    elif not Checker.matchType(symbol.param[i], paramType[i]):
-                        raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast) 
-
+                    if type(symbol.param[i].eletype) is Unknown and type(paramType[i].eletype) is Unknown:
+                        raise TypeCannotBeInferred(ast)
+                    elif type(symbol.param[i].eletype) is Unknown and type(paramType[i].eletype) is not Unknown:
+                        Utils.updateTypeParam(scope, ast.method.name, paramType[i], i)
+                    elif type(symbol.param[i].eletype) is not Unknown and type(paramType[i].eletype) is Unknown:
+                        Utils.updateScope(scope, symbol.param[i], ast.param[i])
+                    elif type(symbol.param[i].eletype) is not type(paramType[i].eletype):
+                        raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
+                else: 
+                    if type(paramType[i]) in [VoidType, ArrayType]:
+                        raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
+                    elif type(paramType[i]) is Unknown:
+                        Utils.updateScope(scope, symbol.param[i], ast.param[i])
+                    elif type(symbol.param[i]) is not type(paramType[i]):
+                        raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
         Graph.add(funcName, ast.method.name)
         return symbol
     

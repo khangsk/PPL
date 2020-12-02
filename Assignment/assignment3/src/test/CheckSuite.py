@@ -824,6 +824,93 @@ class CheckSuite(unittest.TestCase):
         expect = str(TypeMismatchInStatement(Assign(Id('x'),IntLiteral(2))))
         self.assertTrue(TestChecker.test(input, expect, 458))
 
+    def test59(self):
+        input = """ 
+            Function: main
+            Parameter: x, y ,z
+            Body:
+            y = x || (x > z);
+            EndBody.
+        """
+        expect = str(TypeMismatchInExpression(BinaryOp('>',Id('x'),Id('z'))))
+        self.assertTrue(TestChecker.test(input, expect, 459))
+    
+    def test60(self):
+        input = """ 
+        Function: foo
+            Parameter: x
+            Body:
+            x=1.1;
+            Return { True };
+            EndBody.
+        Function: main
+            Parameter: x, y
+            Body:
+            foo(x)[0] = x || (x>y);
+            EndBody.
+
+        """
+        expect = str(TypeMismatchInExpression(BinaryOp('||',Id('x'),BinaryOp('>',Id('x'),Id('y')))))
+        self.assertTrue(TestChecker.test(input, expect, 460))
+
+    def test61(self):
+        input = """ 
+        Function: main
+        Parameter: x, y
+        Body:
+            y = 1;
+            foo(1.1, y);
+        EndBody.
+        Function: foo
+        Parameter: x, y
+        Body:
+            y = 1;
+            x = y;
+        Return { True };
+        EndBody.
+        """
+        expect = str(TypeMismatchInStatement(Assign(Id('x'),Id('y'))))
+        self.assertTrue(TestChecker.test(input, expect, 461))
+
+    def test62_ambigous_variable_2(self):
+        """More complex program"""
+        input = """
+                  Var: x[2][2][3] = { { { 1,2,3 } , { 2,3,4 } } , { { 1,2,3 } , { 2,3,4 } } };
+                  Function: foo
+                  Parameter: z, y
+                  Body:
+                      Return x;
+                  EndBody.
+
+                  Function: main
+                  Parameter: x, y
+                  Body:
+                      x = foo(1,2);
+                      x[1][2][3] = False;
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInStatement(Assign(Id('x'),CallExpr(Id('foo'),[IntLiteral(1), IntLiteral(2)]))))
+        self.assertTrue(TestChecker.test(input, expect, 462))
+
+    def test63_ambigous_variable_2(self):
+        """More complex program"""
+        input = """
+                  Var: x[2][2][3] = { { { 1,2,3 } , { 2,3,4 } } , { { 1,2,3 } , { 2,3,4 } } };
+                  Function: foo
+                  Parameter: z, y
+                  Body:
+                      Return x;
+                  EndBody.
+
+                  Function: main
+                  Parameter: x[2][2][3], y
+                  Body:
+                      x = foo(1,2);
+                      x[0][0][0] = False;
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInStatement(Assign(ArrayCell(Id('x'), [IntLiteral(0), IntLiteral(0), IntLiteral(0)]), BooleanLiteral(False))))
+        self.assertTrue(TestChecker.test(input, expect, 463))
     # def test50(self):
     #     input = """
     #     Function: foo

@@ -1,0 +1,29 @@
+
+                  Function: fact
+                  Parameter: m,n,p
+                  Body:
+                        m = 1;
+                        n = "string";
+                        p = string_of_int(m);
+                  EndBody.
+
+                  Function: main
+                  Parameter: x,y,z
+                  Body:
+                       fact(x[1][2],y, foo(1,2)[2][3]);
+                       x = { { 0x9, 0x6 } };
+                       y = "False";
+                  EndBody.
+
+                  Function: foo
+                  Parameter: x,y
+                  Body:
+                       x = 100 + y; 
+                       Return { { "a", "b", "c" }, { "d", "e", "f" } };
+                  EndBody.
+                  
+                  Function: goo
+                  Body:
+                       foo(100,200);
+                  EndBody.
+                  

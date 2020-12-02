@@ -1,0 +1,16 @@
+
+                  Var: x = { { { 1,2,3 } , { 2,3,4 } } , { { 1,2,3 } , { 2,3,4 } } };
+                  Function: main
+                  Parameter: z, y
+                  Body:
+                      Var: a[2][2][3];
+                      Var: b[1][2] = { {True,False}};
+                      a = x;
+                      a[1][2][3] = 0x9;
+                      If b[1][1] Then
+                         Return 1;
+                      ElseIf b[1][2] Then
+                         Return 1.1;
+                      EndIf.
+                  EndBody.
+                  
