@@ -2,14 +2,13 @@
                   Function: foo
                   Parameter: x
                   Body:
-                        foo(4.2);
-                        x = 5.1;
-                      Return;
+                      Return True && foo(foo(True));
                   EndBody.
 
                   Function: main
                   Body:
-                    foo(2.1);
+                  Var: a;
+                        a=foo(True);
                   EndBody.
 
                   

@@ -270,7 +270,15 @@ class Utils:
             if type(i.kind) is Parameter:
                 for j in range(len(listNameParam)):
                     if listNameParam[j] == i.name:
-                        sym.param[j] = i.mtype
+                        if type(sym.param[j]) is Unknown:
+                            sym.param[j] = i.mtype
+                        elif type(sym.param[j]) is ArrayType:
+                            if type(sym.param[j].eletype) is Unknown:
+                                sym.param[j].eletype = i.mtype.eletype
+                            else:
+                                Utils.updateScope(scope, sym.param[j], Id(i.name))
+                        else:
+                            Utils.updateScope(scope, sym.param[j], Id(i.name))
 
 class Checker:
     @staticmethod
@@ -469,67 +477,123 @@ class StaticChecker(BaseVisitor):
         scope, funcName = param
         op = ast.op
         if op in ['+', '-', '*', '\\', '%', '==', '!=', '>', '<', '>=', '<=']:
-            ltype = self.visit(ast.left, (scope, funcName))
+            ltype = None
+            if type(ast.left) is CallExpr:
+                ltype = Utils.getSymbol(scope, ast.left).mtype
+            else:
+                ltype = self.visit(ast.left, (scope, funcName))
             if type(ltype) not in [IntType, Unknown]:
                 raise TypeMismatchInExpression(ast)
             elif type(ltype) is Unknown:
                 Utils.updateScope(scope, IntType(), ast.left)
-            rType = self.visit(ast.right, (scope, funcName))
-            if type(rType) not in [IntType, Unknown]:
+            if type(ast.left) is CallExpr:
+                self.visit(ast.left, (scope, funcName))
+            rtype = None
+            if type(ast.right) is CallExpr:
+                rtype = Utils.getSymbol(scope, ast.right).mtype
+            else:
+                rtype = self.visit(ast.right, (scope, funcName))
+            if type(rtype) not in [IntType, Unknown]:
                 raise TypeMismatchInExpression(ast)
-            elif type(rType) is Unknown:
+            elif type(rtype) is Unknown:
                 Utils.updateScope(scope, IntType(), ast.right)
+            if type(ast.right) is CallExpr:
+                self.visit(ast.right, (scope, funcName))
             if op in ['==', '!=', '>', '<', '>=', '<=']:
                 return BoolType()
             return IntType()
         elif op in ['+.', '-.', '*.', '\\.', '=/=', '>.', '<.', '>=.', '<=.']:
-            ltype = self.visit(ast.left, (scope, funcName))
+            ltype = None
+            if type(ast.left) is CallExpr:
+                ltype = Utils.getSymbol(scope, ast.left).mtype
+            else:
+                ltype = self.visit(ast.left, (scope, funcName))
             if type(ltype) not in [FloatType, Unknown]:
                 raise TypeMismatchInExpression(ast)
             elif type(ltype) is Unknown:
                 Utils.updateScope(scope, FloatType(), ast.left)
-            rType = self.visit(ast.right, (scope, funcName))
-            if type(rType) not in [FloatType, Unknown]:
+            if type(ast.left) is CallExpr:
+                self.visit(ast.left, (scope, funcName))
+            rtype = None
+            if type(ast.right) is CallExpr:
+                rtype = Utils.getSymbol(scope, ast.right).mtype
+            else:
+                rtype = self.visit(ast.right, (scope, funcName))
+            if type(rtype) not in [FloatType, Unknown]:
                 raise TypeMismatchInExpression(ast)
-            elif type(rType) is Unknown:
+            elif type(rtype) is Unknown:
                 Utils.updateScope(scope, FloatType(), ast.right)
+            if type(ast.right) is CallExpr:
+                self.visit(ast.right, (scope, funcName))
             if op in ['=/=', '>.', '<.', '>=.', '<=.']:
                 return BoolType()
             return FloatType()
         elif op in ['&&', '||']:
-            ltype = self.visit(ast.left, (scope, funcName))
+            ltype = None
+            if type(ast.left) is CallExpr:
+                ltype = Utils.getSymbol(scope, ast.left).mtype
+            else:
+                ltype = self.visit(ast.left, (scope, funcName))
             if type(ltype) not in [BoolType, Unknown]:
                 raise TypeMismatchInExpression(ast)
             elif type(ltype) is Unknown:
                 Utils.updateScope(scope, BoolType(), ast.left)
-            rType = self.visit(ast.right, (scope, funcName))
-            if type(rType) not in [BoolType, Unknown]:
+            if type(ast.left) is CallExpr:
+                self.visit(ast.left, (scope, funcName))
+            rtype = None
+            if type(ast.right) is CallExpr:
+                rtype = Utils.getSymbol(scope, ast.right).mtype
+            else:
+                rtype = self.visit(ast.right, (scope, funcName))
+            if type(rtype) not in [BoolType, Unknown]:
                 raise TypeMismatchInExpression(ast)
-            elif type(rType) is Unknown:
+            elif type(rtype) is Unknown:
                 Utils.updateScope(scope, BoolType(), ast.right)
+            if type(ast.right) is CallExpr:
+                self.visit(ast.right, (scope, funcName))
             return BoolType()
     
     def visitUnaryOp(self, ast, param):
         scope, funcName = param
         op = ast.op
-        eType = self.visit(ast.body, (scope, funcName))
         if op == '!':
+            eType = None
+            if type(ast.body) is CallExpr:
+                eType = Utils.getSymbol(scope, ast.body).mtype
+            else:
+                eType = self.visit(ast.body, (scope, funcName))
             if type(eType) not in [BoolType, Unknown]:
                 raise TypeMismatchInExpression(ast)
             elif type(eType) is Unknown:
                 Utils.updateScope(scope, BoolType(), ast.body)
+            if type(ast.body) is CallExpr:
+                self.visit(ast.body, (scope, funcName))
             return BoolType()
         elif op == '-':
+            eType = None
+            if type(ast.body) is CallExpr:
+                eType = Utils.getSymbol(scope, ast.body).mtype
+            else:
+                eType = self.visit(ast.body, (scope, funcName))
             if type(eType) not in [IntType, Unknown]:
                 raise TypeMismatchInExpression(ast)
             elif type(eType) is Unknown:
                 Utils.updateScope(scope, IntType(), ast.body)
+            if type(ast.body) is CallExpr:
+                self.visit(ast.body, (scope, funcName))
             return IntType()
         elif op == '-.':
+            eType = None
+            if type(ast.body) is CallExpr:
+                eType = Utils.getSymbol(scope, ast.body).mtype
+            else:
+                eType = self.visit(ast.body, (scope, funcName))
             if type(eType) not in [FloatType, Unknown]:
                 raise TypeMismatchInExpression(ast)
             elif type(eType) is Unknown:
                 Utils.updateScope(scope, FloatType(), ast.body)
+            if type(ast.body) is CallExpr:
+                self.visit(ast.body, (scope, funcName))
             return FloatType()
     
     def visitCallExpr(self, ast, param):
@@ -568,6 +632,7 @@ class StaticChecker(BaseVisitor):
         scope, loop, funcName = param
         lhsType = self.visit(ast.lhs, (scope, funcName))
         rhsType = self.visit(ast.rhs, (scope, funcName))
+        
         if type(lhsType) is Unknown:
             if type(rhsType) is Unknown:
                 raise TypeCannotBeInferred(ast)
@@ -740,36 +805,41 @@ class StaticChecker(BaseVisitor):
     
     def handleCall(self, ast, scope, funcName, kind):
         symbol = Checker.checkUndeclared(scope, ast.method.name, Function())
-        paramType = [self.visit(x, (scope, funcName)) for x in ast.param]
-        if len(symbol.param) != len(paramType): 
+        if len(symbol.param) != len(ast.param): 
             raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)   
-        elif len(paramType) > 0:
-            for i in range(len(paramType)):
-                if type(symbol.param[i]) is Unknown:
-                    if type(paramType[i]) in [VoidType, ArrayType]:
-                        raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
-                    elif type(paramType[i]) is Unknown:
-                        raise TypeCannotBeInferred(ast)
-                    else:
-                        Utils.updateTypeParam(scope, ast.method.name, paramType[i], i)
-                elif type(symbol.param[i]) is ArrayType:
-                    if type(paramType[i]) is not ArrayType:
-                        raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
-                    if type(symbol.param[i].eletype) is Unknown and type(paramType[i].eletype) is Unknown:
-                        raise TypeCannotBeInferred(ast)
-                    elif type(symbol.param[i].eletype) is Unknown and type(paramType[i].eletype) is not Unknown:
-                        Utils.updateTypeParam(scope, ast.method.name, paramType[i], i)
-                    elif type(symbol.param[i].eletype) is not Unknown and type(paramType[i].eletype) is Unknown:
-                        Utils.updateScope(scope, symbol.param[i], ast.param[i])
-                    elif type(symbol.param[i].eletype) is not type(paramType[i].eletype):
-                        raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
-                else: 
-                    if type(paramType[i]) in [VoidType, ArrayType]:
-                        raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
-                    elif type(paramType[i]) is Unknown:
-                        Utils.updateScope(scope, symbol.param[i], ast.param[i])
-                    elif type(symbol.param[i]) is not type(paramType[i]):
-                        raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
+        for i in range(len(ast.param)):
+            sym = None
+            if type(ast.param[i]) is CallExpr:
+                sym = Utils.getSymbol(scope, ast.param[i]).mtype
+            else:
+                sym = self.visit(ast.param[i], (scope, funcName))
+            if type(symbol.param[i]) is Unknown:
+                if type(sym) in [VoidType, ArrayType]:
+                    raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
+                elif type(sym) is Unknown:
+                    raise TypeCannotBeInferred(ast)
+                else:
+                    Utils.updateTypeParam(scope, ast.method.name, sym, i)
+            elif type(symbol.param[i]) is ArrayType:
+                if type(sym) is not ArrayType:
+                    raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
+                if type(symbol.param[i].eletype) is Unknown and type(sym.eletype) is Unknown:
+                    raise TypeCannotBeInferred(ast)
+                elif type(symbol.param[i].eletype) is Unknown and type(sym.eletype) is not Unknown:
+                    Utils.updateTypeParam(scope, ast.method.name, sym, i)
+                elif type(symbol.param[i].eletype) is not Unknown and type(sym.eletype) is Unknown:
+                    Utils.updateScope(scope, symbol.param[i], ast.param[i])
+                elif type(symbol.param[i].eletype) is not type(sym.eletype):
+                    raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
+            else: 
+                if type(sym) in [VoidType, ArrayType]:
+                    raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
+                elif type(sym) is Unknown:
+                    Utils.updateScope(scope, symbol.param[i], ast.param[i])
+                elif type(symbol.param[i]) is not type(sym):
+                    raise TypeMismatchInStatement(ast) if kind == 'function' else TypeMismatchInExpression(ast)
+            if type(ast.param[i]) is CallExpr:
+                self.visit(ast.param[i], (scope, funcName))
         Graph.add(funcName, ast.method.name)
         return symbol
     

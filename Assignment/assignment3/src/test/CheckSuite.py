@@ -1078,7 +1078,7 @@ class CheckSuite(unittest.TestCase):
                  x = 1 + foo(1, 1.1, 1000);
             EndBody.
         """
-        expect = str(TypeMismatchInExpression(CallExpr(Id('foo'), [IntLiteral(1), FloatLiteral(1.1), IntLiteral(1000)])))
+        expect = str(TypeMismatchInExpression(BinaryOp('+',IntLiteral(1),CallExpr(Id('foo'), [IntLiteral(1), FloatLiteral(1.1), IntLiteral(1000)]))))
         self.assertTrue(TestChecker.test(input, expect, 471))
 
     def test72_invalid_return_type_in_if_condition(self):
@@ -1713,6 +1713,66 @@ class CheckSuite(unittest.TestCase):
                   """
         expect = str(TypeMismatchInStatement(Return(Id('y'))))
         self.assertTrue(TestChecker.test(input, expect, 500))
+    
+    def test501_order_infer_4(self):
+        """More complex program"""
+        input = """
+                  Function: foo
+                  Parameter: x
+                  Body:
+                      If foo(int_of_string(string_of_bool(foo(1)))) Then
+                        Return True;
+                      EndIf.
+                      Return False;
+                  EndBody.
+
+                  Function: main
+                  Body:
+                    Var: a;
+                    a = foo(3);
+                  EndBody.
+
+                  """
+        expect = str()
+        self.assertTrue(TestChecker.test(input, expect, 501))
+    def test502_order_infer_4(self):
+        """More complex program"""
+        input = """
+                  Function: foo
+                  Parameter: x
+                  Body:
+                        foo(4.2);
+                        x = 5.1;
+                      Return;
+                  EndBody.
+
+                  Function: main
+                  Body:
+                    foo(2.1);
+                  EndBody.
+
+                  """
+        expect = str()
+        self.assertTrue(TestChecker.test(input, expect, 502))
+
+    def test_order_infer_4(self):
+        """More complex program"""
+        input = """
+                  Function: foo
+                  Parameter: x
+                  Body:
+                      Return True && foo(foo(True));
+                  EndBody.
+
+                  Function: main
+                  Body:
+                  Var: a;
+                        a=foo(True);
+                  EndBody.
+
+                  """
+        expect = str()
+        self.assertTrue(TestChecker.test(input, expect, 508))
     # def test50(self):
     #     input = """
     #     Function: foo

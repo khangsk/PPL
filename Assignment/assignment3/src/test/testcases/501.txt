@@ -1,8 +1,17 @@
 
-                  Function: main
-                  Parameter: x,y,z,int_of_float
+                  Function: foo
+                  Parameter: x
                   Body:
-                      x = 1;
-                      x = int_of_float(1.1);
+                      If foo(int_of_string(string_of_bool(foo(1)))) Then
+                        Return True;
+                      EndIf.
+                      Return False;
                   EndBody.
+
+                  Function: main
+                  Body:
+                    Var: a;
+                    a = foo(3);
+                  EndBody.
+
                   
