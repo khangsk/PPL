@@ -1,1 +1,1 @@
-Type Mismatch In Statement: Assign(Id(k),Id(x))
+Type Mismatch In Expression: CallExpr(Id(foo),[IntLiteral(1),FloatLiteral(1.1),IntLiteral(1000)])

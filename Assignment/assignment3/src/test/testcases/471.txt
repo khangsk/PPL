@@ -1,18 +1,17 @@
 
-                   Var: x[2][2][2] = { { { 1,2 } , {2,3} },  { { 3,4 } , {4,5} } };
-                   Var: y[3][2] = { {1,2} , {2,3} , {3,4} }, z[1] = { True };
-                  Function: main
-                  Parameter: k, a, i
-                  Body:
-                        k = x;
-                        a = y;
-                        i = z;
-                  EndBody.
+            Var: x = 1;
+            Function: foo
+            Parameter: x,y,   z
+            Body:
+                x = 1;
+                y = 1.9999;
+                Return y;
+            EndBody.
 
-                  Function: foo
-                  Body:
-                        Var: x;
-                        main( { { { 100,200 } , {200,300} },  { { 300,400 } , {400,500} } } , { {100,200} , {200,300} , {3,4} } , { False });
-                        Return x;
-                  EndBody.
-                  
+            Function: main
+            Body:
+                Var: x = 1.1, y;
+                 x = foo(1,1.1, "this is a string");
+                 x = 1 + foo(1, 1.1, 1000);
+            EndBody.
+        

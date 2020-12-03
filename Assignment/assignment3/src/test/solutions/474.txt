@@ -1,1 +1,1 @@
-Index Out Of Range: ArrayCell(CallExpr(Id(main),[]),[IntLiteral(1),IntLiteral(2)])
+Type Mismatch In Expression: BinaryOp(+,Id(a),IntLiteral(2))

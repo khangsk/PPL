@@ -322,27 +322,38 @@ class Checker:
         return type(a.eletype) == type(b.eletype) and a.dimen == b.dimen
 
     @staticmethod
-    def constantExpr(x, y):
+    def constantIndexValue(x):
         if type(x) is BinaryOp:
-            if x.op not in ['+','-','*','\\','%']:
-                y.append(x.op)
-            left = Checker.constantExpr(x.left, y)
-            right = Checker.constantExpr(x.right, y)
+            left = Checker.constantIndexValue(x.left)
+            right = Checker.constantIndexValue(x.right)
             if x.op == '+': return left + right
             elif x.op == '-': return left - right
             elif x.op == '*': return left * right
             elif x.op == '\\': return left // right
-            elif x.op == '%': 
-                return left % right     
+            elif x.op == '%': return left % right     
         elif type(x) is UnaryOp:
-            if x.op != '-':
-                y.append(x.op)
-            val = Checker.constantExpr(x.body, y)
+            val = Checker.constantIndexValue(x.body)
             if x.op == '-': return -val
         elif type(x) is IntLiteral:
             return x.value
+
+    @staticmethod
+    def checkConstant(x):
+        if type(x) is BinaryOp:
+            if x.op not in ['+','-','*','\\','%']:
+                return False
+            left = Checker.checkConstant(x.left)
+            right = Checker.checkConstant(x.right)
+            return left and right
+        elif type(x) is UnaryOp:
+            if x.op != '-':
+                return False
+            val = Checker.checkConstant(x.body)
+            return True
+        elif type(x) is IntLiteral:
+            return True
         else:
-            y.append(x)
+            return False
 
 class Graph:
     link = {}
@@ -422,7 +433,8 @@ class StaticChecker(BaseVisitor):
         Graph.setDefaultVisitedNodes([x.name for x in c])
         for x in ast.decl:
             if type(x) is FuncDecl:
-                scope = (self.visit(x, scope)).copy()
+                temp = (self.visit(x, scope)).copy()
+                scope = Utils.merge(scope, temp)
         Graph.dfs("main")
         node = Graph.getUnreachableNode()
         if node is not None:
@@ -540,9 +552,8 @@ class StaticChecker(BaseVisitor):
         if len(listDimen) != len(ast.idx):
             raise TypeMismatchInExpression(ast)
         for i in range(len(listDimen)):
-            check = []
-            val = Checker.constantExpr(ast.idx[i], check)
-            if len(check) == 0:
+            if Checker.checkConstant(ast.idx[i]):
+                val = Checker.constantIndexValue(ast.idx[i])
                 if val < 0 or val >= listDimen[i]:
                     raise IndexOutOfRange(ast)
         for x in ast.idx:

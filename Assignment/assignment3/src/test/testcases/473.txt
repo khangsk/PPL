@@ -1,19 +1,14 @@
 
-                   Var: x[2][2][2] = { { { 1,2 } , {2,3} },  { { 3,4 } , {4,5} } };
-                   Var: y[3][2] = { {1,2} , {2,3} , {3,4} }, z[1] = { 1 };
-                  Function: main
-                  Body:
-                        Return y;
-                  EndBody.
-
-                  Function: foo
-                  Body:
-                        Var: y = 0x9;
-                        Var: i = True;
-                        For ( y = x[1][1][1], 1 < main()[1][2], y + main()[2][3] ) Do
-                            y = 1;
-                        EndFor.
-
-                        Return;
-                  EndBody.
-                  
+               Function: main
+               Parameter: y, a, x
+               Body:
+                   x = 1;
+                   y = a + foo(x);
+               EndBody.
+               Function: foo
+               Parameter: a
+               Body:
+                   a = False;
+                   Return a;
+               EndBody.
+               

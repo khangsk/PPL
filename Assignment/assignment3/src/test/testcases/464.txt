@@ -1,13 +1,17 @@
 
-                   Var: x[3][2] = { { 1,2 }, { 2,3} , {3,4}   };
-                  Function: main
-                  Parameter: y, a, i
-                  Body:
-                        a = 1.1 +. foo()[2];
-                  EndBody.
-
-                  Function: foo
-                  Body:
-                        Return {1,2};
-                  EndBody.
-                  
+            Function: func_name
+                Body:
+                    If 1>2 Then
+                        Var: x;
+                        Return True ;
+                    Else 
+                        Var: x;
+                        Var: y[1], y;
+                        Return False;
+                    EndIf.
+                EndBody.
+                
+            Function: main
+                Body:
+                EndBody.
+        
