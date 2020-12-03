@@ -1,24 +1,18 @@
 
-                  Function: fact
-                  Parameter: m,n,p
-                  Body:
-                        m = 1;
-                        n = "string";
-                        p = string_of_int(m);
-                        Return { { 1.1, 1.2 } , { 1.3, 1.4 }, { 1.5, 1.6 } };
-                  EndBody.
-
+                   Var: x[2][2][2] = { { { 1,2 } , {2,3} },  { { 3,4 } , {4,5} } };
+                   Var: y[3][2] = { {True,False} , {True,False} , {True,True} }, z[1] = { 1 };
                   Function: main
-                  Parameter: x,y,z
                   Body:
-                       foo(fact(100,"a","b")[2][1], 1);
+                    foo();
+                        Return y;
                   EndBody.
 
                   Function: foo
-                  Parameter: x,y
                   Body:
-                       y = 0x9; 
-                       x = 1.1 +. 1.2;
+                        Var: y = 0x9;
+                        Var: i = True;
+                        If main()[1][1] Then
+                            Return 1;
+                        EndIf.
                   EndBody.
-
                   

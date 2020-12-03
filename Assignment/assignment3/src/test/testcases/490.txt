@@ -1,20 +1,16 @@
 
-                  Function: foo
-                  Parameter: x,y
-                  Body:
-                      x = 1.1;
-                      y = False;
-                  EndBody.
-
                   Function: main
-                  Parameter: x, y
+                  Parameter: x,y,z
                   Body:
-                      foo(x,y);
-                  EndBody.
-                  
-                  Function: goo
-                  Body:
-                      foo(1.1,1);
+                       If x Then
+                       ElseIf y Then
+                       ElseIf z Then
+                       EndIf. 
                   EndBody.
 
+                  Function: foo
+                  Parameter: k, a, i
+                  Body:
+                        main(True,False,1);
+                  EndBody.
                   

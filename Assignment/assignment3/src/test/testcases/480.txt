@@ -1,15 +1,13 @@
 
+                   Var: x[3][2] = { { 1,2 }, { 2,3} , {3,4}   };
                   Function: main
-                  Parameter: x,y,z
+                  Parameter: y, a, i
                   Body:
-                       While foo(2,3,4)[1][2] Do   
-                       EndWhile. 
+                        a = 1 + foo();
                   EndBody.
 
                   Function: foo
-                  Parameter: k, a, i
                   Body:
-                        k = k + a + i;
-                        Return { {True,False}   };
+                        Return 1.1;
                   EndBody.
                   

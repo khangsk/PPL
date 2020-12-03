@@ -1,29 +1,23 @@
 
-                  Function: fact
-                  Parameter: m,n,p
-                  Body:
-                        m = 1;
-                        n = "string";
-                        p = string_of_int(m);
-                  EndBody.
-
+                   Var: x[2][2][2] = { { { 1,2 } , {2,3} },  { { 3,4 } , {4,5} } };
+                   Var: y[3][2] = { {1,2} , {2,3} , {3,4} }, z[1] = { 1 };
                   Function: main
-                  Parameter: x,y,z
+                  Parameter: k[2][2][2], a[3][2], i[1]
                   Body:
-                       fact(x[1][2],y, foo(1,2)[2][3]);
-                       x = { { 0x9, 0x6 } };
-                       y = "False";
+                        k = x;
+                        a = y;
+                        i = z;
                   EndBody.
 
                   Function: foo
-                  Parameter: x,y
                   Body:
-                       x = 100 + y; 
-                       Return { { "a", "b", "c" }, { "d", "e", "f" } };
-                  EndBody.
-                  
-                  Function: goo
-                  Body:
-                       foo(100,200);
+                        Var: x = 0x9;
+                        Var: i = True;
+                        main( { { { 100,200 } , {200,300} },  { { 300,400 } , {400,500} } } , { {100,200} , {200,300} , {3,4} } , { 100 });
+                        For ( i=2,1<z[1], x+1 ) Do
+                            x = 1;
+                        EndFor.
+                        
+                        Return x;
                   EndBody.
                   

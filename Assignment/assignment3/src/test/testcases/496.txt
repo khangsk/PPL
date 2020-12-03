@@ -1,16 +1,25 @@
 
-                  Var: x = { { { 1,2,3 } , { 2,3,4 } } , { { 1,2,3 } , { 2,3,4 } } };
-                  Function: main
-                  Parameter: z, y
+                  Function: fact
+                  Parameter: n
                   Body:
-                      Var: a[2][2][3];
-                      Var: b[1][2] = { {True,False}};
-                      a = x;
-                      a[1][2][3] = 0x9;
-                      If b[1][1] Then
-                         Return 1;
-                      ElseIf b[1][2] Then
-                         Return 1.1;
-                      EndIf.
+                        If n == 0 Then
+                            Var: x[1] = {False};
+                            Return x[0];
+                        ElseIf fact(1) Then
+                            Var: y=9;
+                        Else
+                            Var: z;
+                            Return fact(n - 1);
+                        EndIf.
+                        Return True;
+                  EndBody.
+                  
+                  Function: main
+                  Parameter: x,y,z
+                  Body:
+                       For (x = 0, fact(0x9) , 1) Do
+                            y = string_of_bool(fact(1));
+                            y = False;
+                       EndFor.
                   EndBody.
                   

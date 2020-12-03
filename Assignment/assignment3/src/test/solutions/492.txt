@@ -1,1 +1,1 @@
-Invalid Array Literal: VarDecl(Id(x),ArrayLiteral(ArrayLiteral(ArrayLiteral(IntLiteral(1),IntLiteral(2),IntLiteral(3)),ArrayLiteral(IntLiteral(2),IntLiteral(3),IntLiteral(4))),ArrayLiteral(ArrayLiteral(IntLiteral(1),IntLiteral(2),IntLiteral(3)),ArrayLiteral(IntLiteral(2),IntLiteral(3),IntLiteral(4)))))
+Type Mismatch In Statement: Return(IntLiteral(1))

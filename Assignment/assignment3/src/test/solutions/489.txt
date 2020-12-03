@@ -1,1 +1,1 @@
-Type Mismatch In Statement: Assign(Id(x),BooleanLiteral(false))
+Type Mismatch In Statement: Return(IntLiteral(1))

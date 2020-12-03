@@ -1,1 +1,1 @@
-Type Mismatch In Expression: ArrayCell(CallExpr(Id(foo),[IntLiteral(2),IntLiteral(3),IntLiteral(4)]),[IntLiteral(1),IntLiteral(2)])
+Type Mismatch In Statement: Return(FloatLiteral(1.1))

@@ -1,13 +1,16 @@
 
-                  Function: foo
-                  Parameter: x,y
+                  Function: main
+                  Parameter: x,y,z
                   Body:
-                      Var: z;
+                       If foo(2,3,4) Then
+                       EndIf. 
                   EndBody.
 
-                  Function: main
-                  Parameter: x, y
+                  Function: foo
+                  Parameter: k, a, i
                   Body:
-                      z = 1;
+                        k = k + a + i;
+                        i = i +. 1.;
+                        Return True;
                   EndBody.
                   

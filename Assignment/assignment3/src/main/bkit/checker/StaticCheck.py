@@ -645,12 +645,12 @@ class StaticChecker(BaseVisitor):
             raise TypeMismatchInStatement(ast)
         e2Type = self.visit(ast.expr2, (scope, funcName))
         if type(e2Type) is Unknown:
-            Utils.updateScope(scope, BoolType(), ast.expr1)
+            Utils.updateScope(scope, BoolType(), ast.expr2)
         elif type(e2Type) is not BoolType:
             raise TypeMismatchInStatement(ast)
         e3Type = self.visit(ast.expr3, (scope, funcName))
         if type(e3Type) is Unknown:
-            Utils.updateScope(scope, IntType(), ast.expr1)
+            Utils.updateScope(scope, IntType(), ast.expr3)
         elif type(e3Type) is not IntType:
             raise TypeMismatchInStatement(ast)
         listLocalVar = [self.visit(i, scope) for i in ast.loop[0]]

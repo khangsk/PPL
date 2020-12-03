@@ -1,12 +1,16 @@
 
-                  Function: main
+                  Function: fact
+                  Parameter: m,n
                   Body:
-                      Var: x;
-                      x = x + foo(); 
+                        m = 1;
+                        n = "string";
                   EndBody.
-                  
-                  Function: foo
+
+                  Function: main
+                  Parameter: x,y,z
                   Body:
-                      Return "string"; 
+                       fact(x,y);
+                       x = x + 9;
+                       y = False;
                   EndBody.
                   

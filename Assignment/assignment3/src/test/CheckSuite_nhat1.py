@@ -1102,7 +1102,7 @@ class CheckSuite(unittest.TestCase):
                         foo()[1][2] = 100;
                   EndBody.
                   """
-        expect = str(TypeMismatchInStatement(Assign(ArrayCell(CallExpr(Id('foo'), []), [IntLiteral(1), IntLiteral(2)]), IntLiteral(100))))
+        expect = str()
         self.assertTrue(TestChecker.test(input, expect, 461))
 
     def test_inferred_para_type_in_binary_op(self):
@@ -1345,7 +1345,7 @@ class CheckSuite(unittest.TestCase):
         """More complex program"""
         input = """
                    Var: x[2][2][2] = { { { 1,2 } , {2,3} },  { { 3,4 } , {4,5} } };
-                   Var: y[3][2] = { {1,2} , {2,3} , {3,4} }, z[1] = { 1 };
+                   Var: y[3][2] = { {True,False} , {True,False} , {True,True} }, z[1] = { 1 };
                   Function: main
                   Body:
                         Return y;

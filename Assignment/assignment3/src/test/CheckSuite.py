@@ -1171,6 +1171,457 @@ class CheckSuite(unittest.TestCase):
                """
         expect = str()
         self.assertTrue(TestChecker.test(input, expect, 476))
+
+    def test77_invalid_index_expression_with_float_dimen(self):
+        """More complex program"""
+        input = """
+                Var: x[3][2] = { { 1,2 }, { 2,3} , {3,4}   };
+               Function: main
+               Parameter: y, a, i
+               Body:
+                    x[1][1.1] = 1;
+               EndBody.
+               """
+        expect = str(TypeMismatchInExpression(ArrayCell(Id('x'), [IntLiteral(1), FloatLiteral(1.1)])))
+        self.assertTrue(TestChecker.test(input, expect, 477))
+
+    def test78_invalid_with_function_return_array(self):
+        """More complex program"""
+        input = """
+                   Var: x[3][2] = { { 1,2 }, { 2,3} , {3,4}   };
+                  Function: main
+                  Parameter: y, a, i
+                  Body:
+                        Return x;
+                  EndBody.
+
+                  Function: foo
+                  Body:
+                        main(1,2,3)[2] = 1;
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInExpression(ArrayCell(CallExpr(Id('main'), [IntLiteral(1), IntLiteral(2), IntLiteral(3)]), [IntLiteral(2)])))
+        self.assertTrue(TestChecker.test(input, expect, 478))
+
+    def test79_multi_func_return_array(self):
+        """More complex program"""
+        input = """
+                   Var: x[3][2] = { { 1,2 }, { 2,3} , {3,4}   };
+                  Function: main
+                  Parameter: y, a, i
+                  Body:
+                        foo()[2][3] = 0.9;
+                        Return x;
+                  EndBody.
+
+                  Function: foo
+                  Body:
+                        Return { { 1.1,2.2, 4.4 }, { 2.2,3.3, 9.9}   }; 
+                  EndBody.
+                  
+                  Function: goo
+                  Body:
+                        foo()[1][2] = 100;
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInExpression(ArrayCell(CallExpr(Id('foo'),[]),[IntLiteral(2), IntLiteral(3)])))
+        self.assertTrue(TestChecker.test(input, expect, 479))
+    
+    def test80_inferred_para_type_in_binary_op(self):
+        """More complex program"""
+        input = """
+                   Var: x[3][2] = { { 1,2 }, { 2,3} , {3,4}   };
+                  Function: main
+                  Parameter: y, a, i
+                  Body:
+                        a = 1 + foo();
+                  EndBody.
+
+                  Function: foo
+                  Body:
+                        Return 1.1;
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInStatement(Return(FloatLiteral(1.1))))
+        self.assertTrue(TestChecker.test(input, expect, 480))
+
+    def test81_invalid_assign_stmt(self):
+        """More complex program"""
+        input = """
+                   Var: x[2][2][2] = { { { 1,2 } , {2,3} },  { { 3,4 } , {4,5} } };
+                   Var: y[3][2] = { {1,2} , {2,3} , {3,4} }, z[1] = { True };
+                  Function: main
+                  Parameter: k, a, i
+                  Body:
+                        Var: bool_of_string;
+                        x[1][1][1] = y[2][1];
+                        y[1][1] = z[0];
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInStatement(Assign(ArrayCell(Id('y'),[IntLiteral(1), IntLiteral(1)]), ArrayCell(Id('z'), [IntLiteral(0)]))))
+        self.assertTrue(TestChecker.test(input, expect, 481))
+    
+    def test82_not_match_dimension_of_array(self):
+        """More complex program"""
+        input = """
+                   Var: x[2][2][2] = { { { 1,2 } , {2,3} },  { { 3,4 } , {4,5} } };
+                   Var: y[3][2] = { {1,2} , {2,3} , {3,4} }, z[1] = { True };
+                  Function: main
+                  Parameter: k, a, i
+                  Body:
+                        Var: bool_of_string;
+                        x[1][1] = y[2][1];
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInExpression(ArrayCell(Id('x'),[IntLiteral(1), IntLiteral(1)])))
+        self.assertTrue(TestChecker.test(input, expect, 482))
+
+    def test83_index_is_not_int(self):
+        """More complex program"""
+        input = """
+                   Var: x[2][2][2] = { { { 1,2 } , {2,3} },  { { 3,4 } , {4,5} } };
+                   Var: y[3][2] = { {1,2} , {2,3} , {3,4} }, z[1] = { True };
+                  Function: main
+                  Parameter: k, a, i
+                  Body:
+                        Var: bool_of_string;
+                        x[1.1][1][1] = y[2][1];
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInExpression(ArrayCell(Id('x'),[FloatLiteral(1.1), IntLiteral(1), IntLiteral(1)])))
+        self.assertTrue(TestChecker.test(input, expect, 483))
+
+    def test84_index_operator_with_not_array_type(self):
+        """More complex program"""
+        input = """
+                   Var: x[2][2][2] = { { { 1,2 } , {2,3} },  { { 3,4 } , {4,5} } };
+                   Var: y[3][2] = { {1,2} , {2,3} , {3,4} }, z[1] = { True };
+                  Function: main
+                  Parameter: k[2][2][2], a[3][2], i[1]
+                  Body:
+                        Var: bool_of_string;
+                        k[1] = 1;
+                        Return k;
+                  EndBody.
+                  
+                  Function: foo
+                  Body:
+                        Var: x;
+                        x = main( {1}, 2, 3);
+                        x = { {1,2} };
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInExpression(ArrayCell(Id('k'),[IntLiteral(1)])))
+        self.assertTrue(TestChecker.test(input, expect, 484))
+
+    def test85_call_stmt_with_param_is_array(self):
+        """More complex program"""
+        input = """
+                   Var: x[2][2][2] = { { { 1,2 } , {2,3} },  { { 3,4 } , {4,5} } };
+                   Var: y[3][2] = { {1,2} , {2,3} , {3,4} }, z[1] = { True };
+                  Function: main
+                  Parameter: k[2][2][2], a[3][2], i[1]
+                  Body:
+                        k = x;
+                        a = y;
+                        i = z;
+                  EndBody.
+
+                  Function: foo
+                  Body:
+                        Var: x;
+                        main( { { { 100,200 } , {200,300} },  { { 300,400 } , {400,500} } } , { {100,200} , {200,300} , {3,4} } , { False });
+                        Return x;
+                  EndBody.
+                  """
+        expect = str(TypeCannotBeInferred(Return(Id('x'))))
+        self.assertTrue(TestChecker.test(input, expect, 485))
+
+    def test86_for_stmt_with_invalid_idx_variable(self):
+        """More complex program"""
+        input = """
+                   Var: x[2][2][2] = { { { 1,2 } , {2,3} },  { { 3,4 } , {4,5} } };
+                   Var: y[3][2] = { {1,2} , {2,3} , {3,4} }, z[1] = { 1 };
+                  Function: main
+                  Parameter: k[2][2][2], a[3][2], i[1]
+                  Body:
+                        k = x;
+                        a = y;
+                        i = z;
+                  EndBody.
+
+                  Function: foo
+                  Body:
+                        Var: x = 0x9;
+                        Var: i = True;
+                        main( { { { 100,200 } , {200,300} },  { { 300,400 } , {400,500} } } , { {100,200} , {200,300} , {3,4} } , { 100 });
+                        For ( i=2,1<z[1], x+1 ) Do
+                            x = 1;
+                        EndFor.
+                        
+                        Return x;
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInStatement(For(Id('i'), IntLiteral(2), BinaryOp('<', IntLiteral(1), ArrayCell(Id('z'), [IntLiteral(1)])), BinaryOp('+', Id('x'), IntLiteral(1)), ([], [Assign(Id('x'), IntLiteral(1))]))))
+        self.assertTrue(TestChecker.test(input, expect, 486))
+
+    def test87_for_stmt(self):
+        """More complex program"""
+        input = """
+                   Var: x[2][2][2] = { { { 1,2 } , {2,3} },  { { 3,4 } , {4,5} } };
+                   Var: y[3][2] = { {1,2} , {2,3} , {3,4} }, z[1] = { 1 };
+                  Function: main
+                  Body:
+                        foo();
+                        Return y;
+                  EndBody.
+
+                  Function: foo
+                  Body:
+                        Var: y = 0x9;
+                        Var: i = True;
+                        For ( y = x[1][1][1], 1 < main()[1][1], y + main()[2][0] ) Do
+                            y = True;
+                        EndFor.
+
+                        Return;
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInStatement(Assign(Id('y'), BooleanLiteral(True))))
+        self.assertTrue(TestChecker.test(input, expect, 487))
+
+    def test88_invalid_type_condition_if_stmt(self):
+        """More complex program"""
+        input = """
+                   Var: x[2][2][2] = { { { 1,2 } , {2,3} },  { { 3,4 } , {4,5} } };
+                   Var: y[3][2] = { {True,False} , {True,False} , {True,True} }, z[1] = { 1 };
+                  Function: main
+                  Body:
+                    foo();
+                        Return y;
+                  EndBody.
+
+                  Function: foo
+                  Body:
+                        Var: y = 0x9;
+                        Var: i = True;
+                        If main()[1][1] Then
+                            Return 1;
+                        EndIf.
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInStatement(Return(IntLiteral(1))))
+        self.assertTrue(TestChecker.test(input, expect, 488))
+
+    def test89_inferred_type_from_if_stmt(self):
+        """More complex program"""
+        input = """
+                  Function: main
+                  Parameter: k
+                  Body:
+                       If foo(1,2,3) Then
+                       ElseIf k Then
+                       EndIf. 
+                  EndBody.
+                  
+                  Function: foo
+                  Parameter: k, a, i
+                  Body:
+                        Var: x[1][2];
+                        x = { {1,2} };
+                        Return 1;
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInStatement(Return(IntLiteral(1))))
+        self.assertTrue(TestChecker.test(input, expect, 489))
+
+    def test90_inferred_para_type_from_if_stmt(self):
+        """More complex program"""
+        input = """
+                  Function: main
+                  Parameter: x,y,z
+                  Body:
+                       If x Then
+                       ElseIf y Then
+                       ElseIf z Then
+                       EndIf. 
+                  EndBody.
+
+                  Function: foo
+                  Parameter: k, a, i
+                  Body:
+                        main(True,False,1);
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInStatement(CallStmt(Id('main'), [BooleanLiteral(True), BooleanLiteral(False), IntLiteral(1)])))
+        self.assertTrue(TestChecker.test(input, expect, 490))
+
+    def test91_inferred_return_type_from_if_stmt(self):
+        """More complex program"""
+        input = """
+                  Function: main
+                  Parameter: x,y,z
+                  Body:
+                       If foo(2,3,4) Then
+                       EndIf. 
+                  EndBody.
+
+                  Function: foo
+                  Parameter: k, a, i
+                  Body:
+                        k = k + a + i;
+                        i = i +. 1.;
+                        Return True;
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInExpression(BinaryOp('+.',Id('i'),FloatLiteral(1.))))
+        self.assertTrue(TestChecker.test(input, expect, 491))
+
+    def test92_inferred_type_from_while_stmt(self):
+        """More complex program"""
+        input = """
+                  Function: main
+                  Parameter: k
+                  Body:
+                       While foo(1,2,3) Do   
+                       EndWhile.
+                       
+                       While k Do   
+                       EndWhile.
+                        
+                  EndBody.
+
+                  Function: foo
+                  Parameter: k, a, i
+                  Body:
+                        Var: x[1][2];
+                        x = { {1,2} };
+                        Return 1;
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInStatement(Return(IntLiteral(1))))
+        self.assertTrue(TestChecker.test(input, expect, 492))
+
+    def test93_inferred_para_type_from_while_stmt(self):
+        """More complex program"""
+        input = """
+                  Function: main
+                  Parameter: x,y,z
+                  Body:
+                       While x Do   
+                       EndWhile. 
+                       
+                       While y Do   
+                       EndWhile.
+                       
+                       While z Do   
+                       EndWhile.
+                  EndBody.
+
+                  Function: foo
+                  Parameter: k, a, i
+                  Body:
+                        main(True,False,1);
+                  EndBody.
+                  """
+        expect = str(
+            TypeMismatchInStatement(CallStmt(Id('main'), [BooleanLiteral(True), BooleanLiteral(False), IntLiteral(1)])))
+        self.assertTrue(TestChecker.test(input, expect, 493))
+
+    def test94_inferred_return_type_from_while_stmt(self):
+        """More complex program"""
+        input = """
+                  Function: main
+                  Parameter: x,y,z
+                  Body:
+                       While foo(2,3,4) Do   
+                       EndWhile. 
+                  EndBody.
+
+                  Function: foo
+                  Parameter: k, a, i
+                  Body:
+                        k = k + a + i;
+                        Return { {True,False}   };
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInStatement(Return(ArrayLiteral([ArrayLiteral([BooleanLiteral(True),BooleanLiteral(False)])]))))
+        self.assertTrue(TestChecker.test(input, expect, 494))
+
+    def test95_inferred_return_type_from_for_stmt(self):
+        """More complex program"""
+        input = """
+                  Function: main
+                  Parameter: x,y,z
+                  Body:
+                       For (x = 0, x < 10, foo(2.0,3,4)) Do
+                            y = float_of_int(x);
+                       EndFor.
+                       Return y;
+                  EndBody.
+
+                  Function: foo
+                  Parameter: k, a, i
+                  Body:
+                        k = main(1,2.1,3);
+                        k = k +. 1.1;
+                        Return { {"a","b"}   };
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInStatement(Return(ArrayLiteral([ArrayLiteral([StringLiteral('a'), StringLiteral('b')])]))))
+        self.assertTrue(TestChecker.test(input, expect, 495))
+
+    def test96_complex_program_from_check_suite(self):
+        """More complex program"""
+        input = """
+                  Function: fact
+                  Parameter: n
+                  Body:
+                        If n == 0 Then
+                            Var: x[1] = {False};
+                            Return x[0];
+                        ElseIf fact(1) Then
+                            Var: y=9;
+                        Else
+                            Var: z;
+                            Return fact(n - 1);
+                        EndIf.
+                        Return True;
+                  EndBody.
+                  
+                  Function: main
+                  Parameter: x,y,z
+                  Body:
+                       For (x = 0, fact(0x9) , 1) Do
+                            y = string_of_bool(fact(1));
+                            y = False;
+                       EndFor.
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInStatement(Assign(Id('y'),BooleanLiteral(False))))
+        self.assertTrue(TestChecker.test(input, expect, 496))
+
+    def test97_inferred_type(self):
+        """More complex program"""
+        input = """
+                  Function: fact
+                  Parameter: m,n
+                  Body:
+                        m = 1;
+                        n = "string";
+                  EndBody.
+
+                  Function: main
+                  Parameter: x,y,z
+                  Body:
+                       fact(x,y);
+                       x = x + 9;
+                       y = False;
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInStatement(Assign(Id('y'), BooleanLiteral(False))))
+        self.assertTrue(TestChecker.test(input, expect, 497))
+
     # def test50(self):
     #     input = """
     #     Function: foo

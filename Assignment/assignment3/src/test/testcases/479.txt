@@ -1,20 +1,19 @@
 
+                   Var: x[3][2] = { { 1,2 }, { 2,3} , {3,4}   };
                   Function: main
-                  Parameter: x,y,z
+                  Parameter: y, a, i
                   Body:
-                       While x Do   
-                       EndWhile. 
-                       
-                       While y Do   
-                       EndWhile.
-                       
-                       While z Do   
-                       EndWhile.
+                        foo()[2][3] = 0.9;
+                        Return x;
                   EndBody.
 
                   Function: foo
-                  Parameter: k, a, i
                   Body:
-                        main(True,False,1);
+                        Return { { 1.1,2.2, 4.4 }, { 2.2,3.3, 9.9}   }; 
+                  EndBody.
+                  
+                  Function: goo
+                  Body:
+                        foo()[1][2] = 100;
                   EndBody.
                   

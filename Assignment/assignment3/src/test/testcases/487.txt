@@ -1,24 +1,20 @@
 
-                  Function: fact
-                  Parameter: m,n,p
-                  Body:
-                        m = 1;
-                        n = "string";
-                        p = string_of_int(m);
-                        Return p;
-                  EndBody.
-
+                   Var: x[2][2][2] = { { { 1,2 } , {2,3} },  { { 3,4 } , {4,5} } };
+                   Var: y[3][2] = { {1,2} , {2,3} , {3,4} }, z[1] = { 1 };
                   Function: main
-                  Parameter: x,y,z
                   Body:
-                       foo(fact(100,"a","b"), 1);
+                        foo();
+                        Return y;
                   EndBody.
 
                   Function: foo
-                  Parameter: x,y
                   Body:
-                       y = 0x9; 
-                       x = 1;
-                  EndBody.
+                        Var: y = 0x9;
+                        Var: i = True;
+                        For ( y = x[1][1][1], 1 < main()[1][1], y + main()[2][0] ) Do
+                            y = True;
+                        EndFor.
 
+                        Return;
+                  EndBody.
                   
