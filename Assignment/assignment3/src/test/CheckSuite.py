@@ -1622,6 +1622,97 @@ class CheckSuite(unittest.TestCase):
         expect = str(TypeMismatchInStatement(Assign(Id('y'), BooleanLiteral(False))))
         self.assertTrue(TestChecker.test(input, expect, 497))
 
+    def test98_inferred_array_type_from_param(self):
+        """More complex program"""
+        input = """
+                  Function: fact
+                  Parameter: m,n,p
+                  Body:
+                        m = 1;
+                        n = "string";
+                        p = string_of_int(m);
+                  EndBody.
+
+                  Function: main
+                  Parameter: x[2][3],y,z
+                  Body:
+                       fact(x[1][2],y, foo(1,2));
+                       y = "False";
+                  EndBody.
+
+                  Function: foo
+                  Parameter: x,y
+                  Body:
+                       x = 100 + y; 
+                       Return "HIHI";
+                  EndBody.
+                  
+                  Function: goo
+                  Body:
+                       foo(100,200);
+                  EndBody.
+                  """
+        expect = str(TypeMismatchInStatement(CallStmt(Id('foo'), [IntLiteral(100), IntLiteral(200)])))
+        self.assertTrue(TestChecker.test(input, expect, 498))
+
+    def test99_inferred_type_from_param(self):
+        """More complex program"""
+        input = """
+                  Function: fact
+                  Parameter: m,n,p
+                  Body:
+                        m = 1;
+                        n = "string";
+                        p = string_of_int(m);
+                        Return p;
+                  EndBody.
+
+                  Function: main
+                  Parameter: x,y,z
+                  Body:
+                       foo(fact(100,"a","b"), 1);
+                  EndBody.
+
+                  Function: foo
+                  Parameter: x,y
+                  Body:
+                       y = 0x9; 
+                       x = 1;
+                  EndBody.
+
+                  """
+        expect = str(TypeMismatchInStatement(Assign(Id('x'), IntLiteral(1))))
+        self.assertTrue(TestChecker.test(input, expect, 499))
+
+    def test100_inferred_type_from_param_2(self):
+        """More complex program"""
+        input = """
+                  Function: fact
+                  Parameter: m,n,p
+                  Body:
+                        m = 1;
+                        n = "string";
+                        p = string_of_int(m);
+                        Return { { 1.1, 1.2 } , { 1.3, 1.4 }, { 1.5, 1.6 } };
+                  EndBody.
+
+                  Function: main
+                  Parameter: x,y,z
+                  Body:
+                       foo(fact(100,"a","b")[2][1], 1);
+                  EndBody.
+
+                  Function: foo
+                  Parameter: x,y
+                  Body:
+                       y = 0x9; 
+                       x = 1.1 +. 1.2;
+                       Return y;
+                  EndBody.
+
+                  """
+        expect = str(TypeMismatchInStatement(Return(Id('y'))))
+        self.assertTrue(TestChecker.test(input, expect, 500))
     # def test50(self):
     #     input = """
     #     Function: foo

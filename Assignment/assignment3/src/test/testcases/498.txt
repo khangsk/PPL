@@ -1,12 +1,28 @@
 
-                  Function: main
-                  Parameter: x,y,z,main, x
+                  Function: fact
+                  Parameter: m,n,p
                   Body:
-                      
+                        m = 1;
+                        n = "string";
+                        p = string_of_int(m);
+                  EndBody.
+
+                  Function: main
+                  Parameter: x[2][3],y,z
+                  Body:
+                       fact(x[1][2],y, foo(1,2));
+                       y = "False";
                   EndBody.
 
                   Function: foo
+                  Parameter: x,y
                   Body:
-                      Return "string"; 
+                       x = 100 + y; 
+                       Return "HIHI";
+                  EndBody.
+                  
+                  Function: goo
+                  Body:
+                       foo(100,200);
                   EndBody.
                   
