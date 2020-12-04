@@ -1,1 +1,1 @@
-Type Mismatch In Statement: CallStmt(Id(printStr),[])
+Type Mismatch In Statement: CallStmt(Id(print),[])

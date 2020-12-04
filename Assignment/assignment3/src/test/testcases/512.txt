@@ -1,0 +1,16 @@
+
+                  Var: k;
+                  Function: foo
+                  Parameter: x,y,z
+                  Body:
+                      While z Do   
+                      EndWhile.
+                  EndBody.
+
+                  Function: main
+                  Body:
+                      Var: z;
+                      z = foo(1,1,"");
+                  EndBody.
+
+                  

@@ -6,7 +6,7 @@
                 x = read();
                 y = int_of_string(x);
                 If y == 0 Then
-                    printStr(x);
+                    print(x);
                 ElseIf y == 1 Then
                     printStrLn(a[1]);
                 Else

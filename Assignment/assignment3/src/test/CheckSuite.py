@@ -21,12 +21,12 @@ class CheckSuite(unittest.TestCase):
         expect = str(TypeMismatchInStatement(CallStmt(Id("printLn"),[StringLiteral("khang")])))
         self.assertTrue(TestChecker.test(input,expect,402))
 
-    def test3_printStr_func(self):
+    def test3_print_func(self):
         input = """Function: main
                    Body: 
-                        printStr();
+                        print();
                    EndBody."""
-        expect = str(TypeMismatchInStatement(CallStmt(Id("printStr"),[])))
+        expect = str(TypeMismatchInStatement(CallStmt(Id("print"),[])))
         self.assertTrue(TestChecker.test(input,expect,403))
 
     def test4_printStrLn_func(self):
@@ -46,13 +46,13 @@ class CheckSuite(unittest.TestCase):
         expect = str(TypeMismatchInStatement(Assign(Id('a'), CallExpr(Id("int_of_float"),[FloatLiteral(123.0)]))))
         self.assertTrue(TestChecker.test(input,expect,405))
 
-    def test6_float_of_int(self):
+    def test6_float_to_int(self):
         input = """Function: main
                    Body: 
                         Var: a = 1.1;
-                        a = float_of_int(12.0);
+                        a = float_to_int(12.0);
                    EndBody."""
-        expect = str(TypeMismatchInExpression(CallExpr(Id("float_of_int"),[FloatLiteral(12.0)])))
+        expect = str(TypeMismatchInExpression(CallExpr(Id("float_to_int"),[FloatLiteral(12.0)])))
         self.assertTrue(TestChecker.test(input,expect,406))
 
     def test7_int_of_string(self):
@@ -480,7 +480,7 @@ class CheckSuite(unittest.TestCase):
             Return;
         EndBody.
         """
-        expect = str(TypeCannotBeInferred(CallExpr(Id('foo'),[Id('x')])))
+        expect = str(TypeCannotBeInferred(Assign(Id('y'),BinaryOp('+',Id('a'),CallExpr(Id('foo'),[Id('x')])))))
         self.assertTrue(TestChecker.test(input,expect,442))
     
     def test43(self):
@@ -539,7 +539,7 @@ class CheckSuite(unittest.TestCase):
                 x = read();
                 y = int_of_string(x);
                 If y == 0 Then
-                    printStr(x);
+                    print(x);
                 ElseIf y == 1 Then
                     printStrLn(a[1]);
                 Else
@@ -684,7 +684,7 @@ class CheckSuite(unittest.TestCase):
                         For (i = 2, i < 10, i + 1) Do
                             Var: s;
                             s = string_of_int(i);
-                            printStr(s);
+                            print(s);
                         EndFor.
                     ElseIf a < b Then
                         i = 1;
@@ -711,7 +711,7 @@ class CheckSuite(unittest.TestCase):
                         For (i = 2, i < 10, i + 1) Do
                             Var: s;
                             s = string_of_int(i);
-                            printStr(s);
+                            print(s);
                         EndFor.
                     ElseIf a < b Then
                         Var: i = 0;
@@ -1555,7 +1555,7 @@ class CheckSuite(unittest.TestCase):
                   Parameter: x,y,z
                   Body:
                        For (x = 0, x < 10, foo(2.0,3,4)) Do
-                            y = float_of_int(x);
+                            y = float_to_int(x);
                        EndFor.
                        Return y;
                   EndBody.
@@ -1786,10 +1786,10 @@ class CheckSuite(unittest.TestCase):
                     Var: i, j;
                         For (i = 1, foo1(foo1(True)), 1) Do
                             For (i = 1, foo1(False), 1) Do
-                                printStr(string_of_int(i));
+                                print(string_of_int(i));
                             EndFor.
                         EndFor.
-                        j = float_of_int(i);
+                        j = float_to_int(i);
                         Return foo(foo(True));
                   EndBody.
                   Function: main
@@ -1861,6 +1861,20 @@ class CheckSuite(unittest.TestCase):
                   """
         expect = str()
         self.assertTrue(TestChecker.test(input, expect, 506))
+    
+    def test107(self):
+        """More complex program"""
+        input = """
+                  Function: main
+                  Parameter: x, y
+                  Body:
+                        Do
+                            Var: z;
+                        While z EndDo.
+                  EndBody.
+                  """
+        expect = str(Undeclared(Identifier(),'z'))
+        self.assertTrue(TestChecker.test(input, expect, 507))
 
     def test_order_infer_4(self):
         """More complex program"""
@@ -1880,6 +1894,39 @@ class CheckSuite(unittest.TestCase):
                   """
         expect = str()
         self.assertTrue(TestChecker.test(input, expect, 508))
+
+    def test109(self):
+        """More complex program"""
+        input = """
+                Var: a[1] = {0};
+
+                Function: foo
+                    Parameter: x
+                    Body:
+                        Return a;
+                    EndBody.
+
+                Function: main
+                    Body:
+                        foo(0)[0] = foo(0.0)[0];
+                    EndBody.
+                  """
+        expect = str(TypeMismatchInExpression(CallExpr(Id('foo'),[FloatLiteral(0.0)])))
+        self.assertTrue(TestChecker.test(input, expect, 509))
+
+    def test110(self):
+        """More complex program"""
+        input = """
+                Var: test;
+                Function: main
+                    Parameter: x
+                    Body:
+                    x = test[0];
+                    EndBody.
+                  """
+        expect = str(TypeMismatchInExpression(ArrayCell(Id('test'),[IntLiteral(0)])))
+        self.assertTrue(TestChecker.test(input, expect, 510))
+
     # def test50(self):
     #     input = """
     #     Function: foo

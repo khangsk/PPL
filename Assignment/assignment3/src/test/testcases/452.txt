@@ -7,7 +7,7 @@
                         For (i = 2, i < 10, i + 1) Do
                             Var: s;
                             s = string_of_int(i);
-                            printStr(s);
+                            print(s);
                         EndFor.
                     ElseIf a < b Then
                         i = 1;

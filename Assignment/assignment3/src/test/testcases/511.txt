@@ -1,0 +1,17 @@
+
+                  Var: k;
+                  Function: foo
+                  Parameter: x,y,z
+                  Body:
+                      If y Then
+                          Return False;
+                      EndIf.
+                  EndBody.
+
+                  Function: main
+                  Body:
+                      Var: z;
+                      z = foo(1,1,"");
+                  EndBody.
+
+                  

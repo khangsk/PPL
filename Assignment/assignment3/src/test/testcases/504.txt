@@ -4,10 +4,10 @@ Function: foo1
                     Var: i, j;
                         For (i = 1, foo1(foo1(True)), 1) Do
                             For (i = 1, foo1(False), 1) Do
-                                printStr(string_of_int(i));
+                                print(string_of_int(i));
                             EndFor.
                         EndFor.
-                        j = float_of_int(i);
+                        j = float_to_int(i);
                         Return foo(foo(True));
                   EndBody.
                   Function: main

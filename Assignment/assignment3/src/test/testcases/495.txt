@@ -3,7 +3,7 @@
                   Parameter: x,y,z
                   Body:
                        For (x = 0, x < 10, foo(2.0,3,4)) Do
-                            y = float_of_int(x);
+                            y = float_to_int(x);
                        EndFor.
                        Return y;
                   EndBody.
