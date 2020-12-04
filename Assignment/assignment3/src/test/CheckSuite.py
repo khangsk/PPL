@@ -1755,6 +1755,113 @@ class CheckSuite(unittest.TestCase):
         expect = str()
         self.assertTrue(TestChecker.test(input, expect, 502))
 
+    def test103_order_infer_4(self):
+        """More complex program"""
+        input = """Function: foo1
+                  Parameter: x
+                  Body:
+                        Return x +. foo1(1. *. foo1(foo1(foo1(x))) +. foo(2.));
+                  EndBody.
+                  Function: main
+                  Body:
+                    Var: x;
+                    
+                    x = foo1(2.) +. foo(2.);
+                  EndBody.
+                    Function: foo
+                  Parameter: x
+                  Body:
+                        x = foo(4.2);
+                      Return x;
+                  EndBody.
+                  """
+        expect = str()
+        self.assertTrue(TestChecker.test(input, expect, 503))
+
+    def test104_order_infer_4(self):
+        """More complex program"""
+        input = """Function: foo1
+                  Parameter: x
+                  Body:
+                    Var: i, j;
+                        For (i = 1, foo1(foo1(True)), 1) Do
+                            For (i = 1, foo1(False), 1) Do
+                                printStr(string_of_int(i));
+                            EndFor.
+                        EndFor.
+                        j = float_of_int(i);
+                        Return foo(foo(True));
+                  EndBody.
+                  Function: main
+                  Body:
+                    Var: x;
+                    
+                    x = foo1(True) && foo(True);
+                  EndBody.
+                    Function: foo
+                  Parameter: x
+                  Body:
+                        x = foo(False);
+                      Return x;
+                  EndBody.
+                  """
+        expect = str()
+        self.assertTrue(TestChecker.test(input, expect, 504))
+
+    def test105_order_infer_4(self):
+        """More complex program"""
+        input = """Function: foo1
+                  Parameter: x
+                  Body:
+                    Var: i, j;
+                        Do
+                            i = 1;
+                        While foo1(foo1(True)) EndDo.
+                        Return foo(foo(True));
+                  EndBody.
+                  Function: main
+                  Body:
+                    Var: x;
+                    
+                    x = foo1(True) && foo(True);
+                  EndBody.
+                    Function: foo
+                  Parameter: x
+                  Body:
+                        x = foo(False);
+                      Return x;
+                  EndBody.
+                  """
+        expect = str()
+        self.assertTrue(TestChecker.test(input, expect, 505))
+
+    def test106_order_infer_4(self):
+        """More complex program"""
+        input = """Function: foo1
+                  Parameter: x
+                  Body:
+                    Var: i, j;
+                        While foo1(foo1(True)) Do
+                            i = 1;
+                        EndWhile.
+                        Return foo(foo(True));
+                  EndBody.
+                  Function: main
+                  Body:
+                    Var: x;
+                    
+                    x = foo1(True) && foo(True);
+                  EndBody.
+                    Function: foo
+                  Parameter: x
+                  Body:
+                        x = foo(False);
+                      Return x;
+                  EndBody.
+                  """
+        expect = str()
+        self.assertTrue(TestChecker.test(input, expect, 506))
+
     def test_order_infer_4(self):
         """More complex program"""
         input = """
