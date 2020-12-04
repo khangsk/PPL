@@ -1224,7 +1224,7 @@ class CheckSuite(unittest.TestCase):
                         foo()[1][2] = 100;
                   EndBody.
                   """
-        expect = str(TypeMismatchInExpression(ArrayCell(CallExpr(Id('foo'),[]),[IntLiteral(2), IntLiteral(3)])))
+        expect = str(TypeCannotBeInferred(Assign(ArrayCell(CallExpr(Id('foo'),[]),[IntLiteral(2), IntLiteral(3)]),FloatLiteral(0.9))))
         self.assertTrue(TestChecker.test(input, expect, 479))
     
     def test80_inferred_para_type_in_binary_op(self):

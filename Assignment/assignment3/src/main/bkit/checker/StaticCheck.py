@@ -363,6 +363,14 @@ class Checker:
             return True
         else:
             return False
+    
+    @staticmethod
+    def checkArrayFunc(scope, funcName, x, ast):
+        if type(x) is ArrayCell:
+            if type(x.arr) is CallExpr:
+                sym = Checker.checkUndeclared(scope, x.arr.method.name, Function())
+                if type(sym.mtype) is not ArrayType:
+                    raise TypeCannotBeInferred(ast)
 
 class Graph:
     link = {}
@@ -631,9 +639,10 @@ class StaticChecker(BaseVisitor):
     
     def visitAssign(self, ast, param):
         scope, loop, funcName = param
+        Checker.checkArrayFunc(scope, funcName, ast.lhs, ast)
+        Checker.checkArrayFunc(scope, funcName, ast.rhs, ast)
         lhsType = self.visit(ast.lhs, (scope, funcName))
         rhsType = self.visit(ast.rhs, (scope, funcName))
-        
         if type(lhsType) is Unknown:
             if type(rhsType) is Unknown:
                 raise TypeCannotBeInferred(ast)
