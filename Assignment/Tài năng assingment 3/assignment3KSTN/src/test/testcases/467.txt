@@ -1,0 +1,15 @@
+
+            Function: main_
+            Body:
+                Var: x;
+                main_();
+                x = 1;
+            EndBody.
+
+            Function: main
+            Body:
+                Var: x;
+                x = 1;
+                x = 1.;
+            EndBody.
+        

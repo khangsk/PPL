@@ -1,0 +1,16 @@
+
+                  Function: fact
+                  Parameter: m,n
+                  Body:
+                        m = 1;
+                        n = "string";
+                  EndBody.
+
+                  Function: main
+                  Parameter: x,y,z
+                  Body:
+                       fact(x,y);
+                       x = x + 9;
+                       y = False;
+                  EndBody.
+                  

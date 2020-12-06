@@ -1,0 +1,1 @@
+Type Cannot Be Inferred: CallStmt(Id(foo),[IntLiteral(5),Id(x)])

@@ -1,0 +1,16 @@
+
+            Function: foo
+            Body:
+                Var: x;
+                x = 1;
+            EndBody.
+
+            Function: main
+            Body:
+                Var: x[5];
+                Var: y[3] = { 1,2,  3};
+                Var: z = 1;
+                z = z + foo();
+                z = foo() + 0x9;
+            EndBody.
+        
