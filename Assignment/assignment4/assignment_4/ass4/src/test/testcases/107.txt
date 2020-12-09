@@ -1,0 +1,7 @@
+
+
+procedure main(); 
+begin 
+    putFloatLn(999.8999999);
+end
+

@@ -1,0 +1,11 @@
+
+        var a:integer;
+            b:real;
+            arr:array[1 .. 5] of integer;
+            isTrue:boolean;
+        procedure main();
+        begin
+            isTrue := false;
+            putBoolLn(isTrue);
+        end
+        

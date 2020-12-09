@@ -1,0 +1,14 @@
+
+
+procedure Main();
+var x: array[0 .. 10] of string;
+begin
+    foo(x);
+end
+
+procedure FOO(a: array[0 .. 10] of string);
+var i: integer;
+begin
+    for i := 0 to 10 do putStringLN(a[i]);
+end
+

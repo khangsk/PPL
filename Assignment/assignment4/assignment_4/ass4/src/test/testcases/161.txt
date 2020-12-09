@@ -1,0 +1,16 @@
+
+
+procedure main();
+begin
+    putBoolLn(not false);
+    PutBooLLN(not true);
+    putbOOLLN(not not false);
+    PUtbOOLLN(not not true);
+    PutBoOLLN(not not not false);
+    PutBoOLLN(not not not true);
+    PutBoOLLN(not false and true);
+    PutBoOLLN(not true and false);
+    PutBoOLLN(not not false and not not not true or false and true);
+    PutBoOLLN(not not true or false);
+end
+

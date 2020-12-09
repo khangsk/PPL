@@ -1,0 +1,3 @@
+retTrue; retTrue; retFalse; false
+retFalse; retFalse; retTrue; true
+retFalse; retFalse; retTrue; retTrue; retFalse; false

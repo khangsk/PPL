@@ -1,0 +1,11 @@
+
+
+procedure main();
+begin
+    putStringLn("Hello World 1");
+    putStringLn("Hello World 2");
+    putStringLn("3");
+    putStringLn("4.5");
+    putStringLn("-0.6");
+end
+

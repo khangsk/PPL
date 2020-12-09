@@ -1,0 +1,7 @@
+
+
+procedure main();
+begin
+    putBool(false or else false or else true and then (true or else false) and (false or else true));
+end
+

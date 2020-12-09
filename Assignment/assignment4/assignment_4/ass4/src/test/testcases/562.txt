@@ -1,0 +1,13 @@
+
+        var arr:array[1 .. 4] of real;
+        procedure main();
+        var arr:array[1 .. 4] of real;
+            b:real;
+            isTrue:boolean;
+        begin
+            arr[1] := 11.5;
+            arr[2] := arr[1] + 2.5;
+            isTrue := arr[2] >= 14.0 ;
+            putBoolLn(isTrue);
+        end
+        

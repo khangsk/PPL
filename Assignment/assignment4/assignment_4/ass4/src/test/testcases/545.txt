@@ -1,0 +1,19 @@
+
+        var fNum:real;
+        procedure main();
+        var arr:array[1 .. 4] of integer;
+            a, b:integer;
+            f:real;
+        begin
+            b := 10;
+            a := b;
+            fNum := a;
+            arr[2] := a;
+            f := arr[1];
+            b := a;
+            arr[2] := b;
+            arr[3] := arr[2];
+            fNum := arr[3];
+            putFloatLn(fNum);
+        end
+        

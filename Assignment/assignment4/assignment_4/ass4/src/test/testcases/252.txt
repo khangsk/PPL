@@ -1,0 +1,39 @@
+
+
+var x, n, m: integer;
+var a: array[0 .. 100000] of integer;
+
+procedure main();
+var i, j: integer;
+begin
+    m := 10007;
+    ha_i_space(pow(1, 2000000000));
+    ha_i_space(pow(4, 2000000000));
+    ha_i_space(pow(15, 2000000000));
+    ha_i_space(pow(27, 2000000000));
+    ha_i_space(pow(79, 2000000000));
+    ha_i_space(pow(128, 2000000000));
+    ha_i_space(pow(9246, 2000000000));
+    ha_i_space(pow(14942, 2000000000));
+    ha_i_space(pow(29265, 2000000000));
+    ha_i_space(pow(667999, 2000000000));
+    ha_i_space(pow(1937815, 2000000000));
+    ha_i_space(pow(6111917, 2000000000));
+    ha_i_space(pow(59684905, 2000000000));
+    ha_i_space(pow(793800323, 2000000000));
+end
+
+function pow(x, n: integer): integer;
+begin
+    if n = 0 then return 1;
+    with res: integer; do begin
+        res := pow(x, n div 2);
+        res := (res * res) mod m;
+        if n mod 2 = 1 then res := (res * x) mod m;
+        return res;
+    end
+end
+
+procedure ha_i_space(ha0852i: integer); begin putInt(ha0852i); putString(" "); end
+
+

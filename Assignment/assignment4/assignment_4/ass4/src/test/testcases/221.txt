@@ -1,0 +1,17 @@
+
+
+procedure main();
+var a: array[-10000 .. 10000] of real;
+    i, l, r: integer;
+begin
+    l := -20;
+    r := 20;
+    a[l] := 1;
+    a[l+1] := 1;
+    for i := l+2 to r do begin
+        a[i] := a[i-1] + a[i-2];
+    end
+    putFloat(a[r]);
+end
+
+

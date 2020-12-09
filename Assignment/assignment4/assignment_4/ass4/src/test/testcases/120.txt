@@ -1,0 +1,7 @@
+
+
+procedure main(); 
+begin 
+    putInt(5 div 2);
+end
+

@@ -1,0 +1,14 @@
+
+
+procedure main();
+var a: integer;
+begin
+    a := foo(1, 2);
+    putInt(a);
+end
+
+function foo(a,b: integer): integer;
+begin
+    return (a + b) div 2;
+end
+

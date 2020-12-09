@@ -1,0 +1,39 @@
+
+
+var x, n, m: integer;
+var a: array[0 .. 100000] of integer;
+
+procedure main();
+var i, j: integer;
+begin
+    m := 10007;
+    for i := 1 to 8 do begin
+        with l, r: integer; do begin
+            if i > 4 then begin
+                l := 50; r := 55;
+            end else begin
+                l := 0; r := 5;
+            end
+            for j := l to r do begin
+                ha_i_space(i); putString("^ ");
+                ha_i_space(j); putString("= ");
+                putIntLn(pow(i,j));
+            end
+        end
+    end
+end
+
+function pow(x, n: integer): integer;
+begin
+    if n = 0 then return 1;
+    with res: integer; do begin
+        res := pow(x, n div 2);
+        res := (res * res) mod m;
+        if n mod 2 = 1 then res := (res * x) mod m;
+        return res;
+    end
+end
+
+procedure ha_i_space(ha0852i: integer); begin putInt(ha0852i); putString(" "); end
+
+

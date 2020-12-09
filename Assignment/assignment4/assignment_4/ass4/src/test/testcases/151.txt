@@ -1,0 +1,18 @@
+
+
+procedure main();
+begin
+    putFloatLn(5 / 4);
+    putFloatLn(15 / 4);
+    putFloatLn(52 / 6);
+    putFloatLn(56 / 5);
+    putFloatLn(9 / 12);
+    putFloatLn(1998 / 46);
+    putFloatLn(1998 / 54);
+    putFloatLn(1998 / 87);
+    putFloatLn(1998 / 42);
+    putFloatLn(1998 / 16);
+    putFloatLn(1998 / 19);
+    putFloatLn(1998 / 24);
+end
+

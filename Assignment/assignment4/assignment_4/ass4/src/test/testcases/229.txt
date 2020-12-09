@@ -1,0 +1,19 @@
+
+
+var a, b: integer;
+
+procedure main();
+begin
+    ha_str_proc(ha_str_func(), 9);
+end
+
+procedure ha_str_proc(ha: string; times: integer); 
+var i: integer;
+begin
+    for i := 1 to times do begin
+        putString(ha); putIntLn(i);
+    end
+end
+
+function ha_str_func(): string; begin return "Ha "; end
+

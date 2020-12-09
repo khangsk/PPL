@@ -1,0 +1,11 @@
+
+
+var a: array[-1000 .. 1000] of string;
+
+procedure main();
+var a: array[-1000 .. 1000] of string;
+begin
+    with a: array[-1000 .. 1000] of string; do begin
+    end
+end
+

@@ -1,0 +1,10 @@
+
+        var fNum:real;
+        procedure main();
+        var iNum:integer;
+        begin
+            iNum := 14;
+            fNum := iNum;
+            putFloat(fNum);
+        end
+        

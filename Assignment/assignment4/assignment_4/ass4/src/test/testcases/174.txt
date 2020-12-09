@@ -1,0 +1,14 @@
+
+
+function foo(): integer;
+var a: integer;
+begin
+    a := 1000;
+    return a;
+end
+
+procedure main();
+begin
+    putInt(foo());
+end
+

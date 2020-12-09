@@ -1,0 +1,15 @@
+
+
+procedure main();
+var a, b: REAL;
+begin
+    a := 1;
+    putFLOATLn(a);
+    b := 2;
+    a := b;
+    putFLOATLn(b);
+    putfloatln(a);
+    a := b + 1;
+    putFloatLn(a);
+end
+

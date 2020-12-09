@@ -1,0 +1,9 @@
+
+        var a, b:integer;
+        procedure main();
+        var isTrue:boolean;
+        begin
+            isTrue := true;
+            putBool(isTrue);
+        end
+        

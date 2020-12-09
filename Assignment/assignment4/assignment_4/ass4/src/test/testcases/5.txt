@@ -1,0 +1,6 @@
+
+        procedure main();
+        begin
+        putint(9);
+        end
+        

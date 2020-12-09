@@ -1,0 +1,10 @@
+
+        procedure main();
+        var arr:array[1 .. 4] of integer;
+        begin
+            arr[1] := 1;
+            arr[2] := 2;
+            arr[3] := 3;
+            putInt(arr[2]);
+        end
+        

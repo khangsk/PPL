@@ -1,0 +1,25 @@
+
+
+procedure main();
+var a, b: REAL;
+    x, y: integer;
+begin
+    a := 1.05 * 25.4;
+    putFLOATLn(a);
+    b := 2.05 + a;
+    putFLOATLn(b);
+    a := a + 100 - b;
+    putFloatLn(a);
+    x := 1000;
+    y := 1;
+    x := x + y * 1000 div 5;
+    putIntLn(x);
+    putIntLn(y);
+    y := x*y + x*2 + 2*x - y*2 + 2*y;
+    putIntLn(y);
+    x := x * y * 2 * 5;
+    putIntLn(x);
+    a := (a * b + x) / y + y / (a*b + 2 mod x);
+    putFloatLn(a);
+end
+

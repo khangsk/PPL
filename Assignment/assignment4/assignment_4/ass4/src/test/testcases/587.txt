@@ -1,0 +1,16 @@
+
+        procedure main();
+        var a, iSum:integer;
+        begin
+            a := 0;
+            iSum := 0;
+            while a < 20 do
+            begin
+                a := a + 1;
+                if a > 17 then break;
+                if a mod 2=0 then continue;
+                iSum := iSum + a;
+            end
+            putInt(iSum);
+        end
+        

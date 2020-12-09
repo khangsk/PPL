@@ -1,0 +1,21 @@
+
+
+procedure main();
+var a: array[0 .. 10] of integer;
+    i: integer;
+begin
+    i := 1;
+    a[0] := 1;
+    a[i] := a[i-1];
+    putInt(a[i]);
+    a[i] := a[i-1] + 1;
+    putInt(a[i]);
+    a[i] := a[i-1] * 2 + 1;
+    putInt(a[i]);
+    a[i] := a[i-1] * 2 + a[i];
+    putInt(a[i]);
+    a[i] := a[i-1] := a[i-1] * 2 + a[i] * 3 + a[i-1] * a[i];
+    putInt(a[i]);
+    putInt(a[i-1]);
+end
+

@@ -1,0 +1,14 @@
+
+
+procedure main();
+var a: real;
+begin
+    a := foo(2, false);
+    putFloat(a);
+end
+
+function foo(a: real; b: boolean): real;
+begin
+    return a*a*a + a/2;
+end
+

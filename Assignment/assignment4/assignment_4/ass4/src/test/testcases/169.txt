@@ -1,0 +1,17 @@
+
+
+procedure main();
+var a, b, c: REAL;
+begin
+    a := 5.0;
+    b := 2.0;
+    a := b := a + b / 2 + 1;
+    putFloatLn(a);
+    putFloatLn(b);
+
+    c := a := b := (a+b)/4 + (a-b)/4 * 2 + 1;
+    putFloatLn(a);
+    putFloatLn(b);
+    putFloatLn(c);
+end
+

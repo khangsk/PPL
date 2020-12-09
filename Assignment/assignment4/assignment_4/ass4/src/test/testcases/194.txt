@@ -1,0 +1,13 @@
+
+
+procedure main();
+var i, j, a, b: integer;
+begin
+    a := 1;
+    b := 10;
+    for i := a to b do begin
+        putInt(i);
+        i := i+1;
+    end
+end
+

@@ -1,0 +1,49 @@
+
+
+procedure main();
+var a: array[4 .. 10] of integer;
+    b: array[5 .. 20] of real;
+    i: integer;
+begin
+    for i := 4 to 10 do begin
+        a[i] := i * i;
+        b[i+1] := i * i;
+    end
+    foo(b, a);
+    putLN();
+    for i := 4 to 10 do begin
+        ha_f_space(a[i]);
+        ha_f_space(b[i+1]);
+    end
+end
+
+procedure foo(
+    a: array[5 .. 20] of real;
+    b: array[4 .. 10] of integer
+);
+var i: integer;
+begin
+    for i := 4 to 10 do begin
+        ha_f_space(a[i+1]);
+        ha_f_space(b[i]);
+    end
+    for i := 4 to 10 do begin
+        a[i+1] := b[i];
+        if i+1 > 10 then continue;
+        b[i+1] := (i+1) * i div 2 + 1;
+    end
+    putLn();
+    for i := 4 to 10 do begin
+        ha_f_space(a[i+1]);
+        ha_f_space(b[i]);
+    end
+end
+
+procedure ha_i_space(ha0852i: integer); begin putInt(ha0852i); putString(" "); end
+procedure ha_f_space(ha0852f: real); begin putFloat(ha0852f); putString(" "); end
+procedure ha_b_space(ha0852b: boolean); begin putBool(ha0852b); putString(" "); end
+
+function ha_str_1(): string; begin return "0852 1"; end
+function ha_str_2(): string; begin return "0852 2"; end
+function ha_str_3(): string; begin return "0852 3"; end
+

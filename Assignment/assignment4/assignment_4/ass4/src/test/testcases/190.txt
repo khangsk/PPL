@@ -1,0 +1,15 @@
+
+
+procedure main();
+var i: integer;
+begin
+    for i := 1 downto 5 do putInt(i);
+    putIntLn(i);
+
+    for i := 1 downto 1 do putInt(i);
+    putIntLn(i);
+
+    for i := 5 downto 1 do putInt(i);
+    putIntLn(i);
+end
+

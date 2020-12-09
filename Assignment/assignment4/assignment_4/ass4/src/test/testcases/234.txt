@@ -1,0 +1,21 @@
+
+
+var a: array[0 .. 10] of integer;
+procedure main();
+var 
+    i: integer;
+begin
+    a[0] := 1;
+    a[1] := 2;
+    putInt(a[0]);
+    putInt(a[1]);
+
+    i := 5;
+    a[i] := 5;
+    putInt(a[i]);
+
+    i := 6;
+    a[i+1] := 6;
+    putInt(a[i+1]);
+end
+

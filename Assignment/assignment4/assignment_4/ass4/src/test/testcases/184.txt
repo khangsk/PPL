@@ -1,0 +1,24 @@
+
+
+procedure main();
+begin
+    if true then begin
+        putInt(100);
+        if false then putInt(100);
+        else if true then putInt(200);
+        else putInt(300);
+    end
+    else if true then putInt(200);
+    else putInt(300);
+
+    if false then begin
+        putInt(100);
+    end
+    else if true then begin
+        putInt(200);
+        if false then putInt(100);
+        else if true then putInt(200);
+        else putInt(300);
+    end else putInt(300);
+end
+

@@ -1,0 +1,21 @@
+
+
+procedure main();
+begin
+    putBoolln(retTrue() and then retTrue() and then retFalse() and then retTrue());
+    putBoolln(retFalse() or else retFalse() or else retTrue() or else retFalse());
+    putBoolln(retFalse() or else retFalse() or else retTrue() and then retTrue() and then retFalse() and then retTrue());
+end
+
+function retTrue(): boolean;
+begin
+    putString("retTrue; ");
+    return true;
+end
+
+function retFalse(): boolean;
+begin
+    putString("retFalse; ");
+    return false;
+end
+

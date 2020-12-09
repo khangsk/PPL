@@ -1,0 +1,17 @@
+
+
+procedure main();
+var a: array[0 .. 10] of integer;
+    i, l, r: integer;
+begin
+    l := 0;
+    r := 10;
+    a[l] := 1;
+    a[l+1] := 1;
+    for i := l+2 to r do begin
+        a[i] := a[i-1] + a[i-2];
+    end
+    putInt(a[r]);
+end
+
+

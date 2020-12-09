@@ -1,0 +1,12 @@
+
+
+procedure main(); 
+begin 
+    putBool(2.0 > 2);
+    putBool(2.0 < 2);
+    putBool(2.0 = 2);
+    putBool(2.0 >= 2);
+    putBool(2.0 <= 2);
+    putBool(2.0 <> 2);
+end
+

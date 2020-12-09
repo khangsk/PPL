@@ -1,0 +1,19 @@
+
+
+var a, b: integer;
+
+procedure main();
+begin
+    putStringLn(str_ha_1());
+    putStringLn(str_ha_2());
+    putStringLn(str_ha_3());
+    putStringLn(str_ha_4());
+    putStringLn(str_ha_5());
+end
+
+function str_ha_1(): string; begin return "Ha 1"; end
+function str_ha_2(): string; begin return "Ha 2"; end
+function str_ha_3(): string; begin return "Ha 3"; end
+function str_ha_4(): string; begin return "Ha 4"; end
+function str_ha_5(): string; begin return "Ha 5"; end
+

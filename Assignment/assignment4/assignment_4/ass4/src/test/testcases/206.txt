@@ -1,0 +1,18 @@
+
+
+procedure main();
+var a, b: integer;
+begin
+    a := 1;
+    b := 5;
+    putLn();
+    with a: integer; do begin
+        a := 2;
+        b := 10;
+        putInt(a); putString(" ");
+        putIntLn(b);
+    end
+    putInt(a); putString(" ");
+    putInt(b);
+end
+

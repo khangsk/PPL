@@ -1,0 +1,11 @@
+
+        var a:integer;
+            b:real;
+            arr:array[1 .. 5] of integer;
+        
+        procedure main();
+        begin
+            b := 10.5;
+            putFloatLn(b);
+        end
+        

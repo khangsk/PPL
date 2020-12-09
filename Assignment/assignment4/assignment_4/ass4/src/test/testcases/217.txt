@@ -1,0 +1,11 @@
+
+
+procedure main();
+var a: array[0 .. 10] of integer;
+    i: integer;
+begin
+    a[0] := 1;
+    a[1] := a[0];
+    putInt(a[1]);
+end
+

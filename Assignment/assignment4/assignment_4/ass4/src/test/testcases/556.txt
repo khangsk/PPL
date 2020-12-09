@@ -1,0 +1,13 @@
+
+        var isTrue:boolean;
+            arr:array[1 .. 4] of boolean;
+        procedure main();
+        var isT, isF:boolean;
+        begin
+            arr[1] := arr[2] := arr[3] := false;
+            isT := not arr[1];
+            isF := not (not arr[2]);
+            isTrue := not not not not not not isF;
+            putBoolLn(isTrue);
+        end
+        

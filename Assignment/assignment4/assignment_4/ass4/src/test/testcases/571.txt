@@ -1,0 +1,12 @@
+
+            procedure main();
+            var x: integer; y: real; z : boolean; 
+            begin 
+                putBoolLn(12 < 5.0);
+                putBoolLn(12 < 12.0);
+                putBoolLn(78.34 < 12.0);
+                putBoolLn(78.34 < 12);
+                putBoolLn(12.0 < 24);
+                putBoolLn(78.0 < 120);
+            end
+        

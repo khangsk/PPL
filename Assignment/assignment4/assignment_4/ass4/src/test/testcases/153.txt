@@ -1,0 +1,12 @@
+
+
+procedure main();
+begin
+    putIntLn(1);
+    putLn();
+    putLn();
+    putLn();
+    putLn();
+    putInt(2);
+end
+

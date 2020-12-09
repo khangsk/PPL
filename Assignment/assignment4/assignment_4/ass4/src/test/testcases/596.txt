@@ -1,0 +1,19 @@
+
+        var i, j:integer;
+        procedure main();
+        var a, b, iSum:integer;
+        begin
+            i := 10;
+            with i:real; do
+            begin
+                i := 14.3;
+                with i:integer; do
+                begin
+                    i := 19;
+                    putInt(i);
+                end
+                putFloat(i);
+            end
+            putInt(i);
+        end
+        

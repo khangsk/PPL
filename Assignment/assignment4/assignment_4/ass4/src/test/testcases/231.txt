@@ -1,0 +1,35 @@
+
+
+var a, b: integer;
+var x, y: real;
+var u, v: boolean;
+
+procedure main();
+var n: integer;
+begin
+    n := 10;
+    while true do begin
+        with i: integer; do begin
+            a := 1;
+            b := n;
+            ha_i_space(n);
+            for i := a to b do begin
+                ha_f_space(mid(a,b));
+            end
+            if n = 0 then break;
+        end
+        n := n-1;
+        putLn();
+    end
+end
+
+function mid(a, b: integer): real; begin return (a + b) / 2; end
+
+procedure ha_i_space(ha0852i: integer); begin putInt(ha0852i); putString(" "); end
+procedure ha_f_space(ha0852f: real); begin putFloat(ha0852f); putString(" "); end
+procedure ha_b_space(ha0852b: boolean); begin putBool(ha0852b); putString(" "); end
+
+function ha_str_1(): string; begin return "0852 1"; end
+function ha_str_2(): string; begin return "0852 2"; end
+function ha_str_3(): string; begin return "0852 3"; end
+

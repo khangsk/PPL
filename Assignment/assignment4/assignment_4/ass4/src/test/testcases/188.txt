@@ -1,0 +1,9 @@
+
+
+procedure main();
+var i: integer;
+begin
+    for i := 1 to 5 do putInt(i);
+    putInt(i);
+end
+

@@ -1,0 +1,10 @@
+
+                procedure main();
+                var x: integer; y: real; z : boolean; 
+                begin 
+                    x := 29;
+                    putIntLn(x mod 10);
+                    putIntLn((12 + 5) mod 12);
+                    putIntLn(12 + 5 mod 12);
+                end
+            

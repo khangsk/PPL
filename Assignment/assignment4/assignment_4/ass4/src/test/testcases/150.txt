@@ -1,0 +1,18 @@
+
+
+procedure main();
+begin
+    putIntLn(5 div 4);
+    putIntLn(15 div 4);
+    putIntLn(52 div 6);
+    putIntLn(56 div 5);
+    putIntLn(9 div 12);
+    putIntLn(1998 div 46);
+    putIntLn(1998 div 54);
+    putIntLn(1998 div 87);
+    putIntLn(1998 div 42);
+    putIntLn(1998 div 16);
+    putIntLn(1998 div 19);
+    putIntLn(1998 div 24);
+end
+

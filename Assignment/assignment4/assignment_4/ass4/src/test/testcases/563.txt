@@ -1,0 +1,15 @@
+
+        var arr:array[1 .. 4] of real;
+        procedure main();
+        var isTrue:boolean;
+            a, b:integer;
+            arr:array[1 .. 2] of integer;
+        begin
+            isTrue := false;
+            a := 14;
+            b := 12;
+            arr[1] := 14;
+            isTrue := arr[1] = a;
+            putBoolLn(isTrue);
+        end
+        

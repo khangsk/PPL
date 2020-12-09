@@ -1,0 +1,7 @@
+
+
+procedure main(); 
+begin 
+    putIntLn(1);
+end
+

@@ -1,0 +1,27 @@
+
+
+var a, b: integer;
+
+procedure main();
+begin
+    a := 24;
+    b := 100;
+    if b/a = foo(a,b) then putString("Ha"); 
+    else putString("aH");
+    putInt(a);
+    putInt(b);
+end
+
+function foo(a, b: integer): integer;
+var i: integer;
+begin
+    for i := 0 to b do begin
+        if a * i = b then begin
+            a := b := -1;
+            return i;
+        end
+    end
+    a := b := 0;
+    return -1;
+end
+

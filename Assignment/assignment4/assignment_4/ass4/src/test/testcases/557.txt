@@ -1,0 +1,13 @@
+
+            procedure main();
+            begin
+                putBoolLn(true or eLse true);
+                putBoolLn(true OR eLse false);
+                putBoolLn(false OR else true);
+                putBoolLn(false or else false);
+                putBoolLn(true and THEN true);
+                putBoolLn(true and THEN false);
+                putBoolLn(false and THEN true);
+                putBoolLn(false and THEN false);
+            end
+        

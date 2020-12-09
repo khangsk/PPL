@@ -1,0 +1,10 @@
+
+
+procedure main();
+begin
+    a := 100;
+    putInt(a);
+end
+
+var a: integer;
+

@@ -1,0 +1,16 @@
+
+
+procedure main();
+var i, j, a, b: integer;
+begin
+    a := 1;
+    b := 5;
+    for i := a to b do begin
+        for j := b downto a do begin
+            putInt(i); putString(" + ");
+            putInt(j); putString(" = ");
+            putIntLn(i+j);
+        end
+    end
+end
+

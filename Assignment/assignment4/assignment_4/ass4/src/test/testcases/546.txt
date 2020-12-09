@@ -1,0 +1,17 @@
+
+        var a, b:integer;
+            gArr:array[1 .. 4] of integer;
+        procedure main();
+        var arr:array[1 .. 4] of integer;
+            c, d:integer;
+        begin
+            a := 1;
+            b := a := 1;
+            c := a;
+            b := a := c := b;
+            gArr[1] := arr[1] := 1;
+            gArr[2] := gArr[1] := 11;
+            d := gArr[2] := arr[4] := gArr[1] := a := gArr[3] := b := 11;
+            putIntLn(gArr[2]);
+        end
+        

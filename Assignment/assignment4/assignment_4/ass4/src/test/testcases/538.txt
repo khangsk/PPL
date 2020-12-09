@@ -1,0 +1,10 @@
+
+        var a, b:real;
+        procedure main();
+        var fNum:real;
+        begin
+            a := 11.5;
+            fNum := a;
+            putFloat(fNum);
+        end
+        

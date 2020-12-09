@@ -1,0 +1,9 @@
+
+
+procedure main();
+var a: boolean;
+begin
+    a := True and then True and then False and then 5 mod 0 = 0;
+    putBool(a);
+end
+

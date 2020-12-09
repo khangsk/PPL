@@ -1,0 +1,25 @@
+
+
+procedure main();
+var a: real;
+begin
+    a := 100;
+    putFloatLn(a);
+    a := foo();
+    putFloatLn(a);
+    bar();
+end
+
+function foo(): integer;
+begin
+    a := 10;
+    return a*5;
+end
+
+procedure bar();
+begin
+    putIntLn(a);
+end
+
+var a: integer;
+

@@ -1,0 +1,13 @@
+
+        procedure main();
+        var a:integer;
+        begin
+            a := 1;
+            test(a);
+        end
+        
+        procedure test(a:integer);
+        begin
+            putInt(a);
+        end
+        

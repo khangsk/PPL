@@ -1,0 +1,18 @@
+
+
+procedure main();
+var a: array[-1000000010 .. -1000000000] of integer;
+    i, l, r: integer;
+begin
+    l := -1000000010;
+    r := -1000000000;
+    for i := l to r do begin
+        a[i] := i + 1;
+        putInt(a[i]); putString(" ");
+    end
+    putLn();
+    for i := l to r do begin
+        putInt(i); putString(": "); putIntLn(a[i]);
+    end
+end
+

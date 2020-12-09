@@ -1,0 +1,14 @@
+
+        function fib(x : integer):integer;
+        begin
+            if (x < 2) then return 1;
+            return fib(x-1) + fib(x-2);
+        end
+
+        procedure main();
+        var x : integer;
+
+        begin
+            putInt(fib(5));
+        end
+        

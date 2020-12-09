@@ -1,0 +1,18 @@
+
+
+procedure main();
+var a, b: integer;
+begin
+    a := 5;
+    while a > 0 do begin
+        putIntLn(a);
+        a := a-1;
+        b := 0;
+        while b < a do begin
+            b := b+1;
+            putInt(b);
+        end
+        putLn();
+    end
+end
+

@@ -1,0 +1,7 @@
+
+
+procedure main(); 
+begin 
+    putBool(True and false);
+end
+

@@ -1,0 +1,14 @@
+
+            procedure main();
+            var x: integer; y: real; z : boolean; 
+            begin 
+                x := 12;
+                y := x * x / x / x;
+                putFloatLn(y);
+                putFloatLn(x);
+                x := x * -7 mod 19 div 2 mod 4;
+                y := (87 * x mod 12) / 45 * 78 + -------34;
+                putFloatLn(y);
+                putFloatLn(x);
+            end
+        

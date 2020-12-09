@@ -1,0 +1,19 @@
+         
+
+        var z: integer;
+
+        procedure main();
+        var b: array[0 .. 2] of string;
+        e: integer;
+        x: real;
+        z: string;
+        begin
+            z := "?? :D ??";
+            putString(z);
+        end
+
+        procedure foo();
+        begin
+
+        end
+        

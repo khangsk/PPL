@@ -1,0 +1,18 @@
+
+        var x:integer;
+        procedure main();
+        begin
+            x := 1;
+            foo(x, 1.0);
+            putInt(x);
+        end
+
+        procedure foo(i: integer; f: real);
+        var bar:boolean;
+        begin
+            bar := true;
+            putBool(bar);
+            i := 2;
+            putInt(i);
+        end
+        

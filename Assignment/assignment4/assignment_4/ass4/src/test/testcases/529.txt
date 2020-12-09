@@ -1,0 +1,9 @@
+
+        var arr:array[1 .. 5] of integer;
+            brr:array[1 .. 4] of boolean;
+        procedure main();
+        begin
+            brr[1] := false;
+            putBoolLn(brr[1]);
+        end
+        

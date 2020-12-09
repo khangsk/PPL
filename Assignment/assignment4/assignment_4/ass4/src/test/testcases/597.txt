@@ -1,0 +1,16 @@
+
+        var a:integer;
+        procedure main();
+        var b:integer;
+            c:real;
+        begin
+            b := 5;
+            c := foo(b);
+            putFloat(c);
+        end
+        
+        function foo(a:integer):integer;
+        begin
+            return a * a;
+        end
+        

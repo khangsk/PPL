@@ -1,0 +1,10 @@
+
+
+procedure main();
+var i: integer;
+begin
+    for i := 1 to 10 do begin
+        if i > 4 then putInt(i); else putInt(-i);
+    end
+end
+

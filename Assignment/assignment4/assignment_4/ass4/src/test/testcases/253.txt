@@ -1,0 +1,21 @@
+
+
+var x, n, m: integer;
+var a: array[0 .. 100000] of integer;
+
+procedure main();
+var i, j: integer;
+begin
+    ha_i_space(inc(1));
+    ha_i_space(inc(inc(1)));
+    ha_i_space(inc(inc(inc(1))));
+    ha_i_space(inc(inc(inc(inc(1)))));
+    ha_i_space(inc(inc(inc(inc(inc(1))))));
+    ha_i_space(inc(inc(inc(inc(inc(inc(1)))))));
+end
+
+function inc(i: integer): integer; begin return i+1; end
+
+procedure ha_i_space(ha0852i: integer); begin putInt(ha0852i); putString(" "); end
+
+

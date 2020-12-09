@@ -1,0 +1,10 @@
+
+        var a, b, c:integer;
+            arr:array[1 .. 3] of integer;
+        procedure main();
+        begin
+            arr[1] := arr[2] := arr[3] := 3;
+            b := 10 div arr[1];
+            putIntLn(arr[3]);
+        end
+        

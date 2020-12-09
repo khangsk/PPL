@@ -1,0 +1,12 @@
+
+
+function foo(): integer;
+begin
+    return 100;
+end
+
+procedure main();
+begin
+    putInt(foo());
+end
+

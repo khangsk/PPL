@@ -1,0 +1,2 @@
+Error: A JNI error has occurred, please check your installation and try again
+Exception in thread "main" java.lang.VerifyError: (class: MPClass, method: main signature: ([Ljava/lang/String;)V) Illegal type in constant pool
