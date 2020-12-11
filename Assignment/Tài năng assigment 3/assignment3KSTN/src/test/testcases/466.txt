@@ -1,0 +1,9 @@
+
+            Function: int_of_float
+            Body:
+            EndBody.
+
+            Function: main
+                Body:
+                EndBody.
+        

@@ -1,0 +1,14 @@
+
+            Var: x = { 1,    1.,   "", True};
+            Function: test
+            Body:
+                Do
+                    Var: x;
+                    Var: y, x[100];
+                While False EndDo.
+            EndBody.
+            
+            Function: main
+                Body:
+                EndBody.
+        

@@ -1,0 +1,16 @@
+
+                  Function: main
+                  Parameter: x,y,z
+                  Body:
+                       If foo(2,3,4) Then
+                       EndIf. 
+                  EndBody.
+
+                  Function: foo
+                  Parameter: k, a, i
+                  Body:
+                        k = k + a + i;
+                        i = i +. 1.;
+                        Return True;
+                  EndBody.
+                  

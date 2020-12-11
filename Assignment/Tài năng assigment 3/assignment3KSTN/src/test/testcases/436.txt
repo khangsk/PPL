@@ -1,0 +1,13 @@
+
+        Var: x[2][2] = {{1,2},{3,2}}, a;
+        Function: foo
+        Body:
+            Return x;
+        EndBody.
+        Function: main
+        Body:
+            Var: a;
+            a = foo()[1][1];
+            a = 1.1;
+        EndBody.
+        

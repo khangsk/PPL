@@ -1,0 +1,22 @@
+Function: foo1
+                  Parameter: x
+                  Body:
+                    Var: i, j;
+                        Do
+                            i = 1;
+                        While foo1(foo1(True)) EndDo.
+                        Return foo(foo(True));
+                  EndBody.
+                  Function: main
+                  Body:
+                    Var: x;
+                    
+                    x = foo1(True) && foo(True);
+                  EndBody.
+                    Function: foo
+                  Parameter: x
+                  Body:
+                        x = foo(False);
+                      Return x;
+                  EndBody.
+                  

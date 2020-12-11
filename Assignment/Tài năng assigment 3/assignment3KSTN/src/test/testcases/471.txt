@@ -1,0 +1,17 @@
+
+            Var: x = 1;
+            Function: foo
+            Parameter: x,y,   z
+            Body:
+                x = 1;
+                y = 1.9999;
+                Return y;
+            EndBody.
+
+            Function: main
+            Body:
+                Var: x = 1.1, y;
+                 x = foo(1,1.1, "this is a string");
+                 x = 1 + foo(1, 1.1, 1000);
+            EndBody.
+        

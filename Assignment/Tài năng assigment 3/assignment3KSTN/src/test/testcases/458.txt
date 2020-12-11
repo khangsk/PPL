@@ -1,0 +1,16 @@
+
+                 Function: main
+                Body:
+                    Var: x;
+                    x = 1 + 2;
+                    foo(5.1,x);
+                EndBody.
+                Function: foo
+                Parameter: x,y
+                Body:
+                    x = 2;
+                    y = 1;
+                    Return;
+                EndBody.
+                
+               

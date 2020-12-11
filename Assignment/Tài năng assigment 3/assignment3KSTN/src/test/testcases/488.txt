@@ -1,0 +1,18 @@
+
+                   Var: x[2][2][2] = { { { 1,2 } , {2,3} },  { { 3,4 } , {4,5} } };
+                   Var: y[3][2] = { {True,False} , {True,False} , {True,True} }, z[1] = { 1 };
+                  Function: main
+                  Body:
+                    foo();
+                        Return y;
+                  EndBody.
+
+                  Function: foo
+                  Body:
+                        Var: y = 0x9;
+                        Var: i = True;
+                        If main()[1][1] Then
+                            Return 1;
+                        EndIf.
+                  EndBody.
+                  

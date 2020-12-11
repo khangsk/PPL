@@ -1,0 +1,19 @@
+Function: foo1
+                  Parameter: x
+                  Body:
+                        Return x +. foo1(1. *. foo1(foo1(foo1(x))) +. foo(2.));
+                  EndBody.
+                  Function: main
+                  Body:
+                    Var: x;
+                    
+                    x = foo1(2.) +. foo(2.);
+                  EndBody.
+                    Function: foo
+                  Parameter: x
+                  Body:
+                        x = foo(4.2);
+                      Return x;
+                      x = 2.2;
+                  EndBody.
+                  

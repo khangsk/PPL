@@ -1,0 +1,17 @@
+
+                Var: c;
+                Function: foo
+                Parameter: a, c
+                Body:
+                    Var: x;
+                    For (a = 1, a < 10, x) Do
+                        Var: c;
+                        x = c;
+                    EndFor.
+                EndBody.
+                Function: main
+                Body:
+                    foo(1,True);
+                    c = 12.0;
+                EndBody.
+                  

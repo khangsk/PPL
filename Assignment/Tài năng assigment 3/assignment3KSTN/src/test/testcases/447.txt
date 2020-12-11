@@ -1,0 +1,12 @@
+Function: main 
+                       Body:
+                           foo(1,2);
+                       EndBody.
+
+                    Function: foo 
+                    Parameter: x,y
+                       Body:
+                            x = x + y;
+                            Return 1;
+                       EndBody.
+                
