@@ -1941,7 +1941,7 @@ class CheckSuite(unittest.TestCase):
                     c = 12.0;
                 EndBody.
                   """
-        expect = str(TypeMismatchInStatement(Return(Id('y'))))
+        expect = str(TypeMismatchInStatement(Assign(Id('c'),IntLiteral(10))))
         self.assertTrue(TestChecker.test(input, expect, 501))
     
     def test102(self):
@@ -1949,9 +1949,11 @@ class CheckSuite(unittest.TestCase):
         input = """
                 Var: x = 3.0, y = 2;
                 Function: main
-                Parameter: z
+                Parameter: k
                 Body:
-                    If main(main(x)) Then
+                    Var: z = True, arr[1], b[1];
+                    arr[b[0]] = b[0];
+                    If main(main(True)) Then
                         Return True;
                     EndIf.
                     Return False;
@@ -1959,6 +1961,25 @@ class CheckSuite(unittest.TestCase):
                   """
         expect = str()
         self.assertTrue(TestChecker.test(input, expect, 502))
+    
+    def test103(self):
+        """More complex program"""
+        input = """
+                
+                Function: main
+                Parameter: a[1], y[1]
+                Body:
+                    Var: x;
+                    y[0] = 1;
+                    a[foo(x)] = y[x];
+                EndBody.
+                Function: foo
+                Parameter: m
+                Body:
+                EndBody.
+                  """
+        expect = str()
+        self.assertTrue(TestChecker.test(input, expect, 503))
     
     
 

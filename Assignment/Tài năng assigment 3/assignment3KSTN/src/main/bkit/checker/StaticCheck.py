@@ -621,6 +621,7 @@ class StaticChecker(BaseVisitor):
                 Utils.updateScope(scope, IntType(), x)
             elif type(idx) is not IntType:
                 raise TypeMismatchInExpression(ast)
+        arr = self.visit(ast.arr, (scope, funcName, stmtParents))
         return arr.eletype
     
     def visitAssign(self, ast, param):
