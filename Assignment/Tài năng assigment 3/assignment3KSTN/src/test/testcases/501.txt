@@ -3,15 +3,17 @@
                 Function: foo
                 Parameter: a, c
                 Body:
-                    Var: x;
-                    For (a = 1, a < 10, x) Do
+                    If a Then 
                         Var: c;
-                        x = c;
-                    EndFor.
+                        c = True;
+                    Else
+                        c = True;
+                    EndIf.
+                    c = 10;
                 EndBody.
                 Function: main
                 Body:
-                    foo(1,True);
+                    foo(True,2);
                     c = 12.0;
                 EndBody.
                   

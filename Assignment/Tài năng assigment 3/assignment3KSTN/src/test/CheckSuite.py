@@ -1250,14 +1250,16 @@ class CheckSuite(unittest.TestCase):
         input = """
             Var: x = 1;
             Function: foo
-            Parameter: x,y
+            Parameter: x
             Body:
-                Var: z;
+                Var: z = 1.;
+                x = z;
+                Return 2;
             EndBody.
 
             Function: main
             Body:
-                 x = foo(1);
+                x = foo(1);
             EndBody.
         """
         expect = str(TypeMismatchInExpression(CallExpr(Id('foo'), [IntLiteral(1)])))
@@ -1925,20 +1927,38 @@ class CheckSuite(unittest.TestCase):
                 Function: foo
                 Parameter: a, c
                 Body:
-                    Var: x;
-                    For (a = 1, a < 10, x) Do
+                    If a Then 
                         Var: c;
-                        x = c;
-                    EndFor.
+                        c = True;
+                    Else
+                        c = True;
+                    EndIf.
+                    c = 10;
                 EndBody.
                 Function: main
                 Body:
-                    foo(1,True);
+                    foo(True,2);
                     c = 12.0;
                 EndBody.
                   """
         expect = str(TypeMismatchInStatement(Return(Id('y'))))
         self.assertTrue(TestChecker.test(input, expect, 501))
+    
+    def test102(self):
+        """More complex program"""
+        input = """
+                Var: x = 3.0, y = 2;
+                Function: main
+                Parameter: z
+                Body:
+                    If main(main(x)) Then
+                        Return True;
+                    EndIf.
+                    Return False;
+                EndBody.
+                  """
+        expect = str()
+        self.assertTrue(TestChecker.test(input, expect, 502))
     
     
 

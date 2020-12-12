@@ -626,7 +626,11 @@ class StaticChecker(BaseVisitor):
     def visitAssign(self, ast, param):
         scope, loop, funcName = param
         lhsType = self.visit(ast.lhs, (scope, funcName, ast))
-        rhsType = self.visit(ast.rhs, (scope, funcName, ast))
+        rhsType = None
+        if type(ast.rhs) is CallExpr:
+            rhsType = Utils.getSymbol(scope, ast.rhs).mtype
+        else:
+            rhsType = self.visit(ast.rhs, (scope, funcName, ast))
         if type(lhsType) is Unknown:
             if type(rhsType) is Unknown:
                 raise TypeCannotBeInferred(ast)
@@ -659,18 +663,24 @@ class StaticChecker(BaseVisitor):
                 Utils.updateScope(scope, lhsType, ast.rhs)
             elif type(lhsType) is not type(rhsType):
                 raise TypeMismatchInStatement(ast) 
-                
+        if type(ast.rhs) is CallExpr:
+            self.visit(ast.rhs, (scope, funcName, ast))      
         return (ast, None)
     
     def visitIf(self, ast, param):
         scope, loop, funcName = param
         ret = []
         for x in ast.ifthenStmt:
-            condType = self.visit(x[0], (scope, funcName, ast))
+            condType = None
+            if type(x[0]) is CallExpr:
+                condType = Utils.getSymbol(scope, x[0]).mtype
+            else:
+                condType = self.visit(x[0], (scope, funcName, ast))
             if type(condType) is Unknown:
                 Utils.updateScope(scope, BoolType(), x[0])
+                self.visit(x[0], (scope, funcName, ast))
             elif type(condType) is not BoolType:
-                raise TypeMismatchInStatement(ast)
+                raise TypeMismatchInStatement(ast)   
             listLocalVar = [self.visit(i, scope) for i in x[1]]
             localScope = Checker.checkRedeclared([], listLocalVar)
             newScope = Utils.merge(scope, localScope)
@@ -690,8 +700,8 @@ class StaticChecker(BaseVisitor):
         for i in ast.elseStmt[1]:
             listStmt.append(self.visit(i, (newScope, False, funcName)))
             for j in newScope:
-                    if j.name not in nameLocalVar:
-                        Utils.updateScope(scope, j.mtype, Id(j.name))
+                if j.name not in nameLocalVar:
+                    Utils.updateScope(scope, j.mtype, Id(j.name))
         ret.append(Checker.handleReturnStmts(listStmt))
         sym = Utils.getSymbol(scope, Id(funcName))
         if any(x is None for x in ret): return (ast, None)

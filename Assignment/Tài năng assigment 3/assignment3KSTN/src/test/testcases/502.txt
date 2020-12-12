@@ -1,15 +1,11 @@
 
-                  Function: foo
-                  Parameter: x
-                  Body:
-                        foo(4.2);
-                        x = 5.1;
-                      Return;
-                  EndBody.
-
-                  Function: main
-                  Body:
-                    foo(2.1);
-                  EndBody.
-
+                Var: x = 3.0, y = 2;
+                Function: main
+                Parameter: z
+                Body:
+                    If main(main(x)) Then
+                        Return True;
+                    EndIf.
+                    Return False;
+                EndBody.
                   
