@@ -1,13 +1,8 @@
 
-                Var: x = 3.0, y = 2;
                 Function: main
-                Parameter: k
+                Parameter: x
                 Body:
-                    Var: z = True, arr[1], b[1];
-                    arr[b[0]] = b[0];
-                    If main(main(True)) Then
-                        Return True;
-                    EndIf.
-                    Return False;
+                    Var: y[1];
+                    y[main(main(True))] = 0;
+                    Return 1;
                 EndBody.
-                  

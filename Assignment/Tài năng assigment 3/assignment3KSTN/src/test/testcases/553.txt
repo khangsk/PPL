@@ -1,0 +1,6 @@
+
+        Function: main
+        Body:
+            Var: x[4][2] = {{1, 2},{2.4, 1.5},{True, False}, {4, 3}};
+        EndBody.
+        

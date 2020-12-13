@@ -1,8 +1,7 @@
 
-                Var: test;
                 Function: main
-                    Parameter: x
-                    Body:
-                    x = test[0];
-                    EndBody.
-                  
+                Parameter: x
+                Body:
+                    x = ({{1}, {2}})[0 + 0 * 0 \ 0][0];
+                    Return 1;
+                EndBody.

@@ -1,0 +1,6 @@
+
+                Function: main
+                Parameter: x[1]
+                Body:
+                    x[x[x[x[0]]]] = True;
+                EndBody.

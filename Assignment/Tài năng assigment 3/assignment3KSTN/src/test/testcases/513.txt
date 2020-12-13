@@ -1,0 +1,7 @@
+
+                Function: main
+                Parameter: x[1]
+                Body:
+                    Var: y = True;
+                    y = x[x[x[x[0]]]];
+                EndBody.

@@ -1,0 +1,10 @@
+Function: main
+                Body:
+                    While foo(foo(foo(1))) Do
+                    EndWhile.
+                EndBody.
+                Function: foo
+                Parameter: x
+                Body:
+                    Return True;
+                EndBody.

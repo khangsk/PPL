@@ -1,0 +1,5 @@
+Function: main
+                Body:
+                    Var: x[1], y[1];
+                    x[x[0]] = y[0];
+                EndBody.

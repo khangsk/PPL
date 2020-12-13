@@ -1,0 +1,13 @@
+
+                Function: main
+                Parameter: x[1], y[1]
+                Body:
+                    If foo(foo(foo(1))) Then Return 1;
+                    Else Return 2;
+                    EndIf.
+                EndBody.
+                Function: foo
+                Parameter: x
+                Body:
+                    Return 1;
+                EndBody.

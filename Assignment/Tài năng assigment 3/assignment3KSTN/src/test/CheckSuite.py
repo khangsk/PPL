@@ -1944,45 +1944,59 @@ class CheckSuite(unittest.TestCase):
         expect = str(TypeMismatchInStatement(Assign(Id('c'),IntLiteral(10))))
         self.assertTrue(TestChecker.test(input, expect, 501))
     
-    def test102(self):
-        """More complex program"""
-        input = """
-                Var: x = 3.0, y = 2;
-                Function: main
-                Parameter: k
-                Body:
-                    Var: z = True, arr[1], b[1];
-                    arr[b[0]] = b[0];
-                    If main(main(True)) Then
-                        Return True;
-                    EndIf.
-                    Return False;
-                EndBody.
-                  """
-        expect = str()
-        self.assertTrue(TestChecker.test(input, expect, 502))
+    # def test102(self):
+    #     """More complex program"""
+    #     input = """
+    #             Var: x = 3.0, y = 2;
+    #             Function: main
+    #             Parameter: k
+    #             Body:
+    #                 Var: z = True, arr[1], b[1];
+    #                 arr[b[0]] = b[0];
+    #                 If main(main(0)) Then
+    #                     Return True;
+    #                 EndIf.
+    #                 Return False;
+    #             EndBody.
+    #               """
+    #     expect = str()
+    #     self.assertTrue(TestChecker.test(input, expect, 502))
     
-    def test103(self):
-        """More complex program"""
-        input = """
+    # def test103(self):
+    #     """More complex program"""
+    #     input = """
                 
-                Function: main
-                Parameter: a[1], y[1]
-                Body:
-                    Var: x;
-                    y[0] = 1;
-                    a[foo(x)] = y[x];
-                EndBody.
-                Function: foo
-                Parameter: m
-                Body:
-                EndBody.
-                  """
-        expect = str()
-        self.assertTrue(TestChecker.test(input, expect, 503))
+    #             Function: main
+    #             Parameter: a[1], y[1]
+    #             Body:
+    #                 Var: x;
+    #                 y[0] = 1;
+    #                 a[foo(x)] = y[x];
+    #             EndBody.
+    #             Function: foo
+    #             Parameter: m
+    #             Body:
+    #             EndBody.
+    #               """
+    #     expect = str()
+    #     self.assertTrue(TestChecker.test(input, expect, 503))
     
+    # def test104(self):
+    #     """More complex program"""
+    #     input = """Function: main
+    #                 Parameter: a,x
+    #                 Body:
+    #                 x = a + foo(foo(x));
+    #                 EndBody.
+                    
+    #                 Function: foo
+    #                 Parameter: x
+    #                 Body:
+                        
+    #                 EndBody."""
+    #     expect = str()
+    #     self.assertTrue(TestChecker.test(input, expect, 504))
     
-
 
 
     

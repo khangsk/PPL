@@ -1,25 +1,8 @@
-Function: foo1
-                  Parameter: x
-                  Body:
-                    Var: i, j;
-                        For (i = 1, foo1(foo1(True)), 1) Do
-                            For (i = 1, foo1(False), 1) Do
-                                print(string_of_int(i));
-                            EndFor.
-                        EndFor.
-                        j = float_to_int(i);
-                        Return foo(foo(True));
-                  EndBody.
-                  Function: main
-                  Body:
-                    Var: x;
-                    
-                    x = foo1(True) && foo(True);
-                  EndBody.
-                    Function: foo
-                  Parameter: x
-                  Body:
-                        x = foo(False);
-                      Return x;
-                  EndBody.
-                  
+
+                Function: main
+                Parameter: x
+                Body:
+                    Var: y[1][1];
+                    (y[0][0])[1] = 0;
+                    Return 1;
+                EndBody.

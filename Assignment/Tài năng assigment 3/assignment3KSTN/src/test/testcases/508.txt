@@ -1,14 +1,7 @@
 
-                  Function: foo
-                  Parameter: x
-                  Body:
-                      Return True && foo(foo(True));
-                  EndBody.
-
-                  Function: main
-                  Body:
-                  Var: a;
-                        a=foo(True);
-                  EndBody.
-
-                  
+                Function: main
+                Parameter: x
+                Body:
+                    ({{1}, {2}})[0][0][0] = 0;
+                    Return 1;
+                EndBody.

@@ -1,0 +1,15 @@
+
+        Function: main
+        Body:
+            Var: x;
+            For (x = 0, x < 100, x) Do
+                If x > 50 Then
+                    Return;
+                EndIf.
+                While x > 1 Do
+                    Break;
+                    Return;
+                EndWhile.
+            EndFor.
+            x = x + 2;
+        EndBody.

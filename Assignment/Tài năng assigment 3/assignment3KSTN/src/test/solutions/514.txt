@@ -1,0 +1,1 @@
+Type Cannot Be Inferred: Assign(ArrayCell(Id(x),[ArrayCell(Id(y),[IntLiteral(0)])]),ArrayCell(Id(y),[IntLiteral(0)]))

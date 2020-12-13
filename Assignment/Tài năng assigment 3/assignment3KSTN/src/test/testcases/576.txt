@@ -1,0 +1,12 @@
+
+        Function: main
+        Body:
+            While foo() > 5
+            Do
+            EndWhile.
+        EndBody.
+        Function: foo
+        Body:
+            Return 1;
+        EndBody.
+        

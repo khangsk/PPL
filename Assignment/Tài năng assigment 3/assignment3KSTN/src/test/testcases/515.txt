@@ -1,0 +1,6 @@
+
+                Function: main
+                Parameter: x[1], y[1]
+                Body:
+                    x[0] = 1 + y[y[y[0]]];
+                EndBody.

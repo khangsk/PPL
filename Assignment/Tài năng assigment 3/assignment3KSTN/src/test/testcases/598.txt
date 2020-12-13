@@ -1,0 +1,6 @@
+Function: main
+                    Parameter: x
+                   Body:
+                        Var: a[3];
+                        a[a[2]]=True;
+                   EndBody.
