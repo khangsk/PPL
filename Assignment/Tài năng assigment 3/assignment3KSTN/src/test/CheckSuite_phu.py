@@ -5,119 +5,7 @@ from AST import *
 
 
 class CheckSuite(unittest.TestCase):
-    def test_redeclared_global_var_vs_global_var(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Var: x;
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(Redeclared(Variable(), r"""x"""))
-        self.assertTrue(TestChecker.test(testcase, expect, 400))
-
-    def test_redeclared_global_var_vs_global_var_diff_type_1(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Var: x[1];
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(Redeclared(Variable(), r"""x"""))
-        self.assertTrue(TestChecker.test(testcase, expect, 401))
-
-    def test_redeclared_global_var_vs_global_var_diff_type_2(self):
+    def test_redeclared_global_var_vs_global_var_diff_type(self):
         testcase = r"""
         Var: x;
         Var: y = 0;
@@ -347,7 +235,7 @@ class CheckSuite(unittest.TestCase):
         expect = str(Redeclared(Function(), r"""x"""))
         self.assertTrue(TestChecker.test(testcase, expect, 405))
 
-    def test_redeclared_func_vs_func_1(self):
+    def test_redeclared_func_vs_func(self):
         testcase = r"""
         Var: x;
         Var: y = 0;
@@ -405,389 +293,6 @@ class CheckSuite(unittest.TestCase):
         """
         expect = str(Redeclared(Function(), r"""foo"""))
         self.assertTrue(TestChecker.test(testcase, expect, 406))
-
-    def test_redeclared_func_vs_func_2(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            Return;
-        EndBody.
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(Redeclared(Function(), r"""main"""))
-        self.assertTrue(TestChecker.test(testcase, expect, 407))
-
-    def test_redeclared_param_vs_global_var(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: x, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = x;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str()
-        self.assertTrue(TestChecker.test(testcase, expect, 408))
-
-    def test_redeclared_param_vs_func_1(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: main, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = main;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str()
-        self.assertTrue(TestChecker.test(testcase, expect, 409))
-
-    def test_redeclared_param_vs_func_2(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: foo, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = foo;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str()
-        self.assertTrue(TestChecker.test(testcase, expect, 410))
-
-    def test_redeclared_param_vs_param(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1], m
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(Redeclared(Parameter(), r"""m"""))
-        self.assertTrue(TestChecker.test(testcase, expect, 411))
-
-    def test_redeclared_param_vs_param_diff_type(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1], n
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(Redeclared(Parameter(), r"""n"""))
-        self.assertTrue(TestChecker.test(testcase, expect, 412))
-
-    def test_redeclared_func_var_vs_global_var(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: x, j[1], k[1][1];
-            x = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(Undeclared(Identifier(), r"""i"""))
-        self.assertTrue(TestChecker.test(testcase, expect, 413))
 
     def test_redeclared_func_var_vs_global_var_diff_type(self):
         testcase = r"""
@@ -860,115 +365,6 @@ class CheckSuite(unittest.TestCase):
             printStrLn(string_of_int(foo(x, z, b)));
             If True Then
                 For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1], m = 1;
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(Redeclared(Variable(), r"""m"""))
-        self.assertTrue(TestChecker.test(testcase, expect, 415))
-
-    def test_redeclared_func_var_vs_func_var(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            Var: i = 1;
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(Redeclared(Variable(), r"""i"""))
-        self.assertTrue(TestChecker.test(testcase, expect, 416))
-
-    def test_redeclared_inner_var_vs_func_var(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
                     Var: y;
                     If x == y Then
                         Continue;
@@ -1008,118 +404,6 @@ class CheckSuite(unittest.TestCase):
         self.assertTrue(TestChecker.test(testcase, expect, 417))
 
     def test_redeclared_inner_var_vs_outer_var(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    Var: y;
-                    If x == y Then
-                        Var: y;
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str()
-        self.assertTrue(TestChecker.test(testcase, expect, 418))
-
-    def test_redeclared_inner_var_vs_inner_var(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    Var: y;
-                    Var: x, y;
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(Redeclared(Variable(), r"""y"""))
-        self.assertTrue(TestChecker.test(testcase, expect, 419))
-
-    def test_redeclared_inner_var_vs_inner_var_diff_block(self):
         testcase = r"""
         Var: x;
         Var: y = 0;
@@ -1240,114 +524,6 @@ class CheckSuite(unittest.TestCase):
         expect = str()
         self.assertTrue(TestChecker.test(testcase, expect, 421))
 
-    def test_undeclared_assign_lhs(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            m = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(Undeclared(Identifier(), r"""m"""))
-        self.assertTrue(TestChecker.test(testcase, expect, 422))
-
-    def test_undeclared_assign_rhs(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            y = m;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(Undeclared(Identifier(), r"""m"""))
-        self.assertTrue(TestChecker.test(testcase, expect, 423))
-
     def test_undeclared_arith_expr(self):
         testcase = r"""
         Var: x;
@@ -1456,114 +632,6 @@ class CheckSuite(unittest.TestCase):
         expect = str(Undeclared(Identifier(), r"""m"""))
         self.assertTrue(TestChecker.test(testcase, expect, 425))
 
-    def test_undeclared_rel_expr(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            y = x;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < m, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(Undeclared(Identifier(), r"""m"""))
-        self.assertTrue(TestChecker.test(testcase, expect, 426))
-
-    def test_undeclared_bool_expr(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            y = x;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf True && m Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(Undeclared(Identifier(), r"""m"""))
-        self.assertTrue(TestChecker.test(testcase, expect, 427))
-
     def test_undeclared_var_diff_block(self):
         testcase = r"""
         Var: x;
@@ -1620,114 +688,6 @@ class CheckSuite(unittest.TestCase):
         expect = str(Undeclared(Identifier(), r"""m"""))
         self.assertTrue(TestChecker.test(testcase, expect, 428))
 
-    def test_undeclared_call_stmt_arg(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            y = x;
-            z = a;
-            b = c;
-            printStrLn(m);
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(Undeclared(Identifier(), r"""m"""))
-        self.assertTrue(TestChecker.test(testcase, expect, 429))
-
-    def test_undeclared_method_name_call_expr(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            y = x;
-            z = a;
-            b = c;
-            printStrLn(str(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(Undeclared(Function(), r"""str"""))
-        self.assertTrue(TestChecker.test(testcase, expect, 430))
-
     def test_undeclared_method_name_call_stmt(self):
         testcase = r"""
         Var: x;
@@ -1782,62 +742,7 @@ class CheckSuite(unittest.TestCase):
         expect = str(Undeclared(Function(), r"""printStringLine"""))
         self.assertTrue(TestChecker.test(testcase, expect, 431))
 
-    def test_undeclared_method_name_hidden_by_inner_var_1(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            Var: string_of_int = 1;
-            y = x;
-            z = a;
-            b = c;
-            printStringLine(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(Undeclared(Function(), r"""printStringLine"""))
-        self.assertTrue(TestChecker.test(testcase, expect, 432))
-
-    def test_undeclared_method_name_hidden_by_inner_var_2(self):
+    def test_undeclared_method_name_hidden_by_inner_var(self):
         testcase = r"""
         Var: x;
         Var: y = 0;
@@ -1891,113 +796,6 @@ class CheckSuite(unittest.TestCase):
         """
         expect = str(Undeclared(Function(), r"""foo"""))
         self.assertTrue(TestChecker.test(testcase, expect, 433))
-
-    def test_type_cannot_be_inferred_global_var_1(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeCannotBeInferred(CallStmt(Id(r"""printStrLn"""), [CallExpr(Id(r"""string_of_int"""), [CallExpr(Id(r"""foo"""), [Id(r"""x"""), Id(r"""z"""), Id(r"""b""")])])])))
-        self.assertTrue(TestChecker.test(testcase, expect, 434))
-
-    def test_type_cannot_be_inferred_global_var_2(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return x;
-        EndBody.
-        """
-        expect = str()
-        self.assertTrue(TestChecker.test(testcase, expect, 435))
 
     def test_type_cannot_be_inferred_assign_lhs(self):
         testcase = r"""
@@ -2161,7 +959,7 @@ class CheckSuite(unittest.TestCase):
         expect = str(TypeCannotBeInferred(Assign(Id(r"""z"""), Id(r"""z"""))))
         self.assertTrue(TestChecker.test(testcase, expect, 438))
 
-    def test_type_cannot_be_inferred_assign_lhs_call_idx_1(self):
+    def test_type_cannot_be_inferred_assign_lhs_call_idx(self):
         testcase = r"""
         Var: x;
         Var: y = 0;
@@ -2219,118 +1017,6 @@ class CheckSuite(unittest.TestCase):
         """
         expect = str(TypeCannotBeInferred(Assign(ArrayCell(CallExpr(Id(r"""goo"""), []), [IntLiteral(0)]), ArrayCell(Id(r"""a"""), [IntLiteral(0)]))))
         self.assertTrue(TestChecker.test(testcase, expect, 439))
-
-    def test_type_cannot_be_inferred_assign_lhs_call_idx_2(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            y = x;
-            goo()[0] = z[0];
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-
-        Function: goo
-        Body:
-            Return {"string"};
-        EndBody.
-        """
-        expect = str(TypeCannotBeInferred(Assign(ArrayCell(CallExpr(Id(r"""goo"""), []), [IntLiteral(0)]), ArrayCell(Id(r"""z"""), [IntLiteral(0)]))))
-        self.assertTrue(TestChecker.test(testcase, expect, 440))
-
-    def test_type_cannot_be_inferred_call_expr_arg(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            y = x;
-            z = a;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeCannotBeInferred(CallStmt(Id(r"""printStrLn"""), [CallExpr(Id(r"""string_of_int"""), [CallExpr(Id(r"""foo"""), [Id(r"""x"""), Id(r"""z"""), Id(r"""b""")])])])))
-        self.assertTrue(TestChecker.test(testcase, expect, 441))
 
     def test_type_cannot_be_inferred_call_expr_return(self):
         testcase = r"""
@@ -2438,283 +1124,61 @@ class CheckSuite(unittest.TestCase):
         expect = str(TypeCannotBeInferred(CallStmt(Id(r"""foo"""), [Id(r"""x"""), Id(r"""z"""), Id(r"""b""")])))
         self.assertTrue(TestChecker.test(testcase, expect, 443))
 
-    def test_type_cannot_be_inferred_while(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
+    # def test_type_cannot_be_inferred_depth_2(self):
+    #     testcase = r"""
+    #     Var: x;
+    #     Var: y = 0;
+    #     Var: z[1];
+    #     Var: a[1] = {"1"};
+    #     Var: b[1][1];
+    #     Var: c[1][1] = {{0.0}};
 
-        Function: main
-        Body:
-            y = x;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                Var: x, y;
-                While x != 1 Do
-                    x = y;
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
+    #     Function: main
+    #     Body:
+    #         Var: m[1];
+    #         m[x] = x;
+    #         x = y;
+    #         z = a;
+    #         b = c;
+    #         printStrLn(string_of_int(foo(x, z, b)));
+    #         If True Then
+    #             For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+    #                 If x == y Then
+    #                     Continue;
+    #                 Else
+    #                     Break;
+    #                 EndIf.
+    #             EndFor.
+    #         ElseIf 1. =/= 1. Then
+    #             While x != 1 Do
+    #                 If x % 2 == 1 Then
+    #                     x = x * 3 + 1;
+    #                 Else
+    #                     x = x \ 2;
+    #                 EndIf.
+    #             EndWhile.
+    #         ElseIf bool_of_string("True") Then
+    #             Do
+    #                 z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+    #             While !(1. *. 1. \. 1. =/= 1.)
+    #             EndDo.
+    #         Else
+    #             main();
+    #         EndIf.
+    #     EndBody.
 
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str()
-        self.assertTrue(TestChecker.test(testcase, expect, 444))
-
-    def test_type_cannot_be_inferred_do_while(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            y = x;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Var: x, y;
-                Do
-                    x = y;
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While x == y
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeCannotBeInferred(Assign(Id(r"""x"""), Id(r"""y"""))))
-        self.assertTrue(TestChecker.test(testcase, expect, 445))
-
-    def test_type_cannot_be_inferred_for(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                Var: x;
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str()
-        self.assertTrue(TestChecker.test(testcase, expect, 446))
-
-    def test_type_cannot_be_inferred_if(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    Var: x;
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str()
-        self.assertTrue(TestChecker.test(testcase, expect, 447))
-
-    def test_type_cannot_be_inferred_depth_2(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            Var: m[1];
-            m[x] = x;
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeCannotBeInferred(Assign(ArrayCell(Id(r"""m"""), [Id(r"""x""")]), Id(r"""x"""))))
-        self.assertTrue(TestChecker.test(testcase, expect, 448))
+    #     Function: foo
+    #     Parameter: m, n[1], p[1][1]
+    #     Body:
+    #         Var: i, j[1], k[1][1];
+    #         i = m;
+    #         j = n;
+    #         k = p;
+    #         Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+    #     EndBody.
+    #     """
+    #     expect = str(TypeCannotBeInferred(Assign(ArrayCell(Id(r"""m"""), [Id(r"""x""")]), Id(r"""x"""))))
+    #     self.assertTrue(TestChecker.test(testcase, expect, 448))
 
     def test_type_cannot_be_inferred_depth_n(self):
         testcase = r"""
@@ -2779,927 +1243,63 @@ Function: f3
         expect = str(TypeCannotBeInferred(Assign(ArrayCell(CallExpr(Id(r"""f1"""), [CallExpr(Id(r"""f2"""), [CallExpr(Id(r"""f3"""), [Id(r"""n""")])])]), [IntLiteral(0)]), ArrayCell(Id(r"""a"""), [CallExpr(Id(r"""f3"""), [CallExpr(Id(r"""f2"""), [Id(r"""n""")])])]))))
         self.assertTrue(TestChecker.test(testcase, expect, 449))
 
-    def test_type_cannot_be_inferred_deep_lhs(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
+    # def test_type_cannot_be_inferred_deep_lhs(self):
+    #     testcase = r"""
+    #     Var: x;
+    #     Var: y = 0;
+    #     Var: z[1];
+    #     Var: a[1] = {"1"};
+    #     Var: b[1][1];
+    #     Var: c[1][1] = {{0.0}};
 
-        Function: main
-        Body:
-            Var: m[2];
-            m[m[m[m[m[m[0]]]]]] = m[0];
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
+    #     Function: main
+    #     Body:
+    #         Var: m[2];
+    #         m[m[m[m[m[m[0]]]]]] = m[0];
+    #         x = y;
+    #         z = a;
+    #         b = c;
+    #         printStrLn(string_of_int(foo(x, z, b)));
+    #         If True Then
+    #             For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+    #                 If x == y Then
+    #                     Continue;
+    #                 Else
+    #                     Break;
+    #                 EndIf.
+    #             EndFor.
+    #         ElseIf 1. =/= 1. Then
+    #             While x != 1 Do
+    #                 If x % 2 == 1 Then
+    #                     x = x * 3 + 1;
+    #                 Else
+    #                     x = x \ 2;
+    #                 EndIf.
+    #             EndWhile.
+    #         ElseIf bool_of_string("True") Then
+    #             Do
+    #                 z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+    #             While !(1. *. 1. \. 1. =/= 1.)
+    #             EndDo.
+    #         Else
+    #             main();
+    #         EndIf.
+    #     EndBody.
 
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeCannotBeInferred(Assign(ArrayCell(Id(r"""m"""), [ArrayCell(Id(r"""m"""), [ArrayCell(Id(r"""m"""), [ArrayCell(Id(r"""m"""), [ArrayCell(Id(r"""m"""), [ArrayCell(Id(r"""m"""), [IntLiteral(0)])])])])])]), ArrayCell(Id(r"""m"""), [IntLiteral(0)]))))
-        self.assertTrue(TestChecker.test(testcase, expect, 450))
+    #     Function: foo
+    #     Parameter: m, n[1], p[1][1]
+    #     Body:
+    #         Var: i, j[1], k[1][1];
+    #         i = m;
+    #         j = n;
+    #         k = p;
+    #         Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+    #     EndBody.
+    #     """
+    #     expect = str(TypeCannotBeInferred(Assign(ArrayCell(Id(r"""m"""), [ArrayCell(Id(r"""m"""), [ArrayCell(Id(r"""m"""), [ArrayCell(Id(r"""m"""), [ArrayCell(Id(r"""m"""), [ArrayCell(Id(r"""m"""), [IntLiteral(0)])])])])])]), ArrayCell(Id(r"""m"""), [IntLiteral(0)]))))
+    #     self.assertTrue(TestChecker.test(testcase, expect, 450))
 
-    def test_type_mismatch_in_stmt_assign_diff_type_1(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            y = 1.0;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(y, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInStatement(Assign(Id(r"""y"""), FloatLiteral(1.0))))
-        self.assertTrue(TestChecker.test(testcase, expect, 451))
-
-    def test_type_mismatch_in_stmt_assign_diff_type_2(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            y = "";
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(y, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInStatement(Assign(Id(r"""y"""), StringLiteral(r""""""))))
-        self.assertTrue(TestChecker.test(testcase, expect, 452))
-
-    def test_type_mismatch_in_stmt_assign_diff_type_3(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            y = True;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(y, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInStatement(Assign(Id(r"""y"""), BooleanLiteral(True))))
-        self.assertTrue(TestChecker.test(testcase, expect, 453))
-
-    def test_type_mismatch_in_stmt_assign_diff_type_4(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            y = {1};
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(y, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInStatement(Assign(Id(r"""y"""), ArrayLiteral([IntLiteral(1)]))))
-        self.assertTrue(TestChecker.test(testcase, expect, 454))
-
-    def test_type_mismatch_in_stmt_assign_diff_type_5(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            a = {2};
-            b = c;
-            printStrLn(string_of_int(foo(x, a, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInStatement(Assign(Id(r"""a"""), ArrayLiteral([IntLiteral(2)]))))
-        self.assertTrue(TestChecker.test(testcase, expect, 455))
-
-    def test_type_mismatch_in_stmt_assign_diff_type_6(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            a = {True};
-            b = c;
-            printStrLn(string_of_int(foo(x, a, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInStatement(Assign(Id(r"""a"""), ArrayLiteral([BooleanLiteral(True)]))))
-        self.assertTrue(TestChecker.test(testcase, expect, 456))
-
-    def test_type_mismatch_in_stmt_assign_diff_type_7(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            a = {2.e7};
-            b = c;
-            printStrLn(string_of_int(foo(x, a, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInStatement(Assign(Id(r"""a"""), ArrayLiteral([FloatLiteral(20000000.0)]))))
-        self.assertTrue(TestChecker.test(testcase, expect, 457))
-
-    def test_type_mismatch_in_stmt_assign_diff_type_8(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            a = {"1", "2"};
-            b = c;
-            printStrLn(string_of_int(foo(x, a, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInStatement(Assign(Id(r"""a"""), ArrayLiteral([StringLiteral(r"""1"""), StringLiteral(r"""2""")]))))
-        self.assertTrue(TestChecker.test(testcase, expect, 458))
-
-    def test_type_mismatch_in_stmt_assign_diff_type_9(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            a = {{"1"}};
-            b = c;
-            printStrLn(string_of_int(foo(x, a, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInStatement(Assign(Id(r"""a"""), ArrayLiteral([ArrayLiteral([StringLiteral(r"""1""")])]))))
-        self.assertTrue(TestChecker.test(testcase, expect, 459))
-
-    def test_type_mismatch_in_stmt_assign_diff_type_10(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            c = 1;
-            printStrLn(string_of_int(foo(x, z, c)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInStatement(Assign(Id(r"""c"""), IntLiteral(1))))
-        self.assertTrue(TestChecker.test(testcase, expect, 460))
-
-    def test_type_mismatch_in_stmt_assign_diff_type_11(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            c = {1.1};
-            printStrLn(string_of_int(foo(x, z, c)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInStatement(Assign(Id(r"""c"""), ArrayLiteral([FloatLiteral(1.1)]))))
-        self.assertTrue(TestChecker.test(testcase, expect, 461))
-
-    def test_type_mismatch_in_stmt_assign_diff_type_12(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            c = {0.0, 0.0};
-            printStrLn(string_of_int(foo(x, z, c)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInStatement(Assign(Id(r"""c"""), ArrayLiteral([FloatLiteral(0.0), FloatLiteral(0.0)]))))
-        self.assertTrue(TestChecker.test(testcase, expect, 462))
-
-    def test_type_mismatch_in_stmt_assign_diff_type_13(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            c = a;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInStatement(Assign(Id(r"""c"""), Id(r"""a"""))))
-        self.assertTrue(TestChecker.test(testcase, expect, 463))
-
-    def test_type_mismatch_in_stmt_assign_diff_type_14(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            a = x;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInStatement(Assign(Id(r"""a"""), Id(r"""x"""))))
-        self.assertTrue(TestChecker.test(testcase, expect, 464))
-
-    def test_type_mismatch_in_stmt_assign_diff_type_15(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            y = a;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInStatement(Assign(Id(r"""y"""), Id(r"""a"""))))
-        self.assertTrue(TestChecker.test(testcase, expect, 465))
-
-    def test_type_mismatch_in_stmt_assign_diff_type_16(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            y = main();
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(y, b, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInExpression(CallExpr(Id(r"""foo"""), [Id(r"""y"""), Id(r"""b"""), Id(r"""b""")])))
-        self.assertTrue(TestChecker.test(testcase, expect, 466))
-
-    def test_type_mismatch_in_stmt_assign_diff_type_17(self):
+    def test_type_mismatch_in_stmt_assign_diff_type(self):
         testcase = r"""
         Var: x;
         Var: y = 0;
@@ -3804,7 +1404,7 @@ Function: f3
             Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
         EndBody.
         """
-        expect = str(TypeMismatchInStatement(If([(Id(r"""x"""), [], [For(Id(r"""x"""), IntLiteral(0), BinaryOp(r"""<""", BinaryOp('\\', Id(r"""x"""), IntLiteral(2)), BinaryOp(r"""*""", IntLiteral(10), IntLiteral(10))), BinaryOp(r"""+""", BinaryOp(r"""-""", IntLiteral(1), IntLiteral(2)), IntLiteral(3)), ([], [If([(BinaryOp(r"""==""", Id(r"""x"""), Id(r"""y""")), [], [Continue()])], ([], [Break()]))]))]), (BinaryOp(r"""=/=""", FloatLiteral(1.0), FloatLiteral(1.0)), [], [While(([], [If([(BinaryOp(r"""==""", BinaryOp(r"""%""", Id(r"""x"""), IntLiteral(2)), IntLiteral(1)), [], [Assign(Id(r"""x"""), BinaryOp(r"""+""", BinaryOp(r"""*""", Id(r"""x"""), IntLiteral(3)), IntLiteral(1)))])], ([], [Assign(Id(r"""x"""), BinaryOp('\\', Id(r"""x"""), IntLiteral(2)))]))]), BinaryOp(r"""!=""", Id(r"""x"""), IntLiteral(1)))]), (CallExpr(Id(r"""bool_of_string"""), [StringLiteral(r"""True""")]), [], [Dowhile(([], [Assign(ArrayCell(Id(r"""z"""), [IntLiteral(0)]), CallExpr(Id(r"""string_of_float"""), [BinaryOp(r"""*.""", CallExpr(Id(r"""float_of_string"""), [ArrayCell(Id(r"""z"""), [IntLiteral(0)])]), FloatLiteral(3.1415))]))]), UnaryOp(r"""!""", BinaryOp(r"""=/=""", BinaryOp(r"""\.""", BinaryOp(r"""*.""", FloatLiteral(1.0), FloatLiteral(1.0)), FloatLiteral(1.0)), FloatLiteral(1.0))))])], ([], [CallStmt(Id(r"""main"""), [])]))))
+        expect = str(TypeMismatchInStatement(If([(Id(r"""x"""), [], [For(Id(r"""x"""), IntLiteral(0), BinaryOp(r"""<""", BinaryOp('\\', Id(r"""x"""), IntLiteral(2)), BinaryOp(r"""*""", IntLiteral(10), IntLiteral(10))), BinaryOp(r"""+""", BinaryOp(r"""-""", IntLiteral(1), IntLiteral(2)), IntLiteral(3)), ([], [If([(BinaryOp(r"""==""", Id(r"""x"""), Id(r"""y""")), [], [Continue()])], ([], [Break()]))]))]), (BinaryOp(r"""=/=""", FloatLiteral(1.0), FloatLiteral(1.0)), [], [While(BinaryOp(r"""!=""", Id(r"""x"""), IntLiteral(1)), ([], [If([(BinaryOp(r"""==""", BinaryOp(r"""%""", Id(r"""x"""), IntLiteral(2)), IntLiteral(1)), [], [Assign(Id(r"""x"""), BinaryOp(r"""+""", BinaryOp(r"""*""", Id(r"""x"""), IntLiteral(3)), IntLiteral(1)))])], ([], [Assign(Id(r"""x"""), BinaryOp('\\', Id(r"""x"""), IntLiteral(2)))]))]))]), (CallExpr(Id(r"""bool_of_string"""), [StringLiteral(r"""True""")]), [], [Dowhile(([], [Assign(ArrayCell(Id(r"""z"""), [IntLiteral(0)]), CallExpr(Id(r"""string_of_float"""), [BinaryOp(r"""*.""", CallExpr(Id(r"""float_of_string"""), [ArrayCell(Id(r"""z"""), [IntLiteral(0)])]), FloatLiteral(3.1415))]))]), UnaryOp(r"""!""", BinaryOp(r"""=/=""", BinaryOp(r"""\.""", BinaryOp(r"""*.""", FloatLiteral(1.0), FloatLiteral(1.0)), FloatLiteral(1.0)), FloatLiteral(1.0))))])], ([], [CallStmt(Id(r"""main"""), [])]))))
         self.assertTrue(TestChecker.test(testcase, expect, 468))
 
     def test_type_mismatch_in_stmt_elseif(self):
@@ -3858,7 +1458,7 @@ Function: f3
             Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
         EndBody.
         """
-        expect = str(TypeMismatchInStatement(If([(BooleanLiteral(True), [], [For(Id(r"""x"""), IntLiteral(0), BinaryOp(r"""<""", BinaryOp('\\', Id(r"""x"""), IntLiteral(2)), BinaryOp(r"""*""", IntLiteral(10), IntLiteral(10))), BinaryOp(r"""+""", BinaryOp(r"""-""", IntLiteral(1), IntLiteral(2)), IntLiteral(3)), ([], [If([(BinaryOp(r"""==""", Id(r"""x"""), Id(r"""y""")), [], [Continue()])], ([], [Break()]))]))]), (Id(r"""z"""), [], [While(([], [If([(BinaryOp(r"""==""", BinaryOp(r"""%""", Id(r"""x"""), IntLiteral(2)), IntLiteral(1)), [], [Assign(Id(r"""x"""), BinaryOp(r"""+""", BinaryOp(r"""*""", Id(r"""x"""), IntLiteral(3)), IntLiteral(1)))])], ([], [Assign(Id(r"""x"""), BinaryOp('\\', Id(r"""x"""), IntLiteral(2)))]))]), BinaryOp(r"""!=""", Id(r"""x"""), IntLiteral(1)))]), (CallExpr(Id(r"""bool_of_string"""), [StringLiteral(r"""True""")]), [], [Dowhile(([], [Assign(ArrayCell(Id(r"""z"""), [IntLiteral(0)]), CallExpr(Id(r"""string_of_float"""), [BinaryOp(r"""*.""", CallExpr(Id(r"""float_of_string"""), [ArrayCell(Id(r"""z"""), [IntLiteral(0)])]), FloatLiteral(3.1415))]))]), UnaryOp(r"""!""", BinaryOp(r"""=/=""", BinaryOp(r"""\.""", BinaryOp(r"""*.""", FloatLiteral(1.0), FloatLiteral(1.0)), FloatLiteral(1.0)), FloatLiteral(1.0))))])], ([], [CallStmt(Id(r"""main"""), [])]))))
+        expect = str(TypeMismatchInStatement(If([(BooleanLiteral(True), [], [For(Id(r"""x"""), IntLiteral(0), BinaryOp(r"""<""", BinaryOp('\\', Id(r"""x"""), IntLiteral(2)), BinaryOp(r"""*""", IntLiteral(10), IntLiteral(10))), BinaryOp(r"""+""", BinaryOp(r"""-""", IntLiteral(1), IntLiteral(2)), IntLiteral(3)), ([], [If([(BinaryOp(r"""==""", Id(r"""x"""), Id(r"""y""")), [], [Continue()])], ([], [Break()]))]))]), (Id(r"""z"""), [], [While(BinaryOp(r"""!=""", Id(r"""x"""), IntLiteral(1)), ([], [If([(BinaryOp(r"""==""", BinaryOp(r"""%""", Id(r"""x"""), IntLiteral(2)), IntLiteral(1)), [], [Assign(Id(r"""x"""), BinaryOp(r"""+""", BinaryOp(r"""*""", Id(r"""x"""), IntLiteral(3)), IntLiteral(1)))])], ([], [Assign(Id(r"""x"""), BinaryOp('\\', Id(r"""x"""), IntLiteral(2)))]))]))]), (CallExpr(Id(r"""bool_of_string"""), [StringLiteral(r"""True""")]), [], [Dowhile(([], [Assign(ArrayCell(Id(r"""z"""), [IntLiteral(0)]), CallExpr(Id(r"""string_of_float"""), [BinaryOp(r"""*.""", CallExpr(Id(r"""float_of_string"""), [ArrayCell(Id(r"""z"""), [IntLiteral(0)])]), FloatLiteral(3.1415))]))]), UnaryOp(r"""!""", BinaryOp(r"""=/=""", BinaryOp(r"""\.""", BinaryOp(r"""*.""", FloatLiteral(1.0), FloatLiteral(1.0)), FloatLiteral(1.0)), FloatLiteral(1.0))))])], ([], [CallStmt(Id(r"""main"""), [])]))))
         self.assertTrue(TestChecker.test(testcase, expect, 469))
 
     def test_type_mismatch_in_stmt_for_var(self):
@@ -3915,60 +1515,6 @@ Function: f3
         expect = str(TypeMismatchInStatement(For(Id(r"""z"""), IntLiteral(0), BinaryOp(r"""<""", BinaryOp('\\', Id(r"""x"""), IntLiteral(2)), BinaryOp(r"""*""", IntLiteral(10), IntLiteral(10))), BinaryOp(r"""+""", BinaryOp(r"""-""", IntLiteral(1), IntLiteral(2)), IntLiteral(3)), ([], [If([(BinaryOp(r"""==""", Id(r"""x"""), Id(r"""y""")), [], [Continue()])], ([], [Break()]))]))))
         self.assertTrue(TestChecker.test(testcase, expect, 470))
 
-    def test_type_mismatch_in_stmt_for_expr1(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0.0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInStatement(For(Id(r"""x"""), FloatLiteral(0.0), BinaryOp(r"""<""", BinaryOp('\\', Id(r"""x"""), IntLiteral(2)), BinaryOp(r"""*""", IntLiteral(10), IntLiteral(10))), BinaryOp(r"""+""", BinaryOp(r"""-""", IntLiteral(1), IntLiteral(2)), IntLiteral(3)), ([], [If([(BinaryOp(r"""==""", Id(r"""x"""), Id(r"""y""")), [], [Continue()])], ([], [Break()]))]))))
-        self.assertTrue(TestChecker.test(testcase, expect, 471))
-
     def test_type_mismatch_in_stmt_for_expr2(self):
         testcase = r"""
         Var: x;
@@ -4023,60 +1569,6 @@ Function: f3
         expect = str(TypeMismatchInStatement(For(Id(r"""x"""), IntLiteral(0), BinaryOp('\\', Id(r"""x"""), IntLiteral(2)), BinaryOp(r"""+""", BinaryOp(r"""-""", IntLiteral(1), IntLiteral(2)), IntLiteral(3)), ([], [If([(BinaryOp(r"""==""", Id(r"""x"""), Id(r"""y""")), [], [Continue()])], ([], [Break()]))]))))
         self.assertTrue(TestChecker.test(testcase, expect, 472))
 
-    def test_type_mismatch_in_stmt_for_expr3(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, x > y) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInStatement(For(Id(r"""x"""), IntLiteral(0), BinaryOp(r"""<""", BinaryOp('\\', Id(r"""x"""), IntLiteral(2)), BinaryOp(r"""*""", IntLiteral(10), IntLiteral(10))), BinaryOp(r""">""", Id(r"""x"""), Id(r"""y""")), ([], [If([(BinaryOp(r"""==""", Id(r"""x"""), Id(r"""y""")), [], [Continue()])], ([], [Break()]))]))))
-        self.assertTrue(TestChecker.test(testcase, expect, 473))
-
     def test_type_mismatch_in_stmt_while(self):
         testcase = r"""
         Var: x;
@@ -4128,7 +1620,7 @@ Function: f3
             Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
         EndBody.
         """
-        expect = str(TypeMismatchInStatement(While(([], [If([(BinaryOp(r"""==""", BinaryOp(r"""%""", Id(r"""x"""), IntLiteral(2)), IntLiteral(1)), [], [Assign(Id(r"""x"""), BinaryOp(r"""+""", BinaryOp(r"""*""", Id(r"""x"""), IntLiteral(3)), IntLiteral(1)))])], ([], [Assign(Id(r"""x"""), BinaryOp('\\', Id(r"""x"""), IntLiteral(2)))]))]), Id(r"""b"""))))
+        expect = str(TypeMismatchInStatement(While(Id(r"""b"""), ([], [If([(BinaryOp(r"""==""", BinaryOp(r"""%""", Id(r"""x"""), IntLiteral(2)), IntLiteral(1)), [], [Assign(Id(r"""x"""), BinaryOp(r"""+""", BinaryOp(r"""*""", Id(r"""x"""), IntLiteral(3)), IntLiteral(1)))])], ([], [Assign(Id(r"""x"""), BinaryOp('\\', Id(r"""x"""), IntLiteral(2)))]))]))))
         self.assertTrue(TestChecker.test(testcase, expect, 474))
 
     def test_type_mismatch_in_stmt_do_while(self):
@@ -4292,61 +1784,7 @@ Function: f3
         expect = str(TypeMismatchInStatement(CallStmt(Id(r"""foo"""), [Id(r"""x"""), Id(r"""z""")])))
         self.assertTrue(TestChecker.test(testcase, expect, 477))
 
-    def test_type_mismatch_in_stmt_call_diff_arg_type_1(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            foo(x, z, b);
-            foo(z[0], z, b);
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-        EndBody.
-        """
-        expect = str(TypeMismatchInStatement(CallStmt(Id(r"""foo"""), [ArrayCell(Id(r"""z"""), [IntLiteral(0)]), Id(r"""z"""), Id(r"""b""")])))
-        self.assertTrue(TestChecker.test(testcase, expect, 478))
-
-    def test_type_mismatch_in_stmt_call_diff_arg_type_2(self):
+    def test_type_mismatch_in_stmt_call_diff_arg_type(self):
         testcase = r"""
         Var: x;
         Var: y = 0;
@@ -4455,61 +1893,7 @@ Function: f3
         expect = str(TypeMismatchInStatement(CallStmt(Id(r"""foo"""), [Id(r"""x"""), Id(r"""z"""), Id(r"""b""")])))
         self.assertTrue(TestChecker.test(testcase, expect, 480))
 
-    def test_type_mismatch_in_stmt_return_1(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Return 2;
-                    Else
-                        Return;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInStatement(Return(None)))
-        self.assertTrue(TestChecker.test(testcase, expect, 481))
-
-    def test_type_mismatch_in_stmt_return_2(self):
+    def test_type_mismatch_in_stmt_return(self):
         testcase = r"""
         Var: x;
         Var: y = 0;
@@ -4617,115 +2001,7 @@ Function: f3
         expect = str(TypeMismatchInExpression(CallExpr(Id(r"""foo"""), [Id(r"""x"""), Id(r"""z"""), Id(r"""b"""), Id(r"""x""")])))
         self.assertTrue(TestChecker.test(testcase, expect, 483))
 
-    def test_type_mismatch_in_expr_call_too_few_arg(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInExpression(CallExpr(Id(r"""foo"""), [Id(r"""x"""), Id(r"""b""")])))
-        self.assertTrue(TestChecker.test(testcase, expect, 484))
-
-    def test_type_mismatch_in_expr_call_diff_arg_type_1(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, {1}, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInExpression(CallExpr(Id(r"""int_of_string"""), [ArrayCell(Id(r"""j"""), [IntLiteral(0)])])))
-        self.assertTrue(TestChecker.test(testcase, expect, 485))
-
-    def test_type_mismatch_in_expr_call_diff_arg_type_2(self):
+    def test_type_mismatch_in_expr_call_diff_arg_type(self):
         testcase = r"""
         Var: x;
         Var: y = 0;
@@ -4793,116 +2069,6 @@ Function: f3
             x = y;
             z = a;
             b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            printStrLn(string_of_float(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInExpression(CallExpr(Id(r"""string_of_float"""), [CallExpr(Id(r"""foo"""), [Id(r"""x"""), Id(r"""z"""), Id(r"""b""")])])))
-        self.assertTrue(TestChecker.test(testcase, expect, 487))
-
-    def test_type_mismatch_in_expr_call_ret_type_1(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            printStrLn(string_of_float(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInExpression(CallExpr(Id(r"""string_of_float"""), [CallExpr(Id(r"""foo"""), [Id(r"""x"""), Id(r"""z"""), Id(r"""b""")])])))
-        self.assertTrue(TestChecker.test(testcase, expect, 488))
-
-    def test_type_mismatch_in_expr_call_ret_type_2(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
             printStrLn(string_of_float(foo(x, z, b)));
             If True Then
                 For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
@@ -4943,116 +2109,62 @@ Function: f3
         expect = str(TypeMismatchInStatement(Return(BinaryOp(r"""+""", Id(r"""i"""), BinaryOp(r"""*""", CallExpr(Id(r"""int_of_string"""), [ArrayCell(Id(r"""j"""), [IntLiteral(0)])]), CallExpr(Id(r"""int_of_float"""), [ArrayCell(Id(r"""k"""), [IntLiteral(0), IntLiteral(0)])]))))))
         self.assertTrue(TestChecker.test(testcase, expect, 489))
 
-    def test_type_mismatch_in_expr_idx_too_many_dim(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
+    # def test_type_mismatch_in_expr_idx_too_few_dim(self):
+        # testcase = r"""
+        # Var: x;
+        # Var: y = 0;
+        # Var: z[1];
+        # Var: a[1] = {"1"};
+        # Var: b[1][1];
+        # Var: c[1][1] = {{0.0}};
 
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
+        # Function: main
+        # Body:
+        #     Var: m[1][1] = {{0}};
+        #     Var: n[1];
+        #     n = m[0];
+        #     x = y;
+        #     z = a;
+        #     b = c;
+        #     printStrLn(string_of_int(foo(x, z, b)));
+        #     If True Then
+        #         For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+        #             If x == y Then
+        #                 Continue;
+        #             Else
+        #                 Break;
+        #             EndIf.
+        #         EndFor.
+        #     ElseIf 1. =/= 1. Then
+        #         While x != 1 Do
+        #             If x % 2 == 1 Then
+        #                 x = x * 3 + 1;
+        #             Else
+        #                 x = x \ 2;
+        #             EndIf.
+        #         EndWhile.
+        #     ElseIf bool_of_string("True") Then
+        #         Do
+        #             z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+        #         While !(1. *. 1. \. 1. =/= 1.)
+        #         EndDo.
+        #     Else
+        #         main();
+        #     EndIf.
+        # EndBody.
 
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInExpression(ArrayCell(Id(r"""k"""), [IntLiteral(0), IntLiteral(0), IntLiteral(0)])))
-        self.assertTrue(TestChecker.test(testcase, expect, 490))
-
-    def test_type_mismatch_in_expr_idx_too_few_dim(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            Var: m[1][1] = {{0}};
-            Var: n[1];
-            n = m[0];
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInExpression(ArrayCell(Id(r"""m"""), [IntLiteral(0)])))
-        self.assertTrue(TestChecker.test(testcase, expect, 491))
+        # Function: foo
+        # Parameter: m, n[1], p[1][1]
+        # Body:
+        #     Var: i, j[1], k[1][1];
+        #     i = m;
+        #     j = n;
+        #     k = p;
+        #     Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        # EndBody.
+        # """
+        # expect = str(TypeMismatchInExpression(ArrayCell(Id(r"""m"""), [IntLiteral(0)])))
+        # self.assertTrue(TestChecker.test(testcase, expect, 491))
 
     def test_type_mismatch_in_expr_idx_not_array(self):
         testcase = r"""
@@ -5108,223 +2220,7 @@ Function: f3
         expect = str(TypeMismatchInExpression(ArrayCell(Id(r"""x"""), [IntLiteral(0)])))
         self.assertTrue(TestChecker.test(testcase, expect, 492))
 
-    def test_type_mismatch_in_expr_op_1(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. != 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInExpression(BinaryOp(r"""!=""", FloatLiteral(1.0), FloatLiteral(1.0))))
-        self.assertTrue(TestChecker.test(testcase, expect, 493))
-
-    def test_type_mismatch_in_expr_op_2(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_int(float_of_string(z[0]) * 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInExpression(BinaryOp(r"""*""", CallExpr(Id(r"""float_of_string"""), [ArrayCell(Id(r"""z"""), [IntLiteral(0)])]), FloatLiteral(3.1415))))
-        self.assertTrue(TestChecker.test(testcase, expect, 494))
-
-    def test_type_mismatch_in_expr_op_3(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. =/= 1. Then
-                While x =/= 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInExpression(BinaryOp(r"""=/=""", Id(r"""x"""), IntLiteral(1))))
-        self.assertTrue(TestChecker.test(testcase, expect, 495))
-
-    def test_type_mismatch_in_expr_op_4(self):
-        testcase = r"""
-        Var: x;
-        Var: y = 0;
-        Var: z[1];
-        Var: a[1] = {"1"};
-        Var: b[1][1];
-        Var: c[1][1] = {{0.0}};
-
-        Function: main
-        Body:
-            x = y;
-            z = a;
-            b = c;
-            printStrLn(string_of_int(foo(x, z, b)));
-            If True Then
-                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
-                    If x == y Then
-                        Continue;
-                    Else
-                        Break;
-                    EndIf.
-                EndFor.
-            ElseIf 1. == 1. Then
-                While x != 1 Do
-                    If x % 2 == 1 Then
-                        x = x * 3 + 1;
-                    Else
-                        x = x \ 2;
-                    EndIf.
-                EndWhile.
-            ElseIf bool_of_string("True") Then
-                Do
-                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
-                While !(1. *. 1. \. 1. =/= 1.)
-                EndDo.
-            Else
-                main();
-            EndIf.
-        EndBody.
-
-        Function: foo
-        Parameter: m, n[1], p[1][1]
-        Body:
-            Var: i, j[1], k[1][1];
-            i = m;
-            j = n;
-            k = p;
-            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
-        EndBody.
-        """
-        expect = str(TypeMismatchInExpression(BinaryOp(r"""==""", FloatLiteral(1.0), FloatLiteral(1.0))))
-        self.assertTrue(TestChecker.test(testcase, expect, 496))
-
-    def test_type_mismatch_in_expr_op_5(self):
+    def test_type_mismatch_in_expr_op(self):
         testcase = r"""
         Var: x;
         Var: y = 0;
@@ -5388,15 +2284,15 @@ Function: f3
         Var: c[1][1] = {{0.0}};
 
         Function: foo
-        Parameter: m, n[1], p[1][1]
         Body:
+            Var: i, j[1], k[1][1];
             Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
         EndBody.
         """
         expect = str(NoEntryPoint())
         self.assertTrue(TestChecker.test(testcase, expect, 498))
 
-    def test_no_entry_point_but_with_main_var(self):
+    def test_not_in_loop_break_1(self):
         testcase = r"""
         Var: x;
         Var: y = 0;
@@ -5404,7 +2300,39 @@ Function: f3
         Var: a[1] = {"1"};
         Var: b[1][1];
         Var: c[1][1] = {{0.0}};
-        Var: main = 0;
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+            Break;
+        EndBody.
 
         Function: foo
         Parameter: m, n[1], p[1][1]
@@ -5416,5 +2344,3274 @@ Function: f3
             Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
         EndBody.
         """
-        expect = str(NoEntryPoint())
-        self.assertTrue(TestChecker.test(testcase, expect, 499))
+        expect = str(NotInLoop(Break()))
+        self.assertTrue(TestChecker.test(testcase, expect, 500))
+
+    def test_not_in_loop_break_2(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+                Break;
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str(NotInLoop(Break()))
+        self.assertTrue(TestChecker.test(testcase, expect, 501))
+
+    def test_not_in_loop_break_3(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                While True Do
+                    While True Do
+                        Break;
+                    EndWhile.
+                    Break;
+                EndWhile.
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str()
+        self.assertTrue(TestChecker.test(testcase, expect, 502))
+
+    def test_not_in_loop_break_4(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                Do
+                    While True Do
+                        For (x = 0, True, 0) Do
+                            Break;
+                        EndFor.
+                        Break;
+                    EndWhile.
+                    Break;
+                While True
+                EndDo.
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str()
+        self.assertTrue(TestChecker.test(testcase, expect, 503))
+
+    def test_not_in_loop_continue_1(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+            Continue;
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str(NotInLoop(Continue()))
+        self.assertTrue(TestChecker.test(testcase, expect, 504))
+
+    def test_not_in_loop_continue_2(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+                Continue;
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str(NotInLoop(Continue()))
+        self.assertTrue(TestChecker.test(testcase, expect, 505))
+
+    def test_not_in_loop_continue_3(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                While True Do
+                    While True Do
+                        Continue;
+                    EndWhile.
+                    Continue;
+                EndWhile.
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str()
+        self.assertTrue(TestChecker.test(testcase, expect, 506))
+
+    def test_not_in_loop_continue_4(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                Do
+                    While True Do
+                        For (x = 0, True, 0) Do
+                            Continue;
+                        EndFor.
+                        Continue;
+                    EndWhile.
+                    Continue;
+                While True
+                EndDo.
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str()
+        self.assertTrue(TestChecker.test(testcase, expect, 507))
+
+    # def test_invalid_arr_lit_1(self):
+    #     testcase = r"""
+    #     Var: x;
+    #     Var: y = 0;
+    #     Var: z[1];
+    #     Var: a[1] = {"1"};
+    #     Var: b[1][1];
+    #     Var: c[1][1] = {{0.0}};
+
+    #     Function: main
+    #     Body:
+    #         Var: m[0];
+    #         m[y] = 0;
+    #         m = {};
+    #         x = y;
+    #         z = a;
+    #         b = c;
+    #         printStrLn(string_of_int(foo(x, z, b)));
+    #         If True Then
+    #             For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+    #                 If x == y Then
+    #                     Continue;
+    #                 Else
+    #                     Break;
+    #                 EndIf.
+    #             EndFor.
+    #         ElseIf 1. =/= 1. Then
+    #             While x != 1 Do
+    #                 If x % 2 == 1 Then
+    #                     x = x * 3 + 1;
+    #                 Else
+    #                     x = x \ 2;
+    #                 EndIf.
+    #             EndWhile.
+    #         ElseIf bool_of_string("True") Then
+    #             Do
+    #                 z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+    #             While !(1. *. 1. \. 1. =/= 1.)
+    #             EndDo.
+    #         Else
+    #             main();
+    #         EndIf.
+    #     EndBody.
+
+    #     Function: foo
+    #     Parameter: m, n[1], p[1][1]
+    #     Body:
+    #         Var: i, j[1], k[1][1];
+    #         i = m;
+    #         j = n;
+    #         k = p;
+    #         Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+    #     EndBody.
+    #     """
+    #     expect = str()
+    #     self.assertTrue(TestChecker.test(testcase, expect, 508))
+
+    # def test_invalid_arr_lit_2(self):
+    #     testcase = r"""
+    #     Var: x;
+    #     Var: y = 0;
+    #     Var: z[1];
+    #     Var: a[1] = {"1"};
+    #     Var: b[1][1];
+    #     Var: c[1][1] = {{0.0}};
+
+    #     Function: main
+    #     Body:
+    #         Var: m[0][1][2];
+    #         m[y][y][y] = 0;
+    #         m = {};
+    #         x = y;
+    #         z = a;
+    #         b = c;
+    #         printStrLn(string_of_int(foo(x, z, b)));
+    #         If True Then
+    #             For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+    #                 If x == y Then
+    #                     Continue;
+    #                 Else
+    #                     Break;
+    #                 EndIf.
+    #             EndFor.
+    #         ElseIf 1. =/= 1. Then
+    #             While x != 1 Do
+    #                 If x % 2 == 1 Then
+    #                     x = x * 3 + 1;
+    #                 Else
+    #                     x = x \ 2;
+    #                 EndIf.
+    #             EndWhile.
+    #         ElseIf bool_of_string("True") Then
+    #             Do
+    #                 z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+    #             While !(1. *. 1. \. 1. =/= 1.)
+    #             EndDo.
+    #         Else
+    #             main();
+    #         EndIf.
+    #     EndBody.
+
+    #     Function: foo
+    #     Parameter: m, n[1], p[1][1]
+    #     Body:
+    #         Var: i, j[1], k[1][1];
+    #         i = m;
+    #         j = n;
+    #         k = p;
+    #         Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+    #     EndBody.
+    #     """
+    #     expect = str()
+    #     self.assertTrue(TestChecker.test(testcase, expect, 509))
+
+    def test_invalid_arr_lit_3(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            Var: m[2] = {1, 1.0};
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str(InvalidArrayLiteral(ArrayLiteral([IntLiteral(1), FloatLiteral(1.0)])))
+        self.assertTrue(TestChecker.test(testcase, expect, 510))
+
+    def test_invalid_arr_lit_4(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            Var: m[2] = {1.0, 1.0};
+            m = {1.0, True};
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str(InvalidArrayLiteral(ArrayLiteral([FloatLiteral(1.0), BooleanLiteral(True)])))
+        self.assertTrue(TestChecker.test(testcase, expect, 511))
+
+    def test_invalid_arr_lit_5(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            Var: m[2] = {1, 1};
+            m = {1, {1}};
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str(InvalidArrayLiteral(ArrayLiteral([IntLiteral(1), ArrayLiteral([IntLiteral(1)])])))
+        self.assertTrue(TestChecker.test(testcase, expect, 512))
+
+    def test_invalid_arr_lit_6(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            Var: m[2][2] = {{1, 1}, {1, 1}};
+            m = {{1, 1}, {1, 1, 1}};
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str(InvalidArrayLiteral(ArrayLiteral([ArrayLiteral([IntLiteral(1), IntLiteral(1)]), ArrayLiteral([IntLiteral(1), IntLiteral(1), IntLiteral(1)])])))
+        self.assertTrue(TestChecker.test(testcase, expect, 513))
+
+    def test_invalid_arr_lit_7(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            Var: m[2][2][2] = {{{0, 0}, {0, 0}}, {{0, 0}, {0, 0}}};
+            m = {{{0, 0}, {0, 0}}, {{"True", False}, {0, 0}}};
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str(InvalidArrayLiteral(ArrayLiteral([StringLiteral(r"""True"""), BooleanLiteral(False)])))
+        self.assertTrue(TestChecker.test(testcase, expect, 514))
+
+    def test_func_not_return_at_all(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+        EndBody.
+        """
+        expect = str(FunctionNotReturn(r"""foo"""))
+        self.assertTrue(TestChecker.test(testcase, expect, 515))
+
+    def test_func_not_return_if_1(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            If True Then
+                Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+            EndIf.
+        EndBody.
+        """
+        expect = str(FunctionNotReturn(r"""foo"""))
+        self.assertTrue(TestChecker.test(testcase, expect, 516))
+
+    def test_func_not_return_if_2(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            If True Then
+                Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+            Else
+                Return 0;
+            EndIf.
+        EndBody.
+        """
+        expect = str()
+        self.assertTrue(TestChecker.test(testcase, expect, 517))
+
+    def test_func_not_return_if_3(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            If True Then
+                Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+            ElseIf True Then
+                Return i;
+            EndIf.
+        EndBody.
+        """
+        expect = str(FunctionNotReturn(r"""foo"""))
+        self.assertTrue(TestChecker.test(testcase, expect, 518))
+
+    def test_func_not_return_if_4(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            If True Then
+                Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+            ElseIf True Then
+                Return 0;
+            Else
+                Return 1;
+            EndIf.
+        EndBody.
+        """
+        expect = str()
+        self.assertTrue(TestChecker.test(testcase, expect, 519))
+
+    def test_func_not_return_if_5(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            If True Then
+                Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+            ElseIf True Then
+                i = 0;
+            Else
+                Return 1;
+            EndIf.
+        EndBody.
+        """
+        expect = str(FunctionNotReturn(r"""foo"""))
+        self.assertTrue(TestChecker.test(testcase, expect, 520))
+
+    # def test_func_not_return_for_1(self):
+    #     testcase = r"""
+    #     Var: x;
+    #     Var: y = 0;
+    #     Var: z[1];
+    #     Var: a[1] = {"1"};
+    #     Var: b[1][1];
+    #     Var: c[1][1] = {{0.0}};
+
+    #     Function: main
+    #     Body:
+    #         x = y;
+    #         z = a;
+    #         b = c;
+    #         printStrLn(string_of_int(foo(x, z, b)));
+    #         If True Then
+    #             For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+    #                 If x == y Then
+    #                     Continue;
+    #                 Else
+    #                     Break;
+    #                 EndIf.
+    #             EndFor.
+    #         ElseIf 1. =/= 1. Then
+    #             While x != 1 Do
+    #                 If x % 2 == 1 Then
+    #                     x = x * 3 + 1;
+    #                 Else
+    #                     x = x \ 2;
+    #                 EndIf.
+    #             EndWhile.
+    #         ElseIf bool_of_string("True") Then
+    #             Do
+    #                 z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+    #             While !(1. *. 1. \. 1. =/= 1.)
+    #             EndDo.
+    #         Else
+    #             main();
+    #         EndIf.
+    #     EndBody.
+
+    #     Function: foo
+    #     Parameter: m, n[1], p[1][1]
+    #     Body:
+    #         Var: i, j[1], k[1][1];
+    #         i = m;
+    #         j = n;
+    #         k = p;
+    #         For (m = 0, m <= m, 0) Do
+    #             Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+    #         EndFor.
+    #     EndBody.
+    #     """
+    #     expect = str()
+    #     self.assertTrue(TestChecker.test(testcase, expect, 521))
+
+    def test_func_not_return_for_2(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            For (m = 0, m <= m, 0) Do
+                If True Then
+                    Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+                EndIf.
+            EndFor.
+        EndBody.
+        """
+        expect = str(FunctionNotReturn(r"""foo"""))
+        self.assertTrue(TestChecker.test(testcase, expect, 522))
+
+    # def test_func_not_return_for_3(self):
+    #     testcase = r"""
+    #     Var: x;
+    #     Var: y = 0;
+    #     Var: z[1];
+    #     Var: a[1] = {"1"};
+    #     Var: b[1][1];
+    #     Var: c[1][1] = {{0.0}};
+
+    #     Function: main
+    #     Body:
+    #         x = y;
+    #         z = a;
+    #         b = c;
+    #         printStrLn(string_of_int(foo(x, z, b)));
+    #         If True Then
+    #             For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+    #                 If x == y Then
+    #                     Continue;
+    #                 Else
+    #                     Break;
+    #                 EndIf.
+    #             EndFor.
+    #         ElseIf 1. =/= 1. Then
+    #             While x != 1 Do
+    #                 If x % 2 == 1 Then
+    #                     x = x * 3 + 1;
+    #                 Else
+    #                     x = x \ 2;
+    #                 EndIf.
+    #             EndWhile.
+    #         ElseIf bool_of_string("True") Then
+    #             Do
+    #                 z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+    #             While !(1. *. 1. \. 1. =/= 1.)
+    #             EndDo.
+    #         Else
+    #             main();
+    #         EndIf.
+    #     EndBody.
+
+    #     Function: foo
+    #     Parameter: m, n[1], p[1][1]
+    #     Body:
+    #         Var: i, j[1], k[1][1];
+    #         i = m;
+    #         j = n;
+    #         k = p;
+    #         For (m = 0, m <= m, 0) Do
+    #             If True Then
+    #                 Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+    #             Else
+    #                 Return 0;
+    #             EndIf.
+    #         EndFor.
+    #     EndBody.
+    #     """
+    #     expect = str()
+    #     self.assertTrue(TestChecker.test(testcase, expect, 523))
+
+    def test_func_not_return_for_4(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            For (m = 0, m <= m, 0) Do
+                If True Then
+                    Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+                ElseIf True Then
+                Else
+                    Return 0;
+                EndIf.
+            EndFor.
+        EndBody.
+        """
+        expect = str(FunctionNotReturn(r"""foo"""))
+        self.assertTrue(TestChecker.test(testcase, expect, 524))
+
+    # def test_func_not_return_while_1(self):
+    #     testcase = r"""
+    #     Var: x;
+    #     Var: y = 0;
+    #     Var: z[1];
+    #     Var: a[1] = {"1"};
+    #     Var: b[1][1];
+    #     Var: c[1][1] = {{0.0}};
+
+    #     Function: main
+    #     Body:
+    #         x = y;
+    #         z = a;
+    #         b = c;
+    #         printStrLn(string_of_int(foo(x, z, b)));
+    #         If True Then
+    #             For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+    #                 If x == y Then
+    #                     Continue;
+    #                 Else
+    #                     Break;
+    #                 EndIf.
+    #             EndFor.
+    #         ElseIf 1. =/= 1. Then
+    #             While x != 1 Do
+    #                 If x % 2 == 1 Then
+    #                     x = x * 3 + 1;
+    #                 Else
+    #                     x = x \ 2;
+    #                 EndIf.
+    #             EndWhile.
+    #         ElseIf bool_of_string("True") Then
+    #             Do
+    #                 z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+    #             While !(1. *. 1. \. 1. =/= 1.)
+    #             EndDo.
+    #         Else
+    #             main();
+    #         EndIf.
+    #     EndBody.
+
+    #     Function: foo
+    #     Parameter: m, n[1], p[1][1]
+    #     Body:
+    #         Var: i, j[1], k[1][1];
+    #         i = m;
+    #         j = n;
+    #         k = p;
+    #         While (m <= m) Do
+    #             Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+    #         EndWhile.
+    #     EndBody.
+    #     """
+    #     expect = str()
+    #     self.assertTrue(TestChecker.test(testcase, expect, 525))
+
+    def test_func_not_return_while_2(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            While (m <= m) Do
+                If True Then
+                    Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+                EndIf.
+            EndWhile.
+        EndBody.
+        """
+        expect = str(FunctionNotReturn(r"""foo"""))
+        self.assertTrue(TestChecker.test(testcase, expect, 526))
+
+    # def test_func_not_return_while_3(self):
+    #     testcase = r"""
+    #     Var: x;
+    #     Var: y = 0;
+    #     Var: z[1];
+    #     Var: a[1] = {"1"};
+    #     Var: b[1][1];
+    #     Var: c[1][1] = {{0.0}};
+
+    #     Function: main
+    #     Body:
+    #         x = y;
+    #         z = a;
+    #         b = c;
+    #         printStrLn(string_of_int(foo(x, z, b)));
+    #         If True Then
+    #             For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+    #                 If x == y Then
+    #                     Continue;
+    #                 Else
+    #                     Break;
+    #                 EndIf.
+    #             EndFor.
+    #         ElseIf 1. =/= 1. Then
+    #             While x != 1 Do
+    #                 If x % 2 == 1 Then
+    #                     x = x * 3 + 1;
+    #                 Else
+    #                     x = x \ 2;
+    #                 EndIf.
+    #             EndWhile.
+    #         ElseIf bool_of_string("True") Then
+    #             Do
+    #                 z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+    #             While !(1. *. 1. \. 1. =/= 1.)
+    #             EndDo.
+    #         Else
+    #             main();
+    #         EndIf.
+    #     EndBody.
+
+    #     Function: foo
+    #     Parameter: m, n[1], p[1][1]
+    #     Body:
+    #         Var: i, j[1], k[1][1];
+    #         i = m;
+    #         j = n;
+    #         k = p;
+    #         While (m <= m) Do
+    #             If True Then
+    #                 Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+    #             Else
+    #                 Return 0;
+    #             EndIf.
+    #         EndWhile.
+    #     EndBody.
+    #     """
+    #     expect = str()
+    #     self.assertTrue(TestChecker.test(testcase, expect, 527))
+
+    def test_func_not_return_while_4(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            While (m <= m) Do
+                If True Then
+                    Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+                ElseIf True Then
+                Else
+                    Return 0;
+                EndIf.
+            EndWhile.
+        EndBody.
+        """
+        expect = str(FunctionNotReturn(r"""foo"""))
+        self.assertTrue(TestChecker.test(testcase, expect, 528))
+
+    # def test_func_not_return_do_while_1(self):
+    #     testcase = r"""
+    #     Var: x;
+    #     Var: y = 0;
+    #     Var: z[1];
+    #     Var: a[1] = {"1"};
+    #     Var: b[1][1];
+    #     Var: c[1][1] = {{0.0}};
+
+    #     Function: main
+    #     Body:
+    #         x = y;
+    #         z = a;
+    #         b = c;
+    #         printStrLn(string_of_int(foo(x, z, b)));
+    #         If True Then
+    #             For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+    #                 If x == y Then
+    #                     Continue;
+    #                 Else
+    #                     Break;
+    #                 EndIf.
+    #             EndFor.
+    #         ElseIf 1. =/= 1. Then
+    #             While x != 1 Do
+    #                 If x % 2 == 1 Then
+    #                     x = x * 3 + 1;
+    #                 Else
+    #                     x = x \ 2;
+    #                 EndIf.
+    #             EndWhile.
+    #         ElseIf bool_of_string("True") Then
+    #             Do
+    #                 z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+    #             While !(1. *. 1. \. 1. =/= 1.)
+    #             EndDo.
+    #         Else
+    #             main();
+    #         EndIf.
+    #     EndBody.
+
+    #     Function: foo
+    #     Parameter: m, n[1], p[1][1]
+    #     Body:
+    #         Var: i, j[1], k[1][1];
+    #         i = m;
+    #         j = n;
+    #         k = p;
+    #         Do
+    #             Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+    #         While (m <= m)
+    #         EndDo.
+    #     EndBody.
+    #     """
+    #     expect = str()
+    #     self.assertTrue(TestChecker.test(testcase, expect, 529))
+
+    def test_func_not_return_do_while_2(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Do
+                If True Then
+                    Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+                EndIf.
+            While (m <= m)
+            EndDo.
+        EndBody.
+        """
+        expect = str(FunctionNotReturn(r"""foo"""))
+        self.assertTrue(TestChecker.test(testcase, expect, 530))
+
+    # def test_func_not_return_do_while_3(self):
+    #     testcase = r"""
+    #     Var: x;
+    #     Var: y = 0;
+    #     Var: z[1];
+    #     Var: a[1] = {"1"};
+    #     Var: b[1][1];
+    #     Var: c[1][1] = {{0.0}};
+
+    #     Function: main
+    #     Body:
+    #         x = y;
+    #         z = a;
+    #         b = c;
+    #         printStrLn(string_of_int(foo(x, z, b)));
+    #         If True Then
+    #             For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+    #                 If x == y Then
+    #                     Continue;
+    #                 Else
+    #                     Break;
+    #                 EndIf.
+    #             EndFor.
+    #         ElseIf 1. =/= 1. Then
+    #             While x != 1 Do
+    #                 If x % 2 == 1 Then
+    #                     x = x * 3 + 1;
+    #                 Else
+    #                     x = x \ 2;
+    #                 EndIf.
+    #             EndWhile.
+    #         ElseIf bool_of_string("True") Then
+    #             Do
+    #                 z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+    #             While !(1. *. 1. \. 1. =/= 1.)
+    #             EndDo.
+    #         Else
+    #             main();
+    #         EndIf.
+    #     EndBody.
+
+    #     Function: foo
+    #     Parameter: m, n[1], p[1][1]
+    #     Body:
+    #         Var: i, j[1], k[1][1];
+    #         i = m;
+    #         j = n;
+    #         k = p;
+    #         Do
+    #             If True Then
+    #                 Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+    #             Else
+    #                 Return 0;
+    #             EndIf.
+    #         While (m <= m)
+    #         EndDo.
+    #     EndBody.
+    #     """
+    #     expect = str()
+    #     self.assertTrue(TestChecker.test(testcase, expect, 531))
+
+    def test_func_not_return_do_while_4(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Do
+                If True Then
+                    Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+                ElseIf True Then
+                Else
+                    Return 0;
+                EndIf.
+            While (m <= m)
+            EndDo.
+        EndBody.
+        """
+        expect = str(FunctionNotReturn(r"""foo"""))
+        self.assertTrue(TestChecker.test(testcase, expect, 532))
+
+    def test_unreachable_func_no_call(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: goo
+        Body:
+        EndBody.
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str(UnreachableFunction(r"""goo"""))
+        self.assertTrue(TestChecker.test(testcase, expect, 533))
+
+    def test_unreachable_func_no_call_main(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str()
+        self.assertTrue(TestChecker.test(testcase, expect, 534))
+
+    # def test_unreachable_func_recursive_call(self):
+    #     testcase = r"""
+    #     Var: x;
+    #     Var: y = 0;
+    #     Var: z[1];
+    #     Var: a[1] = {"1"};
+    #     Var: b[1][1];
+    #     Var: c[1][1] = {{0.0}};
+
+    #     Function: goo
+    #     Body:
+    #         goo();
+    #     EndBody.
+
+    #     Function: main
+    #     Body:
+    #         x = y;
+    #         z = a;
+    #         b = c;
+    #         printStrLn(string_of_int(foo(x, z, b)));
+    #         If True Then
+    #             For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+    #                 If x == y Then
+    #                     Continue;
+    #                 Else
+    #                     Break;
+    #                 EndIf.
+    #             EndFor.
+    #         ElseIf 1. =/= 1. Then
+    #             While x != 1 Do
+    #                 If x % 2 == 1 Then
+    #                     x = x * 3 + 1;
+    #                 Else
+    #                     x = x \ 2;
+    #                 EndIf.
+    #             EndWhile.
+    #         ElseIf bool_of_string("True") Then
+    #             Do
+    #                 z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+    #             While !(1. *. 1. \. 1. =/= 1.)
+    #             EndDo.
+    #         Else
+    #             main();
+    #         EndIf.
+    #     EndBody.
+
+    #     Function: foo
+    #     Parameter: m, n[1], p[1][1]
+    #     Body:
+    #         Var: i, j[1], k[1][1];
+    #         i = m;
+    #         j = n;
+    #         k = p;
+    #         Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+    #     EndBody.
+    #     """
+    #     expect = str()
+    #     self.assertTrue(TestChecker.test(testcase, expect, 535))
+        
+    def test_unreachable_func_indirect_recursive_call(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: goo
+        Body:
+            hoo();
+        EndBody.
+
+        Function: hoo
+        Body:
+            goo();
+        EndBody.
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str()
+        self.assertTrue(TestChecker.test(testcase, expect, 536))
+
+    def test_unreachable_stmt_if_1(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                    main();
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str(UnreachableStatement(CallStmt(Id(r"""main"""), [])))
+        self.assertTrue(TestChecker.test(testcase, expect, 537))
+
+    def test_unreachable_stmt_if_2(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                    EndIf.
+                    main();
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str()
+        self.assertTrue(TestChecker.test(testcase, expect, 538))
+
+    def test_unreachable_stmt_for_1(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+                main();
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str()
+        self.assertTrue(TestChecker.test(testcase, expect, 539))
+
+    def test_unreachable_stmt_for_2(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Return;
+                    EndIf.
+                EndFor.
+                main();
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str()
+        self.assertTrue(TestChecker.test(testcase, expect, 540))
+
+    # def test_unreachable_stmt_for_3(self):
+    #     testcase = r"""
+    #     Var: x;
+    #     Var: y = 0;
+    #     Var: z[1];
+    #     Var: a[1] = {"1"};
+    #     Var: b[1][1];
+    #     Var: c[1][1] = {{0.0}};
+
+    #     Function: main
+    #     Body:
+    #         x = y;
+    #         z = a;
+    #         b = c;
+    #         printStrLn(string_of_int(foo(x, z, b)));
+    #         If True Then
+    #             For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+    #                 If x == y Then
+    #                     Return;
+    #                 Else
+    #                     Return;
+    #                 EndIf.
+    #             EndFor.
+    #             main();
+    #         ElseIf 1. =/= 1. Then
+    #             While x != 1 Do
+    #                 If x % 2 == 1 Then
+    #                     x = x * 3 + 1;
+    #                 Else
+    #                     x = x \ 2;
+    #                 EndIf.
+    #             EndWhile.
+    #         ElseIf bool_of_string("True") Then
+    #             Do
+    #                 z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+    #             While !(1. *. 1. \. 1. =/= 1.)
+    #             EndDo.
+    #         Else
+    #             main();
+    #         EndIf.
+    #     EndBody.
+
+    #     Function: foo
+    #     Parameter: m, n[1], p[1][1]
+    #     Body:
+    #         Var: i, j[1], k[1][1];
+    #         i = m;
+    #         j = n;
+    #         k = p;
+    #         Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+    #     EndBody.
+    #     """
+    #     expect = str(UnreachableStatement(CallStmt(Id(r"""main"""), [])))
+    #     self.assertTrue(TestChecker.test(testcase, expect, 541))
+
+    # def test_unreachable_stmt_for_4(self):
+    #     testcase = r"""
+    #     Var: x;
+    #     Var: y = 0;
+    #     Var: z[1];
+    #     Var: a[1] = {"1"};
+    #     Var: b[1][1];
+    #     Var: c[1][1] = {{0.0}};
+
+    #     Function: main
+    #     Body:
+    #         x = y;
+    #         z = a;
+    #         b = c;
+    #         printStrLn(string_of_int(foo(x, z, b)));
+    #         If True Then
+    #             For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+    #                 Return;
+    #             EndFor.
+    #             main();
+    #         ElseIf 1. =/= 1. Then
+    #             While x != 1 Do
+    #                 If x % 2 == 1 Then
+    #                     x = x * 3 + 1;
+    #                 Else
+    #                     x = x \ 2;
+    #                 EndIf.
+    #             EndWhile.
+    #         ElseIf bool_of_string("True") Then
+    #             Do
+    #                 z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+    #             While !(1. *. 1. \. 1. =/= 1.)
+    #             EndDo.
+    #         Else
+    #             main();
+    #         EndIf.
+    #     EndBody.
+
+    #     Function: foo
+    #     Parameter: m, n[1], p[1][1]
+    #     Body:
+    #         Var: i, j[1], k[1][1];
+    #         i = m;
+    #         j = n;
+    #         k = p;
+    #         Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+    #     EndBody.
+    #     """
+    #     expect = str(UnreachableStatement(CallStmt(Id(r"""main"""), [])))
+    #     self.assertTrue(TestChecker.test(testcase, expect, 542))
+
+    def test_unreachable_stmt_while_1(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Return;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                    Break;
+                EndWhile.
+                main();
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str()
+        self.assertTrue(TestChecker.test(testcase, expect, 543))
+
+    def test_unreachable_stmt_while_2(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Return;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                        Continue;
+                    Else
+                        x = x \ 2;
+                        Break;
+                    EndIf.
+                EndWhile.
+                main();
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str()
+        self.assertTrue(TestChecker.test(testcase, expect, 544))
+
+    def test_unreachable_stmt_while_3(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Return;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                        Continue;
+                    Else
+                        x = x \ 2;
+                        Return;
+                    EndIf.
+                EndWhile.
+                main();
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str()
+        self.assertTrue(TestChecker.test(testcase, expect, 545))
+
+    # def test_unreachable_stmt_while_4(self):
+    #     testcase = r"""
+    #     Var: x;
+    #     Var: y = 0;
+    #     Var: z[1];
+    #     Var: a[1] = {"1"};
+    #     Var: b[1][1];
+    #     Var: c[1][1] = {{0.0}};
+
+    #     Function: main
+    #     Body:
+    #         x = y;
+    #         z = a;
+    #         b = c;
+    #         printStrLn(string_of_int(foo(x, z, b)));
+    #         If True Then
+    #             For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+    #                 If x == y Then
+    #                     Continue;
+    #                 Else
+    #                     Return;
+    #                 EndIf.
+    #             EndFor.
+    #         ElseIf 1. =/= 1. Then
+    #             While x != 1 Do
+    #                 If x % 2 == 1 Then
+    #                     x = x * 3 + 1;
+    #                     Return;
+    #                 Else
+    #                     x = x \ 2;
+    #                     Return;
+    #                 EndIf.
+    #             EndWhile.
+    #             main();
+    #         ElseIf bool_of_string("True") Then
+    #             Do
+    #                 z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+    #             While !(1. *. 1. \. 1. =/= 1.)
+    #             EndDo.
+    #         Else
+    #             main();
+    #         EndIf.
+    #     EndBody.
+
+    #     Function: foo
+    #     Parameter: m, n[1], p[1][1]
+    #     Body:
+    #         Var: i, j[1], k[1][1];
+    #         i = m;
+    #         j = n;
+    #         k = p;
+    #         Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+    #     EndBody.
+    #     """
+    #     expect = str(UnreachableStatement(CallStmt(Id(r"""main"""), [])))
+    #     self.assertTrue(TestChecker.test(testcase, expect, 546))
+
+    def test_unreachable_stmt_do_while_1(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Return;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                    Continue;
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+                main();
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str()
+        self.assertTrue(TestChecker.test(testcase, expect, 547))
+
+    def test_unreachable_stmt_do_while_2(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Return;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                        Break;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                    If True Then
+                        Continue;
+                    ElseIf False Then
+                        Break;
+                    Else
+                    EndIf.
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+                main();
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str()
+        self.assertTrue(TestChecker.test(testcase, expect, 548))
+
+    def test_unreachable_stmt_do_while_3(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Return;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                    If True Then
+                        Continue;
+                    ElseIf False Then
+                        Break;
+                    Else
+                        Return;
+                    EndIf.
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+                main();
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str()
+        self.assertTrue(TestChecker.test(testcase, expect, 549))
+
+    # def test_unreachable_stmt_do_while_4(self):
+    #     testcase = r"""
+    #     Var: x;
+    #     Var: y = 0;
+    #     Var: z[1];
+    #     Var: a[1] = {"1"};
+    #     Var: b[1][1];
+    #     Var: c[1][1] = {{0.0}};
+
+    #     Function: main
+    #     Body:
+    #         x = y;
+    #         z = a;
+    #         b = c;
+    #         printStrLn(string_of_int(foo(x, z, b)));
+    #         If True Then
+    #             For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+    #                 If x == y Then
+    #                     Continue;
+    #                 Else
+    #                     Return;
+    #                 EndIf.
+    #             EndFor.
+    #         ElseIf 1. =/= 1. Then
+    #             While x != 1 Do
+    #                 If x % 2 == 1 Then
+    #                     x = x * 3 + 1;
+    #                 Else
+    #                     x = x \ 2;
+    #                 EndIf.
+    #             EndWhile.
+    #         ElseIf bool_of_string("True") Then
+    #             Do
+    #                 z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+    #                 If True Then
+    #                     Return;
+    #                 ElseIf False Then
+    #                     Return;
+    #                 Else
+    #                     Return;
+    #                 EndIf.
+    #             While !(1. *. 1. \. 1. =/= 1.)
+    #             EndDo.
+    #             main();
+    #         Else
+    #             main();
+    #         EndIf.
+    #     EndBody.
+
+    #     Function: foo
+    #     Parameter: m, n[1], p[1][1]
+    #     Body:
+    #         Var: i, j[1], k[1][1];
+    #         i = m;
+    #         j = n;
+    #         k = p;
+    #         Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+    #     EndBody.
+    #     """
+    #     expect = str(UnreachableStatement(CallStmt(Id(r"""main"""), [])))
+    #     self.assertTrue(TestChecker.test(testcase, expect, 550))
+
+    # def test_unreachable_stmt_return(self):
+    #     testcase = r"""
+    #     Var: x;
+    #     Var: y = 0;
+    #     Var: z[1];
+    #     Var: a[1] = {"1"};
+    #     Var: b[1][1];
+    #     Var: c[1][1] = {{0.0}};
+
+    #     Function: main
+    #     Body:
+    #         x = y;
+    #         z = a;
+    #         b = c;
+    #         printStrLn(string_of_int(foo(x, z, b)));
+    #         If True Then
+    #             For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+    #                 If x == y Then
+    #                     Continue;
+    #                 Else
+    #                     Return;
+    #                 EndIf.
+    #             EndFor.
+    #         ElseIf 1. =/= 1. Then
+    #             While x != 1 Do
+    #                 If x % 2 == 1 Then
+    #                     x = x * 3 + 1;
+    #                 Else
+    #                     x = x \ 2;
+    #                 EndIf.
+    #             EndWhile.
+    #         ElseIf bool_of_string("True") Then
+    #             Do
+    #                 z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+    #             While !(1. *. 1. \. 1. =/= 1.)
+    #             EndDo.
+    #         Else
+    #             main();
+    #         EndIf.
+    #     EndBody.
+
+    #     Function: foo
+    #     Parameter: m, n[1], p[1][1]
+    #     Body:
+    #         Var: i, j[1], k[1][1];
+    #         i = m;
+    #         j = n;
+    #         k = p;
+    #         Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+    #         foo(m, n, p);
+    #     EndBody.
+    #     """
+    #     expect = str(UnreachableStatement(CallStmt(Id(r"""foo"""), [Id(r"""m"""), Id(r"""n"""), Id(r"""p""")])))
+    #     self.assertTrue(TestChecker.test(testcase, expect, 551))
+
+    # def test_index_out_of_range_negative_1(self):
+    #     testcase = r"""
+    #     Var: x;
+    #     Var: y = 0;
+    #     Var: z[1];
+    #     Var: a[1] = {"1"};
+    #     Var: b[1][1];
+    #     Var: c[1][1] = {{0.0}};
+
+    #     Function: main
+    #     Body:
+    #         x = y;
+    #         z = a;
+    #         b = c;
+    #         printStrLn(string_of_int(foo(x, z, b)));
+    #         If True Then
+    #             For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+    #                 If x == y Then
+    #                     Continue;
+    #                 Else
+    #                     Break;
+    #                 EndIf.
+    #             EndFor.
+    #         ElseIf 1. =/= 1. Then
+    #             While x != 1 Do
+    #                 If x % 2 == 1 Then
+    #                     x = x * 3 + 1;
+    #                 Else
+    #                     x = x \ 2;
+    #                 EndIf.
+    #                 Return;
+    #             EndWhile.
+    #             main();
+    #         ElseIf bool_of_string("True") Then
+    #             Do
+    #                 z[-1%-2] = string_of_float(float_of_string(z[0]) *. 3.1);
+    #             While !(1. *. 1. \. 1. =/= 1.)
+    #             EndDo.
+    #         Else
+    #             main();
+    #         EndIf.
+    #     EndBody.
+
+    #     Function: foo
+    #     Parameter: m, n[1], p[1][1]
+    #     Body:
+    #         Var: i, j[1], k[1][1];
+    #         i = m;
+    #         j = n;
+    #         k = p;
+    #         Return i + int_of_string(j[0]) * int_of_float(k[0][0]);
+    #     EndBody.
+    #     """
+    #     expect = str(UnreachableStatement(CallStmt(Id(r"""main"""), [])))
+    #     self.assertTrue(TestChecker.test(testcase, expect, 552))
+
+    def test_index_out_of_range_negative_2(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 3.1415);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][-1 \ 2]);
+        EndBody.
+        """
+        expect = str(IndexOutOfRange(ArrayCell(Id(r"""k"""), [IntLiteral(0), BinaryOp('\\', UnaryOp(r"""-""", IntLiteral(1)), IntLiteral(2))])))
+        self.assertTrue(TestChecker.test(testcase, expect, 553))
+        
+    def test_index_out_of_range_negative_3(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 3.1415);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][---1]);
+        EndBody.
+        """
+        expect = str(IndexOutOfRange(ArrayCell(Id(r"""k"""), [IntLiteral(0), UnaryOp(r"""-""", UnaryOp(r"""-""", UnaryOp(r"""-""", IntLiteral(1))))])))
+        self.assertTrue(TestChecker.test(testcase, expect, 554))
+
+    def test_index_out_of_range_too_big_1(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[1 * 3 \ 2]) * int_of_float(k[0][0]);
+        EndBody.
+        """
+        expect = str(IndexOutOfRange(ArrayCell(Id(r"""j"""), [BinaryOp('\\', BinaryOp(r"""*""", IntLiteral(1), IntLiteral(3)), IntLiteral(2))])))
+        self.assertTrue(TestChecker.test(testcase, expect, 555))
+
+    def test_index_out_of_range_too_big_2(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_string(j[0]) * int_of_float(k[0][9 \ 10 * 10]);
+        EndBody.
+        """
+        expect = str()
+        self.assertTrue(TestChecker.test(testcase, expect, 556))
+
+    def test_index_out_of_range_too_big_3(self):
+        testcase = r"""
+        Var: x;
+        Var: y = 0;
+        Var: z[1];
+        Var: a[1] = {"1"};
+        Var: b[1][1];
+        Var: c[1][1] = {{0.0}};
+
+        Function: main
+        Body:
+            x = y;
+            z = a;
+            b = c;
+            printStrLn(string_of_int(foo(x, z, b)));
+            If True Then
+                For (x = 0, x \ 2 < 10 * 10, 1-2+3) Do
+                    If x == y Then
+                        Continue;
+                    Else
+                        Break;
+                    EndIf.
+                EndFor.
+            ElseIf 1. =/= 1. Then
+                While x != 1 Do
+                    If x % 2 == 1 Then
+                        x = x * 3 + 1;
+                    Else
+                        x = x \ 2;
+                    EndIf.
+                EndWhile.
+            ElseIf bool_of_string("True") Then
+                Do
+                    z[0] = string_of_float(float_of_string(z[0]) *. 31415e-4);
+                While !(1. *. 1. \. 1. =/= 1.)
+                EndDo.
+            Else
+                main();
+            EndIf.
+        EndBody.
+
+        Function: foo
+        Parameter: m, n[1], p[1][1]
+        Body:
+            Var: i, j[1], k[1][1];
+            i = m;
+            j = n;
+            k = p;
+            Return i + int_of_float(k[0][int_of_float(1.0)]);
+        EndBody.
+        """
+        expect = str()
+        self.assertTrue(TestChecker.test(testcase, expect, 557))

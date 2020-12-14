@@ -1,1 +1,1 @@
-Invalid Array Literal: ArrayLiteral(IntLiteral(3),FloatLiteral(1.5))
+Index Out Of Range: ArrayCell(Id(z),[BinaryOp(%,UnaryOp(-,IntLiteral(1)),UnaryOp(-,IntLiteral(2)))])

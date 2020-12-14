@@ -12,6 +12,7 @@
                   Body:
                        fact(x[1][2],y, foo(1,2));
                        y = "False";
+                       main({{1,2,3},{4,5,6}},"khang",True);
                   EndBody.
 
                   Function: foo

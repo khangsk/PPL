@@ -2389,8 +2389,8 @@ class CheckSuite(unittest.TestCase):
                 EndIf.
                 While x > 1 Do
                     Break;
-                    Return;
                 EndWhile.
+                Return;
             EndFor.
             x = x + 2;
         EndBody."""

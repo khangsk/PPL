@@ -1,8 +1,11 @@
 
                 Function: main
-                Parameter: x
-                Body:
-                    Var: y[1][1];
-                    (y[0][0])[1] = 0;
+            Parameter: n, p
+            Body:
+                If True Then
                     Return 1;
-                EndBody.
+                Else
+                    Return main(1, n);
+                EndIf.
+            EndBody.
+                  

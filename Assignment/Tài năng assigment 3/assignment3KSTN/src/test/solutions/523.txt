@@ -1,1 +1,1 @@
-Type Mismatch In Expression: CallExpr(Id(foo),[BooleanLiteral(true)])
+Function Not Return: foo

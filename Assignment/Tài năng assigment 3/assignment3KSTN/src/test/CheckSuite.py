@@ -1845,6 +1845,7 @@ class CheckSuite(unittest.TestCase):
                   Body:
                        fact(x[1][2],y, foo(1,2));
                        y = "False";
+                       main({{1,2,3},{4,5,6}},"khang",True);
                   EndBody.
 
                   Function: foo
@@ -1976,23 +1977,21 @@ class CheckSuite(unittest.TestCase):
         expect = str(TypeMismatchInExpression(ArrayCell(Id("x"),[ArrayCell(Id("x"),[ArrayCell(Id("x"),[ArrayCell(Id("x"),[IntLiteral(0)])])])])))
         self.assertTrue(TestChecker.test(input,expect,503))
 
-    # def test102(self):
-    #     """More complex program"""
-    #     input = """
-    #             Var: x = 3.0, y = 2;
-    #             Function: main
-    #             Parameter: k
-    #             Body:
-    #                 Var: z = True, arr[1], b[1];
-    #                 arr[b[0]] = b[0];
-    #                 If main(main(0)) Then
-    #                     Return True;
-    #                 EndIf.
-    #                 Return False;
-    #             EndBody.
-    #               """
-    #     expect = str()
-    #     self.assertTrue(TestChecker.test(input, expect, 502))
+    def test104(self):
+        """More complex program"""
+        input = """
+                Function: main
+            Parameter: n, p
+            Body:
+                If True Then
+                    Return 1;
+                Else
+                    Return main(1, n);
+                EndIf.
+            EndBody.
+                  """
+        expect = str()
+        self.assertTrue(TestChecker.test(input, expect, 504))
     
     # def test103(self):
     #     """More complex program"""
