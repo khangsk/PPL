@@ -1,7 +1,13 @@
 
-                Function: main
-                Parameter: a[3]
-                Body:
-                    a = main({1,2,5});
-                    Return a;
-                EndBody.
+                   Var: x[3][2] = { { 1,2 }, { 2,3} , {3,4}   };
+                  Function: main
+                  Parameter: y, a, i
+                  Body:
+                        a = 1 + foo();
+                  EndBody.
+
+                  Function: foo
+                  Body:
+                        Return 1.1;
+                  EndBody.
+                  

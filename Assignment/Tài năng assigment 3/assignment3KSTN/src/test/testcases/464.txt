@@ -1,6 +1,17 @@
 
-                Var: x = True;
-                Function: main
+            Function: func_name
                 Body:
-                    x = {True};
+                    If 1>2 Then
+                        Var: x;
+                        Return True ;
+                    Else 
+                        Var: x;
+                        Var: y[1], y;
+                        Return False;
+                    EndIf.
                 EndBody.
+                
+            Function: main
+                Body:
+                EndBody.
+        

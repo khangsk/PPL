@@ -1,8 +1,15 @@
 
-                Function: main
-                Parameter: x
-                Body:
-                    Var: y[1];
-                    y[main(main(True))] = 0;
-                    Return 1;
-                EndBody.
+            Var: x = 1;
+            Function: foo
+            Parameter: x,y
+            Body:
+                Var: z;
+                Return 1;
+            EndBody.
+
+            Function: main
+            Body:
+                Var: x = 1, y;
+                 x = foo(x,y);
+            EndBody.
+        

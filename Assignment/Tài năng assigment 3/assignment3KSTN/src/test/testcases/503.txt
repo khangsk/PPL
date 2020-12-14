@@ -1,8 +1,7 @@
 
                 Function: main
-                Parameter: x
+                Parameter: x[1]
                 Body:
-                    Var: y[1][1];
-                    y[main(main(1))][main(2)] = 0;
-                    Return 1;
+                    Var: y = True;
+                    y = x[x[x[x[0]]]];
                 EndBody.

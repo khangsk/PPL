@@ -1,6 +1,15 @@
 
-                Function: main
-                Body:
-                    Var: x, y;
-                    x = y;
-                EndBody.
+        Function: foo
+        Parameter: a
+        Body:
+            a = 1;
+            Return;
+        EndBody.
+        Function: main
+        Parameter: b
+        Body:
+            main();
+            foo();
+            Return b;
+        EndBody.
+        

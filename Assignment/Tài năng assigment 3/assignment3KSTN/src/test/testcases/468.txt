@@ -1,7 +1,19 @@
 
-                Var: x[2][1], y[3][1];
-                Function: main
-                Body:
-                    x = {{1}, {2}};
-                    y = x;
-                EndBody.
+            Function: main_
+            Body:
+                Var: x;
+                main_();
+                x = 1;
+            EndBody.
+
+            Function: main
+            Body:
+                Var: x[5];
+                Var: y[3] = { 1,2,  3};
+                For ( i=1,i<100,1) Do
+                    If 1 < 2 Then
+                        x = y;
+                    EndIf.
+                EndFor.
+            EndBody.
+        

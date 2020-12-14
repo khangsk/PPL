@@ -1,11 +1,9 @@
 
-                Function: main
-                Parameter: x, y, z[4][4]
-                Body:
-                    Var: s, t, m;
-                    s = read();
-                    t = 5;
-                    t = int_of_float(5.6);
-                    m = 5.7;
-                    m = float_to_int(t);
-                EndBody.
+        Var: x = 1;
+        Function: main
+        Parameter: a, b
+        Body:
+            a = 1;
+            a = True;
+        EndBody.
+                

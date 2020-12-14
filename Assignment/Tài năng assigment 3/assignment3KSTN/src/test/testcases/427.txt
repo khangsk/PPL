@@ -1,7 +1,10 @@
 
-                Function: main
-                Parameter: x, y, z[4][4]
-                Body:
-                    Var: s;
-                    z();
-                EndBody.
+        Var: x = 1;
+        Function: main
+        Parameter: a, b[1]
+        Body:
+            a = True;
+            b[0] = x;
+            b[0] = a;
+        EndBody.
+                

@@ -1,11 +1,11 @@
 
-                Function: foo
-                Body:
-                    Return {{1}, {2}};
-                EndBody.
-                Function: main
-                Body:
-                    Var: x = True;
-                    foo()[0][0] = x;
-                EndBody.
-                
+                Var: x[3][2] = { { 1,2 }, { 2,3} , {3,4}   };
+               Function: main
+               Parameter: y, a, i
+               Body:
+                    For ( i= 1 ,i<1000, i+1 ) Do
+                        a =  a + x[i][i+1];
+                    EndFor.
+                    i = i + 1;
+               EndBody.
+               

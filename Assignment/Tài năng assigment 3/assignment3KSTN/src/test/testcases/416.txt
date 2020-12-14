@@ -1,11 +1,1 @@
-
-                Function: main
-                Body:
-                    foo();
-                EndBody.
-                Function: foo
-                Body:
-                EndBody.
-                Function: foo
-                Body:
-                EndBody.
+Program([FuncDecl(Id(main)[],([][CallStmt(Id(foo),[])]))])

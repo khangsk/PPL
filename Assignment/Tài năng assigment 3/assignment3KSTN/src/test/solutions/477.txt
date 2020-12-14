@@ -1,1 +1,1 @@
-Type Cannot Be Inferred: Return(Id(x))
+Type Mismatch In Expression: ArrayCell(Id(x),[IntLiteral(1),FloatLiteral(1.1)])

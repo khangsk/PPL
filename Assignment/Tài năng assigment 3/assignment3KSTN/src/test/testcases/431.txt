@@ -1,11 +1,17 @@
-
-                Function: main
-                Parameter: x, y, z[4][4], foo
-                Body:
-                    Var: s, t, m;
-                    x = t + m + (t * s \ (m - s + foo()) * 4);
-                EndBody.
-                Function: foo
-                Body:
-                    Return 1;
-                EndBody.
+Var: x;
+                    Function: main
+                   Body: 
+                        x = 1;
+                        x = foo(1);
+                        xx();
+                   EndBody.
+                   Function: xx
+                   Parameter: a
+                   Body:
+                        foo(1);
+                    EndBody.
+                   Function: foo
+                   Parameter: k
+                   Body:
+                        printStrLn(k);
+                   EndBody.

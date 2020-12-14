@@ -1,1 +1,1 @@
-Type Mismatch In Statement: Assign(Id(y),FloatLiteral(5.6))
+Index Out Of Range: ArrayCell(Id(x),[IntLiteral(1)])

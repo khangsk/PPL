@@ -1,1 +1,1 @@
-Redeclared Variable: t
+Type Mismatch In Expression: CallExpr(Id(read),[IntLiteral(4)])

@@ -1,12 +1,7 @@
-
-                Function: foo
-                Parameter: x, y
-                Body:
-                    x = 4;
-                    Return 5;
-                EndBody.
-                Function: main
-                Body:
-                    Var: x, y;
-                    x = foo(x,y) + 1;
-                EndBody.
+ 
+            Function: main
+            Parameter: x, y ,z
+            Body:
+            y = x || (x > z);
+            EndBody.
+        

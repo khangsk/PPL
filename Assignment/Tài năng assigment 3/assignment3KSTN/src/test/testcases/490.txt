@@ -1,9 +1,16 @@
 
-                Function: main
-                Parameter: x
-                Body:
-                    If x > 5 Then Return 1;
-                    ElseIf x > 6 Then Return 2.2;
-                    Else Return True;
-                    EndIf.
-                EndBody.
+                  Function: main
+                  Parameter: x,y,z
+                  Body:
+                       If x Then
+                       ElseIf y Then
+                       ElseIf z Then
+                       EndIf. 
+                  EndBody.
+
+                  Function: foo
+                  Parameter: k, a, i
+                  Body:
+                        main(True,False,1);
+                  EndBody.
+                  

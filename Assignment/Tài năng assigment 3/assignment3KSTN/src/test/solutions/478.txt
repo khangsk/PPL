@@ -1,1 +1,1 @@
-Type Cannot Be Inferred: Return(Id(x))
+Type Mismatch In Expression: ArrayCell(CallExpr(Id(main),[IntLiteral(1),IntLiteral(2),IntLiteral(3)]),[IntLiteral(2)])

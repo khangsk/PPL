@@ -1,1 +1,1 @@
-Redeclared Function: read
+Redeclared Function: foo

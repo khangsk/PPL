@@ -1,6 +1,14 @@
 
-                Var: x[2][1] = {{True}, {False}};
-                Function: main
-                Body:
-                    x = {{1}, {2}};
-                EndBody.
+               Function: main
+               Parameter: y, a, x
+               Body:
+                   x = 1;
+                   y = a + foo(x);
+               EndBody.
+               Function: foo
+               Parameter: a
+               Body:
+                   a = False;
+                   Return a;
+               EndBody.
+               

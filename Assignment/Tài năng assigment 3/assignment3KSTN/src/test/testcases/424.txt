@@ -1,7 +1,5 @@
-
-                Function: main
-                Parameter: x, y, z[4][4]
-                Body:
-                    Var: s;
-                    Var: x = 5;
-                EndBody.
+Var: main;
+                    Function: foo
+                    Body:
+                    EndBody.
+                

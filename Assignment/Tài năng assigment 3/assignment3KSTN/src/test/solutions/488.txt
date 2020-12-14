@@ -1,1 +1,1 @@
-Type Mismatch In Statement: While(Id(y),[],[Return()])
+Type Mismatch In Statement: Return(IntLiteral(1))

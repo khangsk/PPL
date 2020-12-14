@@ -1,9 +1,20 @@
 
-                Function: main
-                Parameter: x
-                Body:
-                    If x > 5 Then Return 1;
-                    ElseIf x > 6 Then Return;
-                    Else Return True;
-                    EndIf.
-                EndBody.
+                  Function: main
+                  Parameter: k
+                  Body:
+                       While foo(1,2,3) Do   
+                       EndWhile.
+                       
+                       While k Do   
+                       EndWhile.
+                        
+                  EndBody.
+
+                  Function: foo
+                  Parameter: k, a, i
+                  Body:
+                        Var: x[1][2];
+                        x = { {1,2} };
+                        Return 1;
+                  EndBody.
+                  

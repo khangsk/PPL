@@ -1,10 +1,7 @@
-
-                Function: main
-                Parameter: x, y
-                Body:
-                    Var: foo = 5;
-                    foo();
-                EndBody.
-                Function: foo
-                Body:
-                EndBody.
+Function: main
+                   Body: 
+                        Var: x;
+                        If x Then
+                            x = 1;
+                        EndIf.
+                   EndBody.

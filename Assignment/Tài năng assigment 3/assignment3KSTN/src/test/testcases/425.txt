@@ -1,7 +1,7 @@
 
-                Function: main
-                Parameter: x, y, z[4][4]
-                Body:
-                    Var: s;
-                    foo();
-                EndBody.
+        Function: main
+        Parameter: a, b
+        Body:
+            a = b;
+        EndBody.
+                

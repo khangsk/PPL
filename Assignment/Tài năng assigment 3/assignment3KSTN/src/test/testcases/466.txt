@@ -1,6 +1,9 @@
 
-                Var: x[2][1];
-                Function: main
+            Function: int_of_float
+            Body:
+            EndBody.
+
+            Function: main
                 Body:
-                    x = {{1}};
                 EndBody.
+        

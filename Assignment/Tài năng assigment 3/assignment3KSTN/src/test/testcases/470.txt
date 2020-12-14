@@ -1,9 +1,15 @@
 
-                Var: x[2][1];
-                Function: main
-                Body:
-                    Var: y[2][1];
-                    x = {{1}, {2}};
-                    y = x;
-                    y[0][0] = 1.5;
-                EndBody.
+            Var: x = 1;
+            Function: foo
+            Parameter: x
+            Body:
+                Var: z = 1.;
+                x = z;
+                Return 2;
+            EndBody.
+
+            Function: main
+            Body:
+                x = foo(1);
+            EndBody.
+        

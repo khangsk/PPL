@@ -1,1 +1,1 @@
-Redeclared Variable: x
+Statement Not In Loop: Continue()

@@ -166,15 +166,27 @@ class Utils:
     def merge(curScope, newScope):
         return reduce(lambda lst, sym: lst if Utils.isExisten(lst, sym) else lst+ [sym], curScope, newScope)
     
+    @staticmethod 
+    def sameElememt(arr):
+        for x in arr.value:
+            if type(x) is not type(arr.value[0]):
+                raise InvalidArrayLiteral(arr)
+        return type(arr.value[0])
+
     @staticmethod
-    def typeElementArray(arr):
-        if not arr:
-            return True
-        typ = type(arr[0])
-        for i in range(1, len(arr)):
-            if typ is not type(arr[i]):
-                return False
-        return True
+    def typeElementArray(arr, ast):
+        if type(arr) is list:
+            for x in arr:
+                if type(x) is not type(arr[0]):
+                    raise InvalidArrayLiteral(ast)
+        elif type(arr.value[0]) is ArrayLiteral:
+            num = len(arr.value[0].value)
+            ret = Utils.sameElememt(arr.value[0])
+            for x in arr.value:
+                if type(x) is not ArrayLiteral or ret is not Utils.sameElememt(x):
+                    raise InvalidArrayLiteral(arr)
+                if num is not len(x.value):
+                    raise InvalidArrayLiteral(x)
 
     @staticmethod
     def getArrayType(ast):
@@ -185,8 +197,7 @@ class Utils:
         while stack:
             check += 1
             if type(stack[0]) is not ArrayLiteral:
-                if not Utils.typeElementArray(stack):
-                    raise InvalidArrayLiteral(ast)
+                Utils.typeElementArray(stack, ast)
                 if type(stack[0]) is IntLiteral:
                     return ArrayType(arr, IntType())
                 elif type(stack[0]) is FloatLiteral:
@@ -201,8 +212,7 @@ class Utils:
             else:
                 if arr[-1] != len(x.value):
                     raise InvalidArrayLiteral(x)
-            if not Utils.typeElementArray(x.value):
-                raise InvalidArrayLiteral(x)
+            Utils.typeElementArray(x, ast)
             
             temp += x.value
             if not stack:

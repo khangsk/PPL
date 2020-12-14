@@ -83,17 +83,18 @@ class CheckSuite(unittest.TestCase):
     def test5(self):
         """Complex program"""
         input = """
-            Var: x = { 1,    1.,   "", True};
+            Var: x[4] = { 1,    1.,   "", True};
             Function: test
             Body:
                 Do
                     Var: x;
-                    Var: y, x[100];
+                    Var: y;
                 While False EndDo.
             EndBody.
             
             Function: main
                 Body:
+                test();
                 EndBody.
         """
         expect = str(InvalidArrayLiteral(ArrayLiteral([IntLiteral(1),FloatLiteral(1.0),StringLiteral(""),BooleanLiteral(True)])))

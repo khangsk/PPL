@@ -1,1 +1,1 @@
-Type Cannot Be Inferred: Assign(Id(z),Id(t))
+Unreachable Statement: Assign(Id(x),FloatLiteral(2.2))

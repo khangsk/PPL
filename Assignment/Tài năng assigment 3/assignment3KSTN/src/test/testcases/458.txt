@@ -1,11 +1,16 @@
 
-                Function: main
+                 Function: main
                 Body:
-                    Var: x[2][1] = {{4}, {3}}, y;
-                    x = foo();
-                    y = foo()[0][0] + 1;
+                    Var: x;
+                    x = 1 + 2;
+                    foo(5.1,x);
                 EndBody.
                 Function: foo
+                Parameter: x,y
                 Body:
-                    Return {{1}, {2}};
+                    x = 2;
+                    y = 1;
+                    Return;
                 EndBody.
+                
+               

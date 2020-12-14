@@ -1,8 +1,16 @@
 
-                Var: x[2][1];
-                Function: main
-                Body:
-                    Var: y[2][1];
-                    x = {{1}, {2}};
-                    x[0][0] = y;
-                EndBody.
+            Var: a,b;
+            Function: foo
+            Parameter: x,y,   z
+            Body:
+                Return;
+            EndBody.
+
+            Function: main
+            Body:
+                If b + 0 Then 
+                    Return a; 
+                EndIf.
+                foo(1,2,3);
+            EndBody.
+        

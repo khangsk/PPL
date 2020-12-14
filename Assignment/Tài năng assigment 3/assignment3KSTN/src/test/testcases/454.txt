@@ -1,11 +1,13 @@
 
                 Function: foo
+                Parameter: a[2][2],b
                 Body:
-                    Return {{1}, {2}};
+                    a[1] = 1;
+                    a[1][1] = b + 2;
+                    Return b;
                 EndBody.
                 Function: main
                 Body:
-                    Var: x[2][1];
-                    x = foo();
+                    foo(5,2);
                 EndBody.
-                
+               

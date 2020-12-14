@@ -1,12 +1,17 @@
 
-                Function: main
-                Body:
-                    Var: x;
-                    Do
-                        x = x + 1;
-                    While x > 100
-                    EndDo.
-                    Do
-                    While x
-                    EndDo.
-                EndBody.
+                  Function: main
+                  Parameter: k
+                  Body:
+                       If foo(1,2,3) Then
+                       ElseIf k Then
+                       EndIf. 
+                  EndBody.
+                  
+                  Function: foo
+                  Parameter: k, a, i
+                  Body:
+                        Var: x[1][2];
+                        x = { {1,2} };
+                        Return 1;
+                  EndBody.
+                  

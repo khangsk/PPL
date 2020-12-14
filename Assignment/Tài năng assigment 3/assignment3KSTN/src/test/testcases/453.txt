@@ -1,10 +1,26 @@
 
+                Function: foo
+                Parameter: a,b
+                Body:
+                    If a > b Then
+                        Var: i;
+                        For (i = 2, i < 10, i + 1) Do
+                            Var: s;
+                            s = string_of_int(i);
+                            print(s);
+                        EndFor.
+                    ElseIf a < b Then
+                        Var: i = 0;
+                        While i < 5 Do
+                            Var: s;
+                            s = string_of_int(i);
+                            printStrLn(s);
+                        EndWhile.
+                    EndIf. 
+                    Return b;
+                EndBody.
                 Function: main
                 Body:
-                    Var: x;
-                    x = foo();
+                    foo(5,2);
                 EndBody.
-                Function: foo
-                Body:
-                    Return 1;
-                EndBody.
+               

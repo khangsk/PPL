@@ -1,6 +1,23 @@
 
-                Var: x[2][1];
-                Function: main
+            Function: func_name
+            Parameter: k
                 Body:
-                    x = 1;
+                    If 0==0 Then
+                        Var: x;
+                    ElseIf 1==1 Then
+                        Var: y[1];
+                    Else
+                        Var: y;
+                        Var: m, n[1][2][3] = "string";
+                    EndIf.
+                    k = 0x9;
+                    For ( k=2,0<1, 1+1 ) Do
+                        Var: y,m,n;
+                        Var: k, n[1][2][100];
+                    EndFor.
                 EndBody.
+                
+            Function: main
+                Body:
+                EndBody.
+        

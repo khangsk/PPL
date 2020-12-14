@@ -1,11 +1,22 @@
 
                 Function: foo
-                Parameter: x[5][6]
+                Parameter: a,b
                 Body:
+                    If a > b Then
+                        If a > 0 Then
+                            If b > 0 Then
+                                Return 1;
+                            Else
+                                b = b + 10;
+                            EndIf.
+                        Else
+                            Return 1;
+                        EndIf.
+                    EndIf. 
+                    Return;
                 EndBody.
                 Function: main
                 Body:
-                    Var: x[5][6];
-                    x[0][0] = "abcd";
-                    foo(x);
+                    foo(5,2);
                 EndBody.
+               

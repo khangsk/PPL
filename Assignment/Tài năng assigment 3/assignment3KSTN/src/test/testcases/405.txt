@@ -1,1 +1,15 @@
-Program([FuncDecl(Id(main)[],([][CallStmt(Id(printStrLn),[])]))])
+
+            Var: x[4] = { 1,    1.,   "", True};
+            Function: test
+            Body:
+                Do
+                    Var: x;
+                    Var: y;
+                While False EndDo.
+            EndBody.
+            
+            Function: main
+                Body:
+                test();
+                EndBody.
+        
