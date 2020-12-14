@@ -1,19 +1,2 @@
-
-            Function: main_
-            Body:
-                Var: x;
-                main_();
-                x = 1;
-            EndBody.
-            
-            Function: main
-            Body:
-            EndBody.
-            
-            Function: main__
-            Body:
-                Var: x;
-                main__();
-                x = 1;
-            EndBody.
-        
+Var: x = 5;
+                    Var: x = 7;

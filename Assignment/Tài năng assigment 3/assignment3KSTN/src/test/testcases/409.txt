@@ -1,18 +1,7 @@
-
-                  Function: foo
-                  Parameter: x
-                  Body:
-                      If foo(int_of_string(string_of_bool(foo(1)))) Then
-                        Return True;
-                        print("hi");
-                      EndIf.
-                      Return False;
-                  EndBody.
-
-                  Function: main
-                  Body:
-                    Var: a;
-                    a = foo(3);
-                  EndBody.
-
-                  
+Var: x[1];
+                Function: main
+                Body:
+                    x[0] = 2;
+                    x[0] = 3.4;
+                    Return x;
+                EndBody.

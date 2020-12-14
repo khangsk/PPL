@@ -1,4 +1,14 @@
-Var: main;
-                    Function: main
-                   Body: 
-                   EndBody.
+
+                Function: main
+                Body:
+                    foo();
+                EndBody.
+                Function: foo
+                Body:
+                    Var: x = 4;
+                    While (x > 0) Do
+                        Var: x = 7;
+                        Var: x = 9;
+                        x = x - 1;
+                    EndWhile.
+                EndBody.

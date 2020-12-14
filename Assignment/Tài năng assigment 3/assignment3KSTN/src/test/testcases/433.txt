@@ -1,13 +1,10 @@
 
-        Var: a;
-        Function: foo
-        Body:
-            Return 1;
-        EndBody.
-        Function: main
-        Body:
-            a = foo();
-            a = "sk";
-        EndBody.
-        
-                
+                Function: main
+                Parameter: x, y
+                Body:
+                    foo();
+                    foo = 1;
+                EndBody.
+                Function: foo
+                Body:
+                EndBody.

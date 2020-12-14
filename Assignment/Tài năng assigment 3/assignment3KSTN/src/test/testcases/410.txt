@@ -1,18 +1,15 @@
-
-                  Function: foo
-                  Parameter: x
-                  Body:
-                        If x > 2 Then
-                            x = 3;
-                        Else
-                            Break;
-                            x = -3;
-                        EndIf.
-                  EndBody.
-
-                  Function: main
-                  Body:
-                    foo(2.1);
-                  EndBody.
-
-                  
+Var: x[4] = {1, 2, 3 ,4};
+                Function: main
+                Body:
+                    Var: z;
+                    Var: m[4] = {1,2,3,4};
+                    z = x[3];
+                    m = foo();
+                    Return x;
+                EndBody.
+                Function: foo
+                Body:
+                    Var: x;
+                    x = main()[3];
+                    Return {1,3,5};
+                EndBody.

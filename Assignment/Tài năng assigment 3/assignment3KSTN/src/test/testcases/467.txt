@@ -1,15 +1,7 @@
 
-            Function: main_
-            Body:
-                Var: x;
-                main_();
-                x = 1;
-            EndBody.
-
-            Function: main
-            Body:
-                Var: x;
-                x = 1;
-                x = 1.;
-            EndBody.
-        
+                Var: x[2][1], y;
+                Function: main
+                Body:
+                    x = {{1}, {2}};
+                    y = {1, 2, 3};
+                EndBody.

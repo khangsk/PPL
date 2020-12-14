@@ -1,19 +1,10 @@
 
-                Var: c;
-                Function: foo
-                Parameter: a, c
-                Body:
-                    If a Then 
-                        Var: c;
-                        c = True;
-                    Else
-                        c = True;
-                    EndIf.
-                    c = 10;
-                EndBody.
                 Function: main
+                Parameter: x[2][2]
                 Body:
-                    foo(True,2);
-                    c = 12.0;
+                    x[foo()][foo()[1]] = 0;
                 EndBody.
-                  
+                Function: foo
+                Body: 
+                    Return 1;
+                EndBody.

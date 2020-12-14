@@ -1,1 +1,1 @@
-Undeclared Identifier: i
+Type Cannot Be Inferred: Assign(Id(x),CallExpr(Id(foo),[]))

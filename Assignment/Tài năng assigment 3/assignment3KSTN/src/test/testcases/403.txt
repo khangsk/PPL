@@ -1,13 +1,1 @@
-
-                   Var: x[3][2] = { { 1,2 }, { 2,3} , {3,4}   };
-                  Function: main
-                  Parameter: y, a, i
-                  Body:
-                        Return x;
-                  EndBody.
-
-                  Function: foo
-                  Body:
-                        main(1,2,3)[2][2] = main(4,5,6)[3][2];
-                  EndBody.
-                  
+Program([FuncDecl(Id(main)[],([][CallStmt(Id(foo),[])]))])

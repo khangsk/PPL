@@ -1,9 +1,11 @@
 
-        Var: a = 1;
-        Function: main
-        Parameter: b
-        Body:
-            b = True;
-            a = b;
-        EndBody.
-                
+                Function: main
+                Parameter: x, y, z[4][4], foo[5][6]
+                Body:
+                    Var: s, t, m;
+                    x = t + m + (t * s \ (m - s + foo()) * 4);
+                EndBody.
+                Function: foo
+                Body:
+                    Return 1;
+                EndBody.

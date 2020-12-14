@@ -1,8 +1,10 @@
 
-        Var: a;
-        Function: main
-        Parameter: b
-        Body:
-            Var: b;
-        EndBody.
-        
+                Function: main
+                Parameter: x, y
+                Body:
+                    foo();
+                    x = x + (y + (1 + foo) + 3);
+                EndBody.
+                Function: foo
+                Body:
+                EndBody.

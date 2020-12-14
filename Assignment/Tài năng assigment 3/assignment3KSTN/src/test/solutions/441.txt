@@ -1,1 +1,1 @@
-Type Mismatch In Statement: CallStmt(Id(main),[])
+Type Cannot Be Inferred: Assign(Id(x),Id(y))

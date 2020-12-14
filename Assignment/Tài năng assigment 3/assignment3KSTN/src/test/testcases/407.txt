@@ -1,20 +1,2 @@
-
-                  Var: k;
-                  Function: foo
-                  Parameter: x,y,z
-                  Body:
-                      While main() Do  
-                          Return 1; 
-                      EndWhile.
-                  EndBody.
-
-                  Function: main
-                  Body:
-                      Var: z;
-                      z = foo(1,1,"");
-                      z = 2;
-                      foo(1,1,"")[1] = 1;
-                      Return True;
-                  EndBody.
-
-                  
+Var: x[2][2] = {{1,2}, {3,4}, {1,2,{4}}};
+                    Var: x = 7;

@@ -1,18 +1,6 @@
 
-                  Function: main
-                  Parameter: x,y,z
-                  Body:
-                       For (x = 0, x < 10, foo(2.0,3,4)) Do
-                            y = float_to_int(x);
-                       EndFor.
-                       Return y;
-                  EndBody.
-
-                  Function: foo
-                  Parameter: k, a, i
-                  Body:
-                        k = main(1,2.1,3);
-                        k = k +. 1.1;
-                        Return { {"a","b"}   };
-                  EndBody.
-                  
+                Function: main
+                Parameter: x, y
+                Body:
+                    x = x +. 1;
+                EndBody.

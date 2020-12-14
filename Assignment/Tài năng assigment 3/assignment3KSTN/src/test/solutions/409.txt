@@ -1,1 +1,1 @@
-Unreachable Statement: CallStmt(Id(print),[StringLiteral(hi)])
+Type Mismatch In Statement: Assign(ArrayCell(Id(x),[IntLiteral(0)]),FloatLiteral(3.4))

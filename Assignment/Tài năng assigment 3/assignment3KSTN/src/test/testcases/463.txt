@@ -1,15 +1,6 @@
 
-                  Var: x[2][2][3] = { { { 1,2,3 } , { 2,3,4 } } , { { 1,2,3 } , { 2,3,4 } } };
-                  Function: foo
-                  Parameter: z, y
-                  Body:
-                      Return x;
-                  EndBody.
-
-                  Function: main
-                  Parameter: x[2][2][3], y
-                  Body:
-                      x = foo(1,2);
-                      x[0][0][0] = False;
-                  EndBody.
-                  
+                Var: x = True;
+                Function: main
+                Body:
+                    x = "abcd";
+                EndBody.

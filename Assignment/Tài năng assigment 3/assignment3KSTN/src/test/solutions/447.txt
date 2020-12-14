@@ -1,1 +1,1 @@
-Type Mismatch In Statement: Return(IntLiteral(1))
+Type Cannot Be Inferred: CallStmt(Id(foo),[Id(x)])

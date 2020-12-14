@@ -1,1 +1,1 @@
-Unreachable Statement: Assign(Id(x),BinaryOp(+,Id(x),IntLiteral(1)))
+Type Mismatch In Expression: CallExpr(Id(read),[IntLiteral(4)])

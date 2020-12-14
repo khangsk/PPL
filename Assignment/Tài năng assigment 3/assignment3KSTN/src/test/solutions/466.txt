@@ -1,1 +1,1 @@
-Redeclared Function: int_of_float
+Type Mismatch In Statement: Assign(Id(x),ArrayLiteral(ArrayLiteral(IntLiteral(1))))

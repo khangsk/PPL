@@ -1,1 +1,1 @@
-Type Mismatch In Statement: CallStmt(Id(main),[BooleanLiteral(true),BooleanLiteral(false),IntLiteral(1)])
+Type Mismatch In Statement: Return(FloatLiteral(2.2))

@@ -1,25 +1,6 @@
 
-                  Function: fact
-                  Parameter: m,n,p
-                  Body:
-                        m = 1;
-                        n = "string";
-                        p = string_of_int(m);
-                        Return { { 1.1, 1.2 } , { 1.3, 1.4 }, { 1.5, 1.6 } };
-                  EndBody.
-
-                  Function: main
-                  Parameter: x,y,z
-                  Body:
-                       foo(fact(100,"a","b")[2][1], 1);
-                  EndBody.
-
-                  Function: foo
-                  Parameter: x,y
-                  Body:
-                       y = 0x9; 
-                       x = 1.1 +. 1.2;
-                       Return y;
-                  EndBody.
-
-                  
+                Function: main
+                Parameter: x[2][2]
+                Body:
+                    x[1][2][3] = 0;
+                EndBody.

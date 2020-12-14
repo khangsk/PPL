@@ -1,8 +1,8 @@
-Var: foo;
-                    Function: main
-                   Body: 
-                        foo();
-                   EndBody.
-                   Function: foo
-                   Body:
-                   EndBody.
+
+                Function: main
+                Body:
+                    print();
+                EndBody.
+                Function: read
+                Body:
+                EndBody.

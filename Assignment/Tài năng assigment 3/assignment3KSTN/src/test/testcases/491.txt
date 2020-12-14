@@ -1,16 +1,9 @@
 
-                  Function: main
-                  Parameter: x,y,z
-                  Body:
-                       If foo(2,3,4) Then
-                       EndIf. 
-                  EndBody.
-
-                  Function: foo
-                  Parameter: k, a, i
-                  Body:
-                        k = k + a + i;
-                        i = i +. 1.;
-                        Return True;
-                  EndBody.
-                  
+                Function: main
+                Parameter: x
+                Body:
+                    If x > 5 Then Return;
+                    ElseIf x > 6 Then Return 1;
+                    Else Return True;
+                    EndIf.
+                EndBody.

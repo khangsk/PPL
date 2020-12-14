@@ -36,7 +36,7 @@ def main(argv):
             suite = unittest.makeSuite(ASTGenSuite)
             test(suite)
         elif argv[1] == 'CheckSuite':
-            from CheckSuite import CheckSuite
+            from CheckSuite_duy import CheckSuite
             suite = unittest.makeSuite(CheckSuite)
             test(suite)
         else:

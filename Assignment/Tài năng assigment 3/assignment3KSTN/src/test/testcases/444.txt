@@ -1,10 +1,7 @@
 
-        Var: a[2][2];
-        Function: main
-        Parameter: b[2][2]
-        Body:
-           a[1][1] = 1.1;
-           b = a;
-           b = {{1,2},{3,4}};
-        EndBody.
-        
+                Var: z[5][7];
+                Function: main
+                Body:
+                    Var: x[5][6], y;
+                    x[1][4] = z[1][2];
+                EndBody.

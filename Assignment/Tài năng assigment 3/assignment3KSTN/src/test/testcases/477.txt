@@ -1,8 +1,6 @@
 
-                Var: x[3][2] = { { 1,2 }, { 2,3} , {3,4}   };
-               Function: main
-               Parameter: y, a, i
-               Body:
-                    x[1][1.1] = 1;
-               EndBody.
-               
+                Function: main
+                Body:
+                    Var: x;
+                    Return x;
+                EndBody.

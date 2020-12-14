@@ -1,20 +1,7 @@
 
-                  Function: main
-                  Parameter: x,y,z
-                  Body:
-                       While x Do   
-                       EndWhile. 
-                       
-                       While y Do   
-                       EndWhile.
-                       
-                       While z Do   
-                       EndWhile.
-                  EndBody.
-
-                  Function: foo
-                  Parameter: k, a, i
-                  Body:
-                        main(True,False,1);
-                  EndBody.
-                  
+                Function: main
+                Parameter: x
+                Body:
+                    printLn();
+                    x = printLn();
+                EndBody.

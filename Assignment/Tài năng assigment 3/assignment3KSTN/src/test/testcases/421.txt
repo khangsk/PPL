@@ -1,4 +1,13 @@
-Function: foo
-                   Body: 
-                    main();
-                   EndBody.
+
+                Function: main
+                Body:
+                    foo();
+                EndBody.
+                Function: foo
+                Body:
+                    Var: x = 4;
+                    Do
+                        Var: x = 5;
+                        x = x + 1;
+                    While x > 2 EndDo.
+                EndBody.

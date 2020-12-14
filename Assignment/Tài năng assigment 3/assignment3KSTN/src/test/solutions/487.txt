@@ -1,1 +1,1 @@
-Type Mismatch In Statement: Assign(Id(y),BooleanLiteral(true))
+Type Mismatch In Statement: For(Id(y),ArrayCell(Id(x),[IntLiteral(1),IntLiteral(0)]),CallExpr(Id(foo),[]),IntLiteral(1),[],[Assign(Id(y),BinaryOp(+,Id(y),IntLiteral(1)))])

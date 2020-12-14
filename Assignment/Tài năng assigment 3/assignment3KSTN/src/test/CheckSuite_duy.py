@@ -1400,18 +1400,7 @@ class CheckSuite(unittest.TestCase):
                 EndBody."""
         expect = str(TypeMismatchInExpression(BinaryOp("||",ArrayCell(ArrayLiteral([ArrayLiteral([IntLiteral(1)]),ArrayLiteral([IntLiteral(2)])]),[IntLiteral(0),IntLiteral(0)]),BooleanLiteral(False))))
         self.assertTrue(TestChecker.test(input,expect,509))
-
-    def test_type_mismatch_in_expression15(self):
-        input = """
-                Function: main
-                Parameter: x
-                Body:
-                    x = ({{1}, {2}})[0 + 0 * 0 \\ 0][0];
-                    Return 1;
-                EndBody."""
-        expect = str()
-        self.assertTrue(TestChecker.test(input,expect,510))
-
+        
     def test_type_mismatch_in_expression16(self):
         input = """
                 Function: main
@@ -2002,25 +1991,6 @@ class CheckSuite(unittest.TestCase):
         expect = str()
         self.assertTrue(TestChecker.test(input,expect, 555))
 
-    def test_invalid_array_literal7(self):
-        input = """
-        Function: main
-        Body:
-            Var: x[0] = {};
-        EndBody.
-        """
-        expect = str(InvalidArrayLiteral(ArrayLiteral([])))
-        self.assertTrue(TestChecker.test(input,expect, 556))
-
-    def test_invalid_array_literal8(self):
-        input = """
-        Function: main
-        Body:
-            Var: x[2][0] = {{}, {}};
-        EndBody.
-        """
-        expect = str(InvalidArrayLiteral(ArrayLiteral([])))
-        self.assertTrue(TestChecker.test(input,expect, 557))
 
     def test_function_not_return1(self):
         input = """

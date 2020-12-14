@@ -1,11 +1,8 @@
 
-        Var: a;
-        Function: main
-        Parameter: b
-        Body:
-            While a Do
-                b = a && True;
-            EndWhile.
-            b = 1 + 2;
-        EndBody.
-        
+                Var: z[5][7];
+                Function: main
+                Body:
+                    Var: x[5][6][7][8];
+                    x[3][0][1][1] = 1;
+                    x[1][4][1][1] = z[1][2];
+                EndBody.

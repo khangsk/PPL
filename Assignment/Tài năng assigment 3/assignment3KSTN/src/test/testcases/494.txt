@@ -1,15 +1,7 @@
 
-                  Function: main
-                  Parameter: x,y,z
-                  Body:
-                       While foo(2,3,4) Do   
-                       EndWhile. 
-                  EndBody.
-
-                  Function: foo
-                  Parameter: k, a, i
-                  Body:
-                        k = k + a + i;
-                        Return { {True,False}   };
-                  EndBody.
-                  
+                Function: main
+                Parameter: x
+                Body:
+                    print(x);
+                    main(1);
+                EndBody.

@@ -1,1 +1,1 @@
-Unreachable Function: sub_func
+Type Mismatch In Expression: CallExpr(Id(read),[IntLiteral(4)])

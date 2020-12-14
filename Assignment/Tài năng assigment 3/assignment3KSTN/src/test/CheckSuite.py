@@ -1944,6 +1944,37 @@ class CheckSuite(unittest.TestCase):
         expect = str(TypeMismatchInStatement(Assign(Id('c'),IntLiteral(10))))
         self.assertTrue(TestChecker.test(input, expect, 501))
     
+    def test102_cannot_inferred_in_call_expr(self):
+        """Complex program"""
+        input = """
+            Var: x = 1;
+            Function: foo
+            Parameter: x,y
+            Body:
+                Var: z;
+                Return 1;
+            EndBody.
+
+            Function: main
+            Body:
+                Var: x = 1, y;
+                 x = foo(x,y);
+            EndBody.
+        """
+        expect = str(TypeCannotBeInferred(Assign(Id('x'), CallExpr(Id('foo'), [Id('x'), Id('y')]))))
+        self.assertTrue(TestChecker.test(input, expect, 502))
+    
+    def test103_type_mismatch_in_expression18(self):
+        input = """
+                Function: main
+                Parameter: x[1]
+                Body:
+                    Var: y = True;
+                    y = x[x[x[x[0]]]];
+                EndBody."""
+        expect = str(TypeMismatchInExpression(ArrayCell(Id("x"),[ArrayCell(Id("x"),[ArrayCell(Id("x"),[ArrayCell(Id("x"),[IntLiteral(0)])])])])))
+        self.assertTrue(TestChecker.test(input,expect,503))
+
     # def test102(self):
     #     """More complex program"""
     #     input = """

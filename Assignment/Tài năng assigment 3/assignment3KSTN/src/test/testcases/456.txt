@@ -2,12 +2,9 @@
                 Function: main
                 Body:
                     Var: x;
-                    x = 1 + 2;
-                    foo(5,x);
+                    x = foo()[0][1];
                 EndBody.
                 Function: foo
-                Parameter: x,y
                 Body:
-                    Return True;
+                    Return {{1}, {2}};
                 EndBody.
-               
