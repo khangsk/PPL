@@ -1,1 +1,6 @@
-Program([FuncDecl(Id(main)[],([][CallStmt(Id(print),[CallExpr(Id(string_of_int),[IntLiteral(120)])])]))])
+
+                    Var: x = 1;
+                    Function: main
+                   Body: 
+                        print(string_of_int(120));
+                   EndBody.

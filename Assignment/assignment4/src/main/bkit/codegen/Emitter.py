@@ -14,6 +14,8 @@ class Emitter():
             return "I"
         elif typeIn is cgen.FloatType:
             return "F"
+        elif typeIn is cgen.Unknown:
+            return "K"
         elif typeIn is cgen.StringType:
             return "Ljava/lang/String;"
         elif typeIn is cgen.BoolType:
@@ -205,7 +207,7 @@ class Emitter():
         #isFinal: Boolean
         #value: String
 
-        return self.jvm.emitSTATICFIELD(lexeme, self.getJVMType(in_), false)
+        return self.jvm.emitSTATICFIELD(lexeme, self.getJVMType(in_), False)
 
     def emitGETSTATIC(self, lexeme, in_, frame):
         #lexeme: String
