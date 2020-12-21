@@ -21,10 +21,11 @@ class SubBody():
         self.sym = sym
         self.isGlobal = isGlobal
 class Symbol:
-    def __init__(self,name,mtype,value = None):
+    def __init__(self,name,mtype,value = None, val=None):
         self.name = name
         self.mtype = mtype
         self.value = value
+        self.val = val
     def __str__(self):
         return 'Symbol(' + self.name + ',' + str(self.mtype) + ')'
 class CName:
@@ -88,7 +89,7 @@ class Access():
         self.isFirst = isFirst
         self.checkArrayType = checkArrayType
 
-class Utility:
+class Utils:
     @staticmethod
     def getSymbol(scope, name):
         for x in scope:
@@ -105,7 +106,7 @@ class Utility:
 
     @staticmethod
     def isOpForNumber(operator):
-        return Utility.isOpForNumberToNumber(operator) or Utility.isOpForNumberToBoolean(operator)
+        return Utils.isOpForNumberToNumber(operator) or Utils.isOpForNumberToBoolean(operator)
 
     @staticmethod
     def mergeNumberType(lType, rType):
@@ -190,43 +191,43 @@ class CodeGenVisitor(BaseVisitor):
         self.emit.emitEPILOG()
         return c
     
-    def visitFuncDecl(self, ast, o):
-        ret = Utility.getSymbol(o.sym, ast.name.name)
-        frame = Frame(ast.name.name, ret)
-        self.genMETHOD(ast, o.sym, frame)
-
-
     def visitVarDecl(self, ast, o):
         frame = o.frame
         isGlobal = o.isGlobal
         varName = ast.variable.name
-        varType = Unknown() 
-        if type(ast.varInit) is IntLiteral: varType =  IntType() 
-        elif type(ast.varInit) is FloatLiteral: varType =  FloatType() 
-        elif type(ast.varInit) is BooleanLiteral: varType =  BoolType() 
-        elif type(ast.varInit) is StringLiteral: varType =  StringType() 
-        elif type(ast.varInit) is ArrayLiteral: varType =  ArrayType() 
+        varType = self.getTypeVar(ast.varInit)
         if isGlobal:
-            self.emit.printout(self.emit.emitATTRIBUTE(varName, Utility.retrieveType(varType), False, ""))
+            self.emit.printout(self.emit.emitATTRIBUTE(varName, Utils.retrieveType(varType), False, ""))
             if type(varType) is ArrayType: 
                 self.listGlobalArray.append(ast)
-            return Symbol(varName, varType)
+            return Symbol(varName, varType, val=ast.varInit)
         # params
         idx = frame.getNewIndex()
-        self.emit.printout(self.emit.emitVAR(idx, varName, Utility.retrieveType(varType), frame.getStartLabel(), frame.getEndLabel(), frame))
-        return SubBody(frame, [Symbol(varName, varType, Index(idx))] + o.sym)
+        self.emit.printout(self.emit.emitVAR(idx, varName, Utils.retrieveType(varType), frame.getStartLabel(), frame.getEndLabel(), frame))
+        
+        return SubBody(frame, [Symbol(varName, varType, Index(idx), val=ast.varInit)] + o.sym)
+    
+    def getTypeVar(self, x):
+        if type(x) is IntLiteral: return IntType() 
+        elif type(x) is FloatLiteral: return FloatType() 
+        elif type(x) is BooleanLiteral: return BoolType() 
+        elif type(x) is StringLiteral: return StringType() 
+        elif type(x) is ArrayLiteral: return ArrayType() 
 
-
+    def visitFuncDecl(self, ast, o):
+        ret = Utils.getSymbol(o.sym, ast.name.name)
+        frame = Frame(ast.name.name, ret)
+        self.genMETHOD(ast, o.sym, frame)
 
     def genMETHOD(self, decl, o, frame):
         # o: Any
         glenv = o
         methodName = decl.name.name
-        returnType = Utility.getSymbol(o, decl.name.name).mtype.rettype
+        returnType = Utils.getSymbol(o, decl.name.name).mtype.rettype
         if methodName == "main": returnType = VoidType()
         isMain = methodName == "main" and len(decl.param) == 0 and type(returnType) is VoidType
         isProc = type(returnType) is VoidType
-        intype = [ArrayPointerType(StringType())] if isMain else [Utility.retrieveType(x.varType) for x in decl.param]
+        intype = [ArrayPointerType(StringType())] if isMain else [Utils.retrieveType(x.varType) for x in decl.param]
         returnType = VoidType()
         mtype = MType(intype, returnType)
         self.emit.printout(self.emit.emitMETHOD(methodName, MType([ArrayType(StringType())],VoidType()), True, frame))
@@ -242,27 +243,31 @@ class CodeGenVisitor(BaseVisitor):
         varList = SubBody(frame, glenv)
         for x in decl.param:
             varList = self.visit(x, varList)
-            if type(x.varType) is ArrayType:
+            if type(x.mtype) is ArrayType:
                 listParamArray.append(varList.sym[0])
         for x in decl.body[0]:
             varList = self.visit(x, varList)
-            if type(x.varType) is ArrayType:
+            if self.getTypeVar(x.varInit) is ArrayType:
                 listLocalArray.append(varList.sym[0])
 
         self.emit.printout(self.emit.emitLABEL(frame.getStartLabel(), frame))
 
-        # # Init local array declare
-        # for sym in listLocalArray:
-        #     index = sym.value.value
-        #     varType = sym.mtype
-        #     size = varType.upper - varType.lower + 1
-        #     self.emit.printout(self.emit.emitInitNewLocalArray(index, size, varType.eleType, frame))
+        # Init local array declare
+        for sym in listLocalArray:
+            index = sym.value.value
+            varType = sym.mtype
+            size = varType.upper - varType.lower + 1
+            self.emit.printout(self.emit.emitInitNewLocalArray(index, size, varType.eleType, frame))
 
-        # # Clone params array
-        # for sym in listParamArray:
-        #     index = sym.value.value
-        #     eleType = sym.mtype.eleType
-        #     self.emit.printout(self.emit.emitCloneArray(index, eleType, frame))
+        # Clone params array
+        for sym in listParamArray:
+            index = sym.value.value
+            eleType = sym.mtype.eleType
+            self.emit.printout(self.emit.emitCloneArray(index, eleType, frame))
+
+        for x in varList.sym:
+            if x.val:
+                self.visit(Assign(Id(x.name), x.val), varList)
 
         list(map(lambda x: self.visit(x, varList), decl.body[1]))
 
@@ -292,7 +297,7 @@ class CodeGenVisitor(BaseVisitor):
     def handleCall(self, ast, frame, symbols, isStmt=False):
         # ast: CallStmt | CallExpr
 
-        sym = Utility.lookup(ast.method.name, symbols, lambda x: x.name)
+        sym = Utils.lookup(ast.method.name, symbols, lambda x: x.name)
         cname = sym.value.value
         ctype = sym.mtype
         paramTypes = ctype.partype
@@ -372,6 +377,8 @@ class CodeGenVisitor(BaseVisitor):
         self.emit.printout(self.emit.emitLABEL(frame.getBreakLabel(), frame))
         frame.exitLoop()
 
+    def visitDowhile(self, ast, o):
+        pass
 
     def visitFor(self, ast, o):
         ctxt = o
@@ -431,7 +438,6 @@ class CodeGenVisitor(BaseVisitor):
         ctxt = o
         frame = ctxt.frame
         nenv = ctxt.sym
-
         # Pre-prepare for assign to array cell
         # stack: ..., arrayref, index, value -> ...
         # push 2 slot for arrayref and index, visit exp first
@@ -439,14 +445,12 @@ class CodeGenVisitor(BaseVisitor):
         if isArray: [frame.push() for i in range(0,2)]
 
         # Visit LHS: Id || ArrayCell
-        expCode, expType = self.visit(ast.exp, Access(frame, nenv, False, True))
+        rhsCode, rhsType = self.visit(ast.rhs, Access(frame, nenv, False, True))
         lhsCode, lhsType = self.visit(ast.lhs, Access(frame, nenv, True, True))
-        if type(lhsType) is FloatType and type(expType) is IntType:
-            expCode = expCode + self.emit.emitI2F(frame)
         if not isArray:
-            self.emit.printout(expCode + lhsCode)
+            self.emit.printout(rhsCode + lhsCode)
         else:
-            self.emit.printout(lhsCode[0] + expCode + lhsCode[1])
+            self.emit.printout(lhsCode[0] + rhsCode + lhsCode[1])
             # recover stack status
             [frame.pop() for i in range(0,2)]
 
@@ -465,14 +469,14 @@ class CodeGenVisitor(BaseVisitor):
 
         if isLeft and o.checkArrayType: return False, None
 
-        sym = Utility.lookup(ast.name, symbols, lambda x: x.name)
+        sym = Utils.lookup(ast.name, symbols, lambda x: x.name)
 
         # recover status of stack in frame
         if not isFirst and isLeft: frame.push()
         elif not isFirst and not isLeft: frame.pop()
 
         isArrayType = type(sym.mtype) is ArrayType
-        emitType = Utility.retrieveType(sym.mtype)
+        emitType = Utils.retrieveType(sym.mtype)
         if sym.value is None: # not index -> global var - static field
             if isLeft and not isArrayType: retCode = self.emit.emitPUTSTATIC(self.className + "/" + sym.name, emitType, frame)
             else: retCode = self.emit.emitGETSTATIC(self.className + "/" + sym.name, emitType, frame)
@@ -544,12 +548,12 @@ class CodeGenVisitor(BaseVisitor):
         
         lCode, lType = self.visit(ast.left, ctxt)
         rCode, rType = self.visit(ast.right, ctxt)
-        if Utility.isOpForNumber(op): # for number type
-            mType = Utility.mergeNumberType(lType, rType)
+        if Utils.isOpForNumber(op): # for number type
+            mType = Utils.mergeNumberType(lType, rType)
             if op == '/': mType = FloatType() # mergeType >= lType, rType
             if type(lType) is IntType and type(mType) != type(lType): lCode = lCode + self.emit.emitI2F(frame)
             if type(rType) is IntType and type(mType) != type(rType): rCode = rCode + self.emit.emitI2F(frame)
-            if Utility.isOpForNumberToNumber(op):
+            if Utils.isOpForNumberToNumber(op):
                 if op in ['+', '-']:
                     return lCode + rCode + self.emit.emitADDOP(op, mType, frame), mType
                 if op in ['*', '/']:
@@ -589,6 +593,8 @@ class CodeGenVisitor(BaseVisitor):
     def visitStringLiteral(self, ast, o):
         return self.emit.emitPUSHCONST(ast.value, StringType(), o.frame), StringType()
 
+    # def visitArrayLiteral(self, ast, param):
+    #     return Utils.getArrayType(ast)
     # def genInit(self):
     #     methodname,methodtype = "<init>",MType([],VoidType())
     #     frame = Frame(methodname, methodtype.rettype)

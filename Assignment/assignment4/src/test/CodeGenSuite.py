@@ -7,12 +7,14 @@ class CheckCodeGenSuite(unittest.TestCase):
     def test_int(self):
         """Simple program: int main() {} """
         input = """
-                    Var: x = 1;
+                    Var: x = 111;
                     Function: main
-                   Body: 
-                        print(string_of_int(120));
+                   Body:        
+                        Var: y = 12;
+                        print(string_of_int(y));
+                        print(string_of_int(x));
                    EndBody."""
-        expect = "120"
+        expect = "12111"
         self.assertTrue(TestCodeGen.test(input,expect,501))
     # def test_int_ast(self):
     # 	input = Program([
