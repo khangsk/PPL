@@ -1,5 +1,5 @@
 
                     Function: main
                    Body:        
-                        print(string_of_int(12111));
+                        printStrLn(string_of_bool(!True));
                    EndBody.

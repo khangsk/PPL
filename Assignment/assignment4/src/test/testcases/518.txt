@@ -1,0 +1,8 @@
+
+                    Function: main
+                   Body:        
+                        Var: x = True;
+                        x = (10.12 =/= 9.5) && (10.5 >. 10.) && (-.2.0001 <. -.2.) && (90.1 >=. 90.1) && (-.12. <=. -.12.);
+                        print(string_of_bool(x));
+
+                   EndBody.

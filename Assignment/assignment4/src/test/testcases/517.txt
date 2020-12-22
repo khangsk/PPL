@@ -1,0 +1,8 @@
+
+                    Function: main
+                   Body:        
+                        Var: x = True;
+                        x = (3 == 3) && (10 != 9) && (100 > -10) && (-2 < 0) && (90 >= 90) && (-12 <= -12);
+                        print(string_of_bool(x));
+
+                   EndBody.

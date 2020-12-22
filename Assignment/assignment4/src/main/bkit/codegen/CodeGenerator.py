@@ -50,7 +50,9 @@ class ClassType(Type):
 class StringType(Type):
     def __str__(self):
         return "StringType"
-class BoolType(Type): pass
+class BoolType(Type):
+    def __str__(self):
+        return "BoolType"
 class MType(Type):
     def __init__(self,i,o):
         self.partype = i #List[Type]
@@ -91,26 +93,22 @@ class Access():
 
 class Utils:
     @staticmethod
-    def getSymbol(scope, name):
-        for x in scope:
-            if x.name == name:
-                return x
-    
-    @staticmethod
-    def isOpForNumberToNumber(operator):
-        return str(operator) in ['+', '-', '*', '/', 'div', 'mod']
-
-    @staticmethod
-    def isOpForNumberToBoolean(operator):
-        return str(operator) in ['<>', '=', '>', '<', '>=', '<=']
-
-    @staticmethod
-    def isOpForNumber(operator):
-        return Utils.isOpForNumberToNumber(operator) or Utils.isOpForNumberToBoolean(operator)
-
-    @staticmethod
-    def mergeNumberType(lType, rType):
-        return FloatType() if FloatType in [type(x) for x in [lType, rType]] else IntType()
+    def getSymbol(scope, x):
+        s = ''
+        if type(x) is Id:
+            s = x.name
+        elif type(x) is ArrayCell:
+            if type(x.arr) is Id:
+                s = x.arr.name
+            elif type(x.arr) is CallExpr:
+                s = x.arr.method.name
+        elif type(x) is CallExpr:
+            s = x.method.name
+        else:
+            s = x
+        for i in scope:
+            if i.name == s:
+                return i
 
     @staticmethod
     def retrieveType(originType):
@@ -135,7 +133,14 @@ class CodeGenerator():
             Symbol("printLn", MType([], VoidType()), CName(self.libName)),
             Symbol("printStrLn", MType([StringType()], VoidType()), CName(self.libName)),
             Symbol("print", MType([StringType()], VoidType()), CName(self.libName)),
-            Symbol("string_of_int", MType([IntType()], StringType()), CName(self.libName))
+            Symbol("string_of_int", MType([IntType()], StringType()), CName(self.libName)),
+            Symbol("int_of_float", MType([FloatType()], IntType()), CName(self.libName)),
+            Symbol("float_to_int", MType([IntType()], FloatType()), CName(self.libName)),
+            Symbol("int_of_string", MType([StringType()], IntType()), CName(self.libName)),
+            Symbol("float_of_string", MType([StringType()], FloatType()), CName(self.libName)),
+            Symbol("string_of_float", MType([FloatType()], StringType()), CName(self.libName)),
+            Symbol("bool_of_string", MType([StringType()], BoolType()), CName(self.libName)),
+            Symbol("string_of_bool", MType([BoolType()], StringType()), CName(self.libName))
         ]
 
     def gen(self, ast, dir_):
@@ -195,7 +200,7 @@ class CodeGenVisitor(BaseVisitor):
         frame = o.frame
         isGlobal = o.isGlobal
         varName = ast.variable.name
-        varType = self.getTypeVar(ast.varInit)
+        varType = self.getTypeVar(ast.varInit) if ast.varInit else Unknown()
         if isGlobal:
             self.emit.printout(self.emit.emitATTRIBUTE(varName, Utils.retrieveType(varType), False, ""))
             if type(varType) is ArrayType: 
@@ -287,9 +292,9 @@ class CodeGenVisitor(BaseVisitor):
 
 
     def visitCallStmt(self, ast, o):
-        ctxt = o
-        frame = ctxt.frame
-        symbols = ctxt.sym
+        
+        frame = o.frame
+        symbols = o.sym
         self.handleCall(ast, frame, symbols, isStmt=True)
 
 
@@ -311,7 +316,7 @@ class CodeGenVisitor(BaseVisitor):
                 pass
             paramsCode = paramsCode + pCode
             idx = idx + 1
-        # if sym.name == "main": ctype = MType([ArrayPointerType(StringType())], VoidType())
+       
         code = paramsCode + self.emit.emitINVOKESTATIC(cname + "/" + sym.name, ctype, frame) 
         if isStmt: self.emit.printout(code)
         else: return code, ctype.rettype
@@ -319,9 +324,9 @@ class CodeGenVisitor(BaseVisitor):
 
 
     def visitReturn(self, ast, o):
-        ctxt = o
-        frame = ctxt.frame
-        nenv = ctxt.sym
+        
+        frame = o.frame
+        nenv = o.sym
         retType = frame.returnType
         if not type(retType) is VoidType:
             expCode, expType = self.visit(ast.expr, Access(frame, nenv, False, True))
@@ -358,9 +363,9 @@ class CodeGenVisitor(BaseVisitor):
 
 
     def visitWhile(self, ast, o):
-        ctxt = o
-        frame = ctxt.frame
-        nenv = ctxt.sym
+        
+        frame = o.frame
+        nenv = o.sym
         expCode, expType = self.visit(ast.exp, Access(frame, nenv, False, True))
         
         labelS = frame.getNewLabel() # label start
@@ -381,9 +386,9 @@ class CodeGenVisitor(BaseVisitor):
         pass
 
     def visitFor(self, ast, o):
-        ctxt = o
-        frame = ctxt.frame
-        nenv = ctxt.sym
+        
+        frame = o.frame
+        nenv = o.sym
 
         exp1Code, _ = self.visit(ast.expr1, Access(frame, nenv, False, True))
         exp2Code, _ = self.visit(ast.expr2, Access(frame, nenv, False, True))
@@ -422,22 +427,22 @@ class CodeGenVisitor(BaseVisitor):
         frame.exitLoop()
 
     def visitBreak(self, ast, o):
-        ctxt = o
-        frame = ctxt.frame
+        
+        frame = o.frame
         self.emit.printout(self.emit.emitGOTO(frame.getBreakLabel(), frame))
 
     def visitContinue(self, ast, o):
-        ctxt = o
-        frame = ctxt.frame
+        
+        frame = o.frame
         self.emit.printout(self.emit.emitGOTO(frame.getContinueLabel(), frame))
 
 
 
 
     def visitAssign(self, ast, o):
-        ctxt = o
-        frame = ctxt.frame
-        nenv = ctxt.sym
+        
+        frame = o.frame
+        nenv = o.sym
         # Pre-prepare for assign to array cell
         # stack: ..., arrayref, index, value -> ...
         # push 2 slot for arrayref and index, visit exp first
@@ -511,73 +516,54 @@ class CodeGenVisitor(BaseVisitor):
 
 
     def visitBinaryOp(self, ast, o):
-        ctxt = o
-        frame = ctxt.frame
-        op = str(ast.op)
         
-        if op in ['orelse', 'andthen']:
-            result = []
-            lCode, lType = self.visit(ast.left, ctxt)
-            result.append(lCode)
-
-            labelF = frame.getNewLabel() # eval is false
-            labelT = frame.getNewLabel() # eval is true
-
-            if op == 'andthen': result.append(self.emit.emitIFFALSE(labelF, frame)) # false
-            else: result.append(self.emit.emitIFTRUE(labelT, frame)) # true
-
-            rCode, rType = self.visit(ast.right, ctxt)
-            result.append(rCode)
-
-            if op == 'andthen':
-                result.append(self.emit.emitIFFALSE(labelF, frame)) # false
-                result.append(self.emit.emitPUSHICONST("true", frame)) # push true
-                result.append(self.emit.emitGOTO(labelT, frame)) # go to true
-                result.append(self.emit.emitLABEL(labelF, frame)) # push false
-                result.append(self.emit.emitPUSHICONST("false", frame))
-                result.append(self.emit.emitLABEL(labelT, frame))
+        frame = o.frame
+        op = ast.op
+        if op in ['&&', '||']:
+            frame = o.frame
+            buffer = []
+            labelT = frame.getNewLabel()
+            labelF = frame.getNewLabel()
+            lCode = self.visit(ast.left, o)[0]
+            buffer.append(lCode)
+            if ast.op == '||':
+                buffer.append(self.emit.emitIFTRUE(labelT,frame))
             else:
-                result.append(self.emit.emitIFTRUE(labelT, frame)) # true
-                result.append(self.emit.emitPUSHICONST("false", frame)) # push false
-                result.append(self.emit.emitGOTO(labelF, frame)) # go to false
-                result.append(self.emit.emitLABEL(labelT, frame)) # push true
-                result.append(self.emit.emitPUSHICONST("true", frame))
-                result.append(self.emit.emitLABEL(labelF, frame))
-
-            return ''.join(result), BoolType()
+                buffer.append(self.emit.emitIFFALSE(labelF,frame))
+            rCode = self.visit(ast.right, o)[0]
+            buffer.append(rCode)
+            if ast.op == '||':
+                buffer.append(self.emit.emitIFTRUE(labelT,frame))
+                buffer.append(self.emit.emitPUSHICONST("False",frame))
+                buffer.append(self.emit.emitGOTO(labelF,frame))
+                buffer.append(self.emit.emitLABEL(labelT,frame))
+                buffer.append(self.emit.emitPUSHICONST("True",frame))
+                buffer.append(self.emit.emitLABEL(labelF,frame))
+            else:
+                buffer.append(self.emit.emitIFFALSE(labelF,frame))
+                buffer.append(self.emit.emitPUSHICONST("True",frame))
+                buffer.append(self.emit.emitGOTO(labelT,frame))
+                buffer.append(self.emit.emitLABEL(labelF,frame))
+                buffer.append(self.emit.emitPUSHICONST("False",frame))
+                buffer.append(self.emit.emitLABEL(labelT,frame))
+            return "".join(buffer),BoolType()
         
-        lCode, lType = self.visit(ast.left, ctxt)
-        rCode, rType = self.visit(ast.right, ctxt)
-        if Utils.isOpForNumber(op): # for number type
-            mType = Utils.mergeNumberType(lType, rType)
-            if op == '/': mType = FloatType() # mergeType >= lType, rType
-            if type(lType) is IntType and type(mType) != type(lType): lCode = lCode + self.emit.emitI2F(frame)
-            if type(rType) is IntType and type(mType) != type(rType): rCode = rCode + self.emit.emitI2F(frame)
-            if Utils.isOpForNumberToNumber(op):
-                if op in ['+', '-']:
-                    return lCode + rCode + self.emit.emitADDOP(op, mType, frame), mType
-                if op in ['*', '/']:
-                    return lCode + rCode + self.emit.emitMULOP(op, mType, frame), mType
-                if op == 'div':
-                    return lCode + rCode + self.emit.emitDIV(frame), mType
-                if op == 'mod':
-                    return lCode + rCode + self.emit.emitMOD(frame), mType
-            else: # op to boolean: > <= = <>, ...
-                return lCode + rCode + self.emit.emitREOP(op, mType, frame), BoolType()
-        else: # for boolean type
-            mType = BoolType()
-            if op == 'or': return lCode + rCode + self.emit.emitOROP(frame), mType
-            if op == 'and': return lCode + rCode + self.emit.emitANDOP(frame), mType
-
+        lCode, lType = self.visit(ast.left, o)
+        rCode, rType = self.visit(ast.right, o)
+        if op in ['+', '-', '+.', '-.']:
+            return lCode + rCode + self.emit.emitADDOP(op, lType, frame), lType
+        if op in ['*', '\\', '%', '*.', '\\.']:
+            return lCode + rCode + self.emit.emitMULOP(op, lType, frame), lType
+        if op in ['==', '!=', '>', '<', '>=', '<=', '=/=', '>.', '<.', '>=.', '<=.']:
+            return lCode + rCode + self.emit.emitREOP(op, lType, frame), BoolType()
 
 
     def visitUnaryOp(self, ast, o):
-        ctxt = o
-        frame = ctxt.frame
-        op = str(ast.op)
-        bCode, bType = self.visit(ast.body, ctxt)
-        if op == '-': return bCode + self.emit.emitNEGOP(bType, frame), bType
-        if op == 'not': return bCode + self.emit.emitNOT(bType, frame), bType
+        frame = o.frame
+        op = ast.op
+        bCode, bType = self.visit(ast.body, o)
+        if op in ['-', '-.']: return bCode + self.emit.emitNEGOP(bType, frame), bType
+        if op == '!': return bCode + self.emit.emitNOT(bType, frame), bType
 
 
 

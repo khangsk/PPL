@@ -51,9 +51,9 @@ class Emitter():
                 return self.jvm.emitSIPUSH(i)
             return self.jvm.emitLDC(str(i))
         elif type(in_) is str:
-            if in_ == "true":
+            if in_ == "True":
                 return self.emitPUSHICONST(1, frame)
-            elif in_ == "false":
+            elif in_ == "False":
                 return self.emitPUSHICONST(0, frame)
             else:
                 return self.emitPUSHICONST(int(in_), frame)
@@ -80,11 +80,11 @@ class Emitter():
         #typ: Type
         #frame: Frame
         
-        if type(typ) is cgen.IntType:
+        if type(typ) in [cgen.IntType, cgen.BoolType]:
             return self.emitPUSHICONST(in_, frame)
         elif type(typ) is cgen.StringType:
             frame.push()
-            return self.jvm.emitLDC(in_)
+            return self.jvm.emitLDC('"' + in_ + '"')
         else:
             raise IllegalOperandException(in_)
 
@@ -132,7 +132,6 @@ class Emitter():
         #fromLabel: Int
         #toLabel: Int
         #frame: Frame
-        
         return self.jvm.emitVAR(in_, varName, self.getJVMType(inType), fromLabel, toLabel)
 
     def emitREADVAR(self, name, inType, index, frame):
@@ -143,8 +142,10 @@ class Emitter():
         #... -> ..., value
         
         frame.push()
-        if type(inType) is cgen.IntType:
+        if type(inType) in [cgen.IntType, cgen.BoolType]:
             return self.jvm.emitILOAD(index)
+        elif type(inType) is cgen.FloatType:
+            return self.jvm.emitFLOAD(index)
         elif type(inType) is cgen.ArrayType or type(inType) is cgen.ClassType or type(inType) is cgen.StringType:
             return self.jvm.emitALOAD(index)
         else:
@@ -175,8 +176,10 @@ class Emitter():
         
         frame.pop()
 
-        if type(inType) is cgen.IntType:
+        if type(inType) in [cgen.IntType, cgen.BoolType]:
             return self.jvm.emitISTORE(index)
+        elif type(inType) is cgen.FloatType:
+            return self.jvm.emitFSTORE(index)
         elif type(inType) is cgen.ArrayType or type(inType) is cgen.ClassType or type(inType) is cgen.StringType:
             return self.jvm.emitASTORE(index)
         else:
@@ -311,12 +314,12 @@ class Emitter():
         label1 = frame.getNewLabel()
         label2 = frame.getNewLabel()
         result = list()
-        result.append(emitIFTRUE(label1, frame))
-        result.append(emitPUSHCONST("true", in_, frame))
-        result.append(emitGOTO(label2, frame))
-        result.append(emitLABEL(label1, frame))
-        result.append(emitPUSHCONST("false", in_, frame))
-        result.append(emitLABEL(label2, frame))
+        result.append(self.emitIFTRUE(label1, frame))
+        result.append(self.emitPUSHCONST("True", in_, frame))
+        result.append(self.emitGOTO(label2, frame))
+        result.append(self.emitLABEL(label1, frame))
+        result.append(self.emitPUSHCONST("False", in_, frame))
+        result.append(self.emitLABEL(label2, frame))
         return ''.join(result)
 
     '''
@@ -332,15 +335,13 @@ class Emitter():
 
         frame.pop()
         if lexeme == "+":
-            if type(in_) is cgen.IntType:
-                return self.jvm.emitIADD()
-            else:
-                return self.jvm.emitFADD()
-        else:
-            if type(in_) is cgen.IntType:
-                return self.jvm.emitISUB()
-            else:
-                return self.jvm.emitFSUB()
+            return self.jvm.emitIADD()
+        if lexeme == "+.":
+            return self.jvm.emitFADD()
+        if lexeme == "-":
+            return self.jvm.emitISUB()
+        if lexeme == "-.":
+            return self.jvm.emitFSUB()
 
     '''
     *   generate imul, idiv, fmul or fdiv.
@@ -356,15 +357,15 @@ class Emitter():
 
         frame.pop()
         if lexeme == "*":
-            if type(in_) is cgen.IntType:
-                return self.jvm.emitIMUL()
-            else:
-                return self.jvm.emitFMUL()
-        else:
-            if type(in_) is cgen.IntType:
-                return self.jvm.emitIDIV()
-            else:
-                return self.jvm.emitFDIV()
+            return self.jvm.emitIMUL()
+        if lexeme == "*.":
+            return self.jvm.emitFMUL()
+        if lexeme == "\\":
+            return self.jvm.emitIDIV()
+        if lexeme == "\\.":
+            return self.jvm.emitFDIV()
+        if lexeme == "%":
+            return self.jvm.emitIREM()
 
     def emitDIV(self, frame):
         #frame: Frame
@@ -409,16 +410,28 @@ class Emitter():
 
         frame.pop()
         frame.pop()
+        if type(in_) is cgen.FloatType: 
+            result.append(self.jvm.emitFCMPL())
         if op == ">":
             result.append(self.jvm.emitIFICMPLE(labelF))
+        elif op == ">.":
+            result.append(self.jvm.emitIFLE(labelF))
         elif op == ">=":
             result.append(self.jvm.emitIFICMPLT(labelF))
+        elif op == ">=.":
+            result.append(self.jvm.emitIFLT(labelF))
         elif op == "<":
             result.append(self.jvm.emitIFICMPGE(labelF))
+        elif op == "<.":
+            result.append(self.jvm.emitIFGE(labelF))
         elif op == "<=":
             result.append(self.jvm.emitIFICMPGT(labelF))
+        elif op == "<=.":
+            result.append(self.jvm.emitIFGT(labelF))
         elif op == "!=":
             result.append(self.jvm.emitIFICMPEQ(labelF))
+        elif op == "=/=":
+            result.append(self.jvm.emitIFEQ(labelF))
         elif op == "==":
             result.append(self.jvm.emitIFICMPNE(labelF))
         result.append(self.emitPUSHCONST("1", cgen.IntType(), frame))

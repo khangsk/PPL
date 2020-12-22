@@ -1,5 +1,6 @@
 
                     Function: main
                    Body:        
-                        print(string_of_int(12111));
+                        Var: y = 123.0;
+                        printStrLn(string_of_float(y));
                    EndBody.

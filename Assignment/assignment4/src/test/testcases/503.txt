@@ -1,10 +1,8 @@
 
-        Function: foo
-        Body:
-            print(string_of_int(1));
-        EndBody.
-        Function: main
-        Body: 
-            foo();
-            print(string_of_int(120));
-        EndBody.
+                    Var: x = 111;
+                    Function: main
+                   Body:        
+                        Var: y = 12;
+                        print(string_of_int(y));
+                        print(string_of_int(x));
+                   EndBody.

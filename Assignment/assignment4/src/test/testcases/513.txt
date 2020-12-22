@@ -1,0 +1,13 @@
+
+                    Function: main
+                   Body:        
+                        Var: x = 0.;
+                        x = x +. 5.;
+                        x = x -. 10.;
+                        x = x *. -.2.;
+                        printStrLn(string_of_float(x));
+                        x = x +. 1.;
+                        printStrLn(string_of_float(x));
+                        x = x \. 2.;
+                        printStrLn(string_of_float(x));
+                   EndBody.

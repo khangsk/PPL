@@ -1,0 +1,7 @@
+
+                    Function: main
+                   Body:        
+                        Var: y = 1;
+                        y = -2;
+                        printStrLn(string_of_int(y));
+                   EndBody.

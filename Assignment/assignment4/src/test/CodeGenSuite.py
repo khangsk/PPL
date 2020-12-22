@@ -4,18 +4,15 @@ from AST import *
 
 
 class CheckCodeGenSuite(unittest.TestCase):
-    def test_int(self):
-        """Simple program: int main() {} """
-        input = """
-                    Var: x = 111;
-                    Function: main
-                   Body:        
-                        Var: y = 12;
-                        print(string_of_int(y));
-                        print(string_of_int(x));
-                   EndBody."""
-        expect = "12111"
-        self.assertTrue(TestCodeGen.test(input,expect,501))
+    # def test_int(self):
+    #     """Simple program: int main() {} """
+    #     input = """
+    #                 Function: main
+    #                Body:        
+    #                     print(string_of_int(12111));
+    #                EndBody."""
+    #     expect = "12111"
+    #     self.assertTrue(TestCodeGen.test(input,expect,501))
     # def test_int_ast(self):
     # 	input = Program([
     # 		FuncDecl(Id("main"),[],([],[
@@ -23,6 +20,195 @@ class CheckCodeGenSuite(unittest.TestCase):
     #                 CallExpr(Id("string_of_int"),[IntLiteral(120)])])]))])
     # 	expect = "120"
     # 	self.assertTrue(TestCodeGen.test(input,expect,502))
+
+    # def test3_int(self):
+    #     input = """
+    #                 Var: x = 111;
+    #                 Function: main
+    #                Body:        
+    #                     Var: y = 12;
+    #                     print(string_of_int(y));
+    #                     print(string_of_int(x));
+    #                EndBody."""
+    #     expect = "12111"
+    #     self.assertTrue(TestCodeGen.test(input,expect,503))
+    
+    # def test4_bool(self):
+    #     input = """
+    #                 Function: main
+    #                Body:        
+    #                     Var: y = True;
+    #                     print(string_of_bool(y));
+    #                EndBody."""
+    #     expect = "true"
+    #     self.assertTrue(TestCodeGen.test(input,expect,504))
+
+    # def test5_float(self):
+    #     input = """
+    #                 Function: main
+    #                Body:        
+    #                     Var: y = 123.0;
+    #                     printStrLn(string_of_float(y));
+    #                EndBody."""
+    #     expect = "123.0\n"
+    #     self.assertTrue(TestCodeGen.test(input,expect,505))
+
+    # def test6_string(self):
+    #     input = """
+    #                 Function: main
+    #                Body:        
+    #                     Var: y = "Hello, Im Khang";
+    #                     printStrLn(y);
+    #                EndBody."""
+    #     expect = "Hello, Im Khang\n"
+    #     self.assertTrue(TestCodeGen.test(input,expect,506))
+    
+    # def test7_unary(self):
+    #     input = """
+    #                 Function: main
+    #                Body:        
+    #                     Var: y = 1;
+    #                     y = -2;
+    #                     printStrLn(string_of_int(y));
+    #                EndBody."""
+    #     expect = "-2\n"
+    #     self.assertTrue(TestCodeGen.test(input,expect,507))
+    
+    # def test8_unary(self):
+    #     input = """
+    #                 Function: main
+    #                Body:        
+    #                     Var: y = 0.;
+    #                     y = -.2.0;
+    #                     printStrLn(string_of_float(y));
+    #                EndBody."""
+    #     expect = "-2.0\n"
+    #     self.assertTrue(TestCodeGen.test(input,expect,508))
+
+    # def test9_unary(self):
+    #     input = """
+    #                 Function: main
+    #                Body:        
+    #                     printStrLn(string_of_bool(!True));
+    #                EndBody."""
+    #     expect = "false\n"
+    #     self.assertTrue(TestCodeGen.test(input,expect,509))
+    
+    # def test10_binary(self):
+    #     input = """
+    #                 Function: main
+    #                Body:        
+                        
+    #                     printStrLn(string_of_bool(True || False));
+    #                     printStrLn(string_of_bool(False || False));
+    #                     print(string_of_bool(False || True));
+    #                EndBody."""
+    #     expect = "true\nfalse\ntrue"
+    #     self.assertTrue(TestCodeGen.test(input,expect,510))
+    
+    # def test11_binary(self):
+    #     input = """
+    #                 Function: main
+    #                Body:        
+                        
+    #                     printStrLn(string_of_bool(True && False));
+    #                     printStrLn(string_of_bool(True && True));
+    #                     print(string_of_bool(False && True));
+    #                EndBody."""
+    #     expect = "false\ntrue\nfalse"
+    #     self.assertTrue(TestCodeGen.test(input,expect,511))
+
+    # def test12_binary(self):
+    #     input = """
+    #                 Function: main
+    #                Body:        
+    #                     Var: x = 0;
+    #                     x = x + 5;
+    #                     x = x - 10;
+    #                     x = x * -2;
+    #                     printStrLn(string_of_int(x));
+    #                     x = x + 1;
+    #                     printStrLn(string_of_int(x));
+    #                     x = x \\ 2;
+    #                     printStrLn(string_of_int(x));
+    #                     x = x % 3;
+    #                     printStrLn(string_of_int(x));
+    #                EndBody."""
+    #     expect = "10\n11\n5\n2\n"
+    #     self.assertTrue(TestCodeGen.test(input,expect,512))
+    
+    # def test13_binary(self):
+    #     input = """
+    #                 Function: main
+    #                Body:        
+    #                     Var: x = 0.;
+    #                     x = x +. 5.;
+    #                     x = x -. 10.;
+    #                     x = x *. -.2.;
+    #                     printStrLn(string_of_float(x));
+    #                     x = x +. 1.;
+    #                     printStrLn(string_of_float(x));
+    #                     x = x \\. 2.;
+    #                     printStrLn(string_of_float(x));
+    #                EndBody."""
+    #     expect = "10.0\n11.0\n5.5\n"
+    #     self.assertTrue(TestCodeGen.test(input,expect,513))
+
+    # def test14_binary(self):
+    #     input = """
+    #                 Function: main
+    #                Body:        
+    #                     print(string_of_bool(True && (1 + 2 >= 3) && (3 != 4)));
+
+    #                EndBody."""
+    #     expect = "true"
+    #     self.assertTrue(TestCodeGen.test(input,expect,514))
+    
+    # def test15_binary(self):
+    #     input = """
+    #                 Function: main
+    #                Body:        
+    #                     print(string_of_bool(False || (10 * 5 > 60) || (3 == 4)));
+
+    #                EndBody."""
+    #     expect = "false"
+    #     self.assertTrue(TestCodeGen.test(input,expect,515))
+
+    # def test16_binary(self):
+    #     input = """
+    #                 Function: main
+    #                Body:        
+    #                     print(string_of_bool(False || (10. *. 5. >=. 60.) || (3 == 4)));
+
+    #                EndBody."""
+    #     expect = "false"
+    #     self.assertTrue(TestCodeGen.test(input,expect,516))
+
+    # def test17_binary(self):
+    #     input = """
+    #                 Function: main
+    #                Body:        
+    #                     Var: x = True;
+    #                     x = (3 == 3) && (10 != 9) && (100 > -10) && (-2 < 0) && (90 >= 90) && (-12 <= -12);
+    #                     print(string_of_bool(x));
+
+    #                EndBody."""
+    #     expect = "true"
+    #     self.assertTrue(TestCodeGen.test(input,expect,517))
+    
+    def test18_binary(self):
+        input = """
+                    Function: main
+                   Body:        
+                        Var: x = True;
+                        x = (10.12 =/= 9.5) && (10.5 >. 10.) && (-.2.0001 <. -.2.) && (90.1 >=. 90.1) && (-.12. <=. -.12.);
+                        print(string_of_bool(x));
+
+                   EndBody."""
+        expect = "true"
+        self.assertTrue(TestCodeGen.test(input,expect,518))
+
+
     # def test3(self):
     #     """Simple program: int main() {} """
     #     input = """
