@@ -196,18 +196,153 @@ class CheckCodeGenSuite(unittest.TestCase):
     #     expect = "true"
     #     self.assertTrue(TestCodeGen.test(input,expect,517))
     
-    def test18_binary(self):
+    # def test18_binary(self):
+    #     input = """
+    #                 Function: main
+    #                Body:        
+    #                     Var: x = True;
+    #                     x = (10.12 =/= 9.5) && (10.5 >. 10.) && (-.2.0001 <. -.2.) && (90.1 >=. 90.1) && (-.12. <=. -.12.);
+    #                     print(string_of_bool(x));
+
+    #                EndBody."""
+    #     expect = "true"
+    #     self.assertTrue(TestCodeGen.test(input,expect,518))
+    # def test19_if(self):
+    #     input = """
+    #                 Function: main
+    #                Body:        
+    #                     Var: x = 5;
+    #                     x = x - 1;
+    #                     If (x < 0) Then print("Nho hon 0");
+    #                     ElseIf (x == 0) Then print("Bang 0");
+    #                     ElseIf (x == 1) Then print("stop");
+    #                     Else
+    #                         Var: y = 100;
+    #                         x = x + y;
+    #                         print(string_of_int(x));
+    #                     EndIf.
+    #                EndBody."""
+    #     expect = "104"
+    #     self.assertTrue(TestCodeGen.test(input,expect,519))
+
+    # def test20_if(self):
+    #     input = """
+    #                 Function: main
+    #                Body:        
+    #                     Var: x = 0;
+    #                     x = x - 1;
+    #                     If (x < 0) Then print("Nho hon 0");
+    #                     ElseIf (x == 0) Then print("Bang 0");
+    #                     ElseIf (x == 1) Then print("stop");
+    #                     Else
+    #                         print(string_of_int(x));
+    #                     EndIf.
+    #                EndBody."""
+    #     expect = "Nho hon 0"
+    #     self.assertTrue(TestCodeGen.test(input,expect,520))
+
+    # def test21_if(self):
+    #     input = """
+    #                 Function: main
+    #                Body:        
+    #                     Var: x = 2;
+    #                     x = x - 1;
+    #                     If (x < 0) Then print("Nho hon 0");
+    #                     ElseIf (x == 0) Then print("Bang 0");
+    #                     ElseIf (x == 1) Then 
+    #                         Var: x = 123456, s = "1";
+    #                         s = string_of_int(x);
+    #                         print(s);
+    #                     Else
+    #                         print(string_of_int(x));
+    #                     EndIf.
+    #                EndBody."""
+    #     expect = "123456"
+    #     self.assertTrue(TestCodeGen.test(input,expect,521))
+
+    def test22_while(self):
         input = """
                     Function: main
                    Body:        
-                        Var: x = True;
-                        x = (10.12 =/= 9.5) && (10.5 >. 10.) && (-.2.0001 <. -.2.) && (90.1 >=. 90.1) && (-.12. <=. -.12.);
-                        print(string_of_bool(x));
-
+                        Var: x = 5;
+                        While (x >= 0) Do
+                            print(string_of_int(x));
+                            x = x - 1;
+                        EndWhile.
                    EndBody."""
-        expect = "true"
-        self.assertTrue(TestCodeGen.test(input,expect,518))
+        expect = "543210"
+        self.assertTrue(TestCodeGen.test(input,expect,522))
+    
+    def test23_while(self):
+        input = """
+                    Var: x = 10;
+                    Function: main
+                   Body:        
+                        Var: x = 10;
+                        While (x >= 0) Do
+                            Var: y = 2;
+                            If (x % 2 == 0) Then
+                                print(string_of_int(x));
+                            Else
+                                x = x - y;
+                            EndIf.
+                            x = x - 1;
+                        EndWhile.
+                   EndBody."""
+        expect = "1062"
+        self.assertTrue(TestCodeGen.test(input,expect,523))
+    
+    def test24_while(self):
+        input = """
+                    Function: main
+                   Body:        
+                        Var: x = 5;
+                        While (x >= 0) Do
+                            Var: y = 1;
+                            If (x > y) Then
+                                print(string_of_int(x));
+                            ElseIf (x == y) Then
+                                Break;
+                            Else
+                                print(string_of_int(x));
+                            EndIf.
+                            x = x - 1;
+                        EndWhile.
+                   EndBody."""
+        expect = "5432"
+        self.assertTrue(TestCodeGen.test(input,expect,524))
 
+    def test25_do_while(self):
+        input = """
+                    Function: main
+                   Body:        
+                        Var: n = 10;
+                        Do
+                            If (n % 2 != 0) Then
+                                print(string_of_int(n));
+                            EndIf.
+                            n = n - 1;
+                        While (n >= 0) EndDo.
+                   EndBody."""
+        expect = "97531"
+        self.assertTrue(TestCodeGen.test(input,expect,525))
+    
+    def test26_do_while(self):
+        input = """
+                    Function: main
+                   Body:        
+                        Var: n = 10;
+                        Do
+                            Var: x = 5, y = 4;
+                            If ((n + x) % y == 0) Then
+                                print(string_of_int(n));
+                            EndIf.
+                            n = n - 1;
+                        While (n >= 0) EndDo.
+                   EndBody."""
+        expect = "73"
+        self.assertTrue(TestCodeGen.test(input,expect,526))
+    
 
     # def test3(self):
     #     """Simple program: int main() {} """

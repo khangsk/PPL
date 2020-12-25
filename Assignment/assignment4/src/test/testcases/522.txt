@@ -1,0 +1,9 @@
+
+                    Function: main
+                   Body:        
+                        Var: x = 5;
+                        While (x >= 0) Do
+                            print(string_of_int(x));
+                            x = x - 1;
+                        EndWhile.
+                   EndBody.

@@ -1,0 +1,13 @@
+
+                    Function: main
+                   Body:        
+                        Var: n = 10;
+                        Do
+                            Var: x = 5, y = 4;
+                            If ((n + x) % y == 0) Then
+                                print(string_of_int(n));
+                            EndIf.
+                            n = n - 1;
+                            Continue;
+                        While (n >= 0) EndDo.
+                   EndBody.

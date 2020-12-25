@@ -209,7 +209,6 @@ class CodeGenVisitor(BaseVisitor):
         # params
         idx = frame.getNewIndex()
         self.emit.printout(self.emit.emitVAR(idx, varName, Utils.retrieveType(varType), frame.getStartLabel(), frame.getEndLabel(), frame))
-        
         return SubBody(frame, [Symbol(varName, varType, Index(idx), val=ast.varInit)] + o.sym)
     
     def getTypeVar(self, x):
@@ -232,10 +231,9 @@ class CodeGenVisitor(BaseVisitor):
         if methodName == "main": returnType = VoidType()
         isMain = methodName == "main" and len(decl.param) == 0 and type(returnType) is VoidType
         isProc = type(returnType) is VoidType
-        intype = [ArrayPointerType(StringType())] if isMain else [Utils.retrieveType(x.varType) for x in decl.param]
-        returnType = VoidType()
+        intype = [ArrayType(StringType())] if isMain else [Utils.retrieveType(x.varType) for x in decl.param]
         mtype = MType(intype, returnType)
-        self.emit.printout(self.emit.emitMETHOD(methodName, MType([ArrayType(StringType())],VoidType()), True, frame))
+        self.emit.printout(self.emit.emitMETHOD(methodName, mtype, True, frame))
         frame.enterScope(isProc)
 
         # Generate code for parameter declarations
@@ -342,20 +340,31 @@ class CodeGenVisitor(BaseVisitor):
 
     def visitIf(self, ast, o):
         frame = o.frame
-        nenv = o.sym
-        expCode, expType = self.visit(ast.expr, Access(frame, nenv, False, True))
-        self.emit.printout(expCode)
-
-        labelT = frame.getNewLabel() 
+        nenv = o.sym 
         labelE = frame.getNewLabel() 
-
-        self.emit.printout(self.emit.emitIFTRUE(labelT, frame)) 
-        hasReturnStmt = True in [self.visit(x, o) for x in ast.elseStmt]
-        if not hasReturnStmt:
+        hasReturnStmt = False
+        for ele in ast.ifthenStmt:
+            expCode, expType = self.visit(ele[0], Access(frame, nenv, False, True))
+            labelF = frame.getNewLabel()
+            self.emit.printout(expCode)
+            self.emit.printout(self.emit.emitIFFALSE(labelF, frame))
+            #  var 
+            newScope = o
+            for x in ele[1]:
+                newScope = self.visit(x, newScope)
+            for x in ele[1]:
+                self.visit(Assign(Id(x.variable.name), x.varInit), newScope)
+            hasReturnStmt = True in [self.visit(x, newScope) for x in ele[2]]
             self.emit.printout(self.emit.emitGOTO(labelE, frame)) # go to end
-        # True
-        self.emit.printout(self.emit.emitLABEL(labelT, frame))
-        hasReturnStmt = True in [self.visit(x, o) for x in ast.thenStmt] and hasReturnStmt
+            self.emit.printout(self.emit.emitLABEL(labelF, frame))
+
+        #  var 
+        newScope = o
+        for x in ast.elseStmt[0]:
+            newScope = self.visit(x, newScope)
+        for x in ast.elseStmt[0]:
+            self.visit(Assign(Id(x.variable.name), x.varInit), newScope)
+        hasReturnStmt = True in [self.visit(x, newScope) for x in ast.elseStmt[1]]
         # End
         self.emit.printout(self.emit.emitLABEL(labelE, frame))
         return hasReturnStmt
@@ -374,7 +383,14 @@ class CodeGenVisitor(BaseVisitor):
         self.emit.printout(self.emit.emitLABEL(labelS, frame))
         self.emit.printout(expCode)
         self.emit.printout(self.emit.emitIFFALSE(labelE, frame))
-        hasReturnStmt = True in [self.visit(x, o) for x in ast.sl]
+
+        newScope = o
+        for x in ast.sl[0]:
+            newScope = self.visit(x, newScope)
+        for x in ast.sl[0]:
+            self.visit(Assign(Id(x.variable.name), x.varInit), newScope)
+
+        hasReturnStmt = True in [self.visit(x, newScope) for x in ast.sl[1]]
         self.emit.printout(self.emit.emitLABEL(frame.getContinueLabel(), frame))
         if not hasReturnStmt:
             self.emit.printout(self.emit.emitGOTO(labelS, frame)) # loop
@@ -383,7 +399,31 @@ class CodeGenVisitor(BaseVisitor):
         frame.exitLoop()
 
     def visitDowhile(self, ast, o):
-        pass
+        frame = o.frame
+        nenv = o.sym
+        expCode, expType = self.visit(ast.exp, Access(frame, nenv, False, True))
+        
+        labelS = frame.getNewLabel() # label start
+        labelE = frame.getNewLabel() # label end
+        frame.enterLoop()
+        self.emit.printout(self.emit.emitLABEL(labelS, frame))
+
+        newScope = o
+        for x in ast.sl[0]:
+            newScope = self.visit(x, newScope)
+        for x in ast.sl[0]:
+            self.visit(Assign(Id(x.variable.name), x.varInit), newScope)
+        hasReturnStmt = True in [self.visit(x, newScope) for x in ast.sl[1]]
+
+        self.emit.printout(self.emit.emitLABEL(frame.getContinueLabel(), frame))
+        if hasReturnStmt:
+            self.emit.printout(self.emit.emitGOTO(labelE, frame)) # loop
+        self.emit.printout(expCode)
+        self.emit.printout(self.emit.emitIFTRUE(labelS, frame))
+            
+        self.emit.printout(self.emit.emitLABEL(labelE, frame))
+        self.emit.printout(self.emit.emitLABEL(frame.getBreakLabel(), frame))
+        frame.exitLoop()
 
     def visitFor(self, ast, o):
         
@@ -581,22 +621,22 @@ class CodeGenVisitor(BaseVisitor):
 
     # def visitArrayLiteral(self, ast, param):
     #     return Utils.getArrayType(ast)
-    # def genInit(self):
-    #     methodname,methodtype = "<init>",MType([],VoidType())
-    #     frame = Frame(methodname, methodtype.rettype)
-    #     self.emit.printout(self.emit.emitMETHOD(methodname,methodtype,False,frame))
-    #     frame.enterScope(True)
-    #     varname,vartype,varindex = "this",ClassType(self.className),frame.getNewIndex()
-    #     startLabel, endLabel = frame.getStartLabel(), frame.getEndLabel()
-    #     self.emit.printout(self.emit.emitVAR(varindex, varname, vartype, startLabel, endLabel,frame ))
-    #     self.emit.printout(self.emit.emitLABEL(startLabel,frame))
-    #     self.emit.printout(self.emit.emitREADVAR(varname, vartype, varindex, frame))
-    #     self.emit.printout(self.emit.emitINVOKESPECIAL(frame))
-    #     self.emit.printout(self.emit.emitLABEL(endLabel, frame))
-    #     self.emit.printout(self.emit.emitRETURN(methodtype.rettype, frame))
-    #     self.emit.printout(self.emit.emitENDMETHOD(frame))
+    def genInit(self):
+        methodname,methodtype = "<init>",MType([],VoidType())
+        frame = Frame(methodname, methodtype.rettype)
+        self.emit.printout(self.emit.emitMETHOD(methodname,methodtype,False,frame))
+        frame.enterScope(True)
+        varname,vartype,varindex = "this",ClassType(self.className),frame.getNewIndex()
+        startLabel, endLabel = frame.getStartLabel(), frame.getEndLabel()
+        self.emit.printout(self.emit.emitVAR(varindex, varname, vartype, startLabel, endLabel,frame ))
+        self.emit.printout(self.emit.emitLABEL(startLabel,frame))
+        self.emit.printout(self.emit.emitREADVAR(varname, vartype, varindex, frame))
+        self.emit.printout(self.emit.emitINVOKESPECIAL(frame))
+        self.emit.printout(self.emit.emitLABEL(endLabel, frame))
+        self.emit.printout(self.emit.emitRETURN(methodtype.rettype, frame))
+        self.emit.printout(self.emit.emitENDMETHOD(frame))
 
-    # # The following code is just for initial, students should remove it and write your visitor from here
+    # The following code is just for initial, students should remove it and write your visitor from here
     def genMain(self,o):
         methodname,methodtype = "main",MType([ArrayType(StringType())],VoidType())
         frame = Frame(methodname, methodtype.rettype)
