@@ -8,6 +8,5 @@
                                 print(string_of_int(n));
                             EndIf.
                             n = n - 1;
-                            Continue;
                         While (n >= 0) EndDo.
                    EndBody.

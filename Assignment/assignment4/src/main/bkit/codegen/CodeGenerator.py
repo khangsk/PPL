@@ -328,10 +328,7 @@ class CodeGenVisitor(BaseVisitor):
         retType = frame.returnType
         if not type(retType) is VoidType:
             expCode, expType = self.visit(ast.expr, Access(frame, nenv, False, True))
-            if type(retType) is FloatType and type(expType) is IntType:
-                expCode = expCode + self.emit.emitI2F(frame)
             self.emit.printout(expCode)
-        # self.emit.printout(self.emit.emitGOTO(frame.getEndLabel(), frame))
         self.emit.printout(self.emit.emitRETURN(retType, frame))
         return True
 
@@ -432,8 +429,10 @@ class CodeGenVisitor(BaseVisitor):
 
         exp1Code, _ = self.visit(ast.expr1, Access(frame, nenv, False, True))
         exp2Code, _ = self.visit(ast.expr2, Access(frame, nenv, False, True))
-        lhsWCode, _ = self.visit(ast.id, Access(frame, nenv, True, True)) # Write code
-        lhsRCode, _ = self.visit(ast.id, Access(frame, nenv, False, False)) # Read code
+        exp3Code, _ = self.visit(ast.expr3, Access(frame, nenv, False, True))
+
+        lhsWCode, _ = self.visit(ast.idx1, Access(frame, nenv, True, True)) # Write code
+        lhsRCode, _ = self.visit(ast.idx1, Access(frame, nenv, False, False)) # Read code
         
         labelS = frame.getNewLabel() # label start
         labelE = frame.getNewLabel() # label end
@@ -445,19 +444,21 @@ class CodeGenVisitor(BaseVisitor):
         # Loop
         self.emit.printout(self.emit.emitLABEL(labelS, frame))
         # 1. Condition
-        self.emit.printout(lhsRCode)
         self.emit.printout(exp2Code)
-        if ast.up:
-            self.emit.printout(self.emit.emitIFICMPGT(labelE, frame))
-        else:
-            self.emit.printout(self.emit.emitIFICMPLT(labelE, frame))
+        self.emit.printout(self.emit.emitIFFALSE(labelE, frame))
         # 2. Statements
-        hasReturnStmt = True in [self.visit(x, o) for x in ast.loop]
+        newScope = o
+        for x in ast.loop[0]:
+            newScope = self.visit(x, newScope)
+        for x in ast.loop[0]:
+            self.visit(Assign(Id(x.variable.name), x.varInit), newScope)
+        hasReturnStmt = True in [self.visit(x, newScope) for x in ast.loop[1]]
+
         self.emit.printout(self.emit.emitLABEL(frame.getContinueLabel(), frame))
         # 3. Update index
         self.emit.printout(lhsRCode)
-        self.emit.printout(self.emit.emitPUSHICONST(1, frame))
-        self.emit.printout(self.emit.emitADDOP('+' if ast.up else '-', IntType(), frame))
+        self.emit.printout(exp3Code)
+        self.emit.printout(self.emit.emitADDOP('+', IntType(), frame))
         self.emit.printout(lhsWCode)
 
         if not hasReturnStmt:
