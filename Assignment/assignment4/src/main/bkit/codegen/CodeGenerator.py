@@ -167,6 +167,9 @@ class CodeGenVisitor(BaseVisitor):
 
         self.listGlobalArray = [] # list(VarDecl: array declare global)
 
+        self.function = []
+
+        self.visitFunc = []
 
     def visitProgram(self, ast, c):
         # #ast: Program
@@ -183,16 +186,21 @@ class CodeGenVisitor(BaseVisitor):
         self.emit.printout(self.emit.emitPROLOG(self.className, "java.lang.Object"))
         staticDecl = self.env
         for x in ast.decl:
-            if type(x) is FuncDecl:
-                partype = [i.varType for i in x.param]
-                staticDecl = [Symbol(x.name.name, MType(partype, Unknown()), CName(self.className))] + staticDecl
-            else:
+            if type(x) is FuncDecl and x.name.name == 'main':
+                # partype = [i.varType for i in x.param]
+                partype = []
+                staticDecl = [Symbol(x.name.name, MType(partype, VoidType()), CName(self.className))] + staticDecl
+            elif type(x) is VarDecl:
                 newSym = self.visit(x, SubBody(None, None, isGlobal=True))
                 staticDecl = [newSym] + staticDecl
+            else:
+                self.function.append(x)
         
         e = SubBody(None, staticDecl)
-        [self.visit(x, e) for x in ast.decl if type(x) is FuncDecl]
-
+        [self.visit(x, e) for x in ast.decl if type(x) is FuncDecl and x.name.name == 'main']
+        for x in self.visitFunc:
+            staticDecl = [Symbol(x.name.name, x.param[1], CName(self.className))] + staticDecl
+            self.visit(x, SubBody(None, staticDecl))
         self.emit.emitEPILOG()
         return c
     
@@ -231,7 +239,7 @@ class CodeGenVisitor(BaseVisitor):
         if methodName == "main": returnType = VoidType()
         isMain = methodName == "main" and len(decl.param) == 0 and type(returnType) is VoidType
         isProc = type(returnType) is VoidType
-        intype = [ArrayType(StringType())] if isMain else [Utils.retrieveType(x.varType) for x in decl.param]
+        intype = [ArrayType(StringType())] if isMain else decl.param[1].partype
         mtype = MType(intype, returnType)
         self.emit.printout(self.emit.emitMETHOD(methodName, mtype, True, frame))
         frame.enterScope(isProc)
@@ -244,10 +252,14 @@ class CodeGenVisitor(BaseVisitor):
         listParamArray = [] # list(Symbol(name, mtype, value: Index(idx)))
         listLocalArray = [] # list(Symbol(name, mtype, value: Index(idx)))
         varList = SubBody(frame, glenv)
-        for x in decl.param:
-            varList = self.visit(x, varList)
-            if type(x.mtype) is ArrayType:
-                listParamArray.append(varList.sym[0])
+        if not isMain:
+            for i in range(len(decl.param[0])):
+                idx = varList.frame.getNewIndex()
+                self.emit.printout(self.emit.emitVAR(idx, decl.param[0][i], Utils.retrieveType(decl.param[1].partype[i]), varList.frame.getStartLabel(), varList.frame.getEndLabel(), varList.frame))
+                varList = SubBody(varList.frame, [Symbol(decl.param[0][i], decl.param[1].partype[i], Index(idx))] + varList.sym)
+                # varList = self.visit(x, varList)
+                # if type(x.mtype) is ArrayType:
+                #     listParamArray.append(varList.sym[0])
         for x in decl.body[0]:
             varList = self.visit(x, varList)
             if self.getTypeVar(x.varInit) is ArrayType:
@@ -299,23 +311,26 @@ class CodeGenVisitor(BaseVisitor):
 
     def handleCall(self, ast, frame, symbols, isStmt=False):
         # ast: CallStmt | CallExpr
-
         sym = Utils.lookup(ast.method.name, symbols, lambda x: x.name)
-        cname = sym.value.value
-        ctype = sym.mtype
-        paramTypes = ctype.partype
         paramsCode = ""
         idx = 0
+        parType = []
         for x in ast.param:
             pCode, pType = self.visit(x, Access(frame, symbols, False, True))
-            if type(paramTypes[idx]) is FloatType and type(pType) is IntType:
-                pCode = pCode + self.emit.emitI2F(frame)
-            if type(paramTypes[idx]) is ArrayType:
-                pass
             paramsCode = paramsCode + pCode
+            parType.append(pType)
             idx = idx + 1
-       
-        code = paramsCode + self.emit.emitINVOKESTATIC(cname + "/" + sym.name, ctype, frame) 
+        ctype = MType(parType, VoidType())
+        code = ""
+        if sym is None:
+            code = paramsCode + self.emit.emitINVOKESTATIC(self.className + "/" + ast.method.name, ctype, frame) 
+            for i in self.function:
+                if i.name.name == ast.method.name:
+                    varD = [j.variable.name for j in i.param]
+                    self.visitFunc.append(FuncDecl(i.name, (varD, ctype), i.body))
+        else:
+            ctype = sym.mtype
+            code = paramsCode + self.emit.emitINVOKESTATIC(sym.value.value + "/" + sym.name, ctype, frame) 
         if isStmt: self.emit.printout(code)
         else: return code, ctype.rettype
 
