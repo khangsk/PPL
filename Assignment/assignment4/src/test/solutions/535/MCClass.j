@@ -4,51 +4,46 @@
 
 .method public static main([Ljava/lang/String;)V
 .var 0 is args Ljava/lang/String; from Label0 to Label1
+.var 1 is x I from Label0 to Label1
 Label0:
-	iconst_0
-	invokestatic io/string_of_int(I)Ljava/lang/String;
-	invokestatic io/print(Ljava/lang/String;)V
-	invokestatic MCClass/foo()V
-	iconst_2
-	iconst_3
-	invokestatic MCClass/foo1(II)V
-	bipush 120
-	invokestatic io/string_of_int(I)Ljava/lang/String;
-	invokestatic io/print(Ljava/lang/String;)V
-Label1:
-	return
-.limit stack 2
-.limit locals 1
-.end method
-
-.method public static foo()V
-.var 0 is a I from Label0 to Label1
-.var 1 is b I from Label0 to Label1
-Label0:
-	iconst_2
+	iconst_4
 	istore_1
-	iconst_1
-	istore_0
-	iload_0
 	iload_1
-	iadd
+	iconst_3
+	iconst_4
+	invokestatic MCClass/foo(II)I
+	if_icmple Label3
+	iconst_1
+	goto Label4
+Label3:
+	iconst_0
+Label4:
+	ifle Label5
+	iload_1
 	invokestatic io/string_of_int(I)Ljava/lang/String;
 	invokestatic io/print(Ljava/lang/String;)V
+	goto Label2
+Label5:
+	iconst_3
+	iconst_5
+	invokestatic MCClass/foo(II)I
+	invokestatic io/string_of_int(I)Ljava/lang/String;
+	invokestatic io/print(Ljava/lang/String;)V
+Label2:
 Label1:
 	return
-.limit stack 2
+.limit stack 4
 .limit locals 2
 .end method
 
-.method public static foo1(II)V
-.var 0 is x I from Label0 to Label1
-.var 1 is y I from Label0 to Label1
+.method public static foo(II)I
+.var 0 is a I from Label0 to Label1
+.var 1 is b I from Label0 to Label1
 Label0:
 	iload_0
 	iload_1
 	iadd
-	invokestatic io/string_of_int(I)Ljava/lang/String;
-	invokestatic io/print(Ljava/lang/String;)V
+	ireturn
 Label1:
 	return
 .limit stack 2

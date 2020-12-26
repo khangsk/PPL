@@ -9,15 +9,12 @@ Label0:
 	invokestatic io/string_of_int(I)Ljava/lang/String;
 	invokestatic io/print(Ljava/lang/String;)V
 	invokestatic MCClass/foo()V
-	iconst_2
-	iconst_3
-	invokestatic MCClass/foo1(II)V
 	bipush 120
 	invokestatic io/string_of_int(I)Ljava/lang/String;
 	invokestatic io/print(Ljava/lang/String;)V
 Label1:
 	return
-.limit stack 2
+.limit stack 1
 .limit locals 1
 .end method
 
@@ -34,6 +31,9 @@ Label0:
 	iadd
 	invokestatic io/string_of_int(I)Ljava/lang/String;
 	invokestatic io/print(Ljava/lang/String;)V
+	iconst_2
+	iconst_3
+	invokestatic MCClass/foo1(II)V
 Label1:
 	return
 .limit stack 2

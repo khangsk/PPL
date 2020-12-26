@@ -79,7 +79,7 @@ class ArrayPointerType(Type):
         return "ArrayPointerType({0})".format(str(self.eleType))
 
 class Access():
-    def __init__(self, frame, sym, isLeft, isFirst, checkArrayType=False):
+    def __init__(self, frame, sym, isLeft, isFirst, checkArrayType=False, typ=None):
         # frame: Frame
         # sym: List[Symbol]
         # isLeft: Boolean
@@ -90,6 +90,7 @@ class Access():
         self.isLeft = isLeft
         self.isFirst = isFirst
         self.checkArrayType = checkArrayType
+        self.typ = typ
 
 class Utils:
     @staticmethod
@@ -309,25 +310,28 @@ class CodeGenVisitor(BaseVisitor):
 
 
 
-    def handleCall(self, ast, frame, symbols, isStmt=False):
+    def handleCall(self, ast, frame, symbols, isStmt=False, typ=VoidType()):
         # ast: CallStmt | CallExpr
         sym = Utils.lookup(ast.method.name, symbols, lambda x: x.name)
         paramsCode = ""
         idx = 0
         parType = []
-        for x in ast.param:
-            pCode, pType = self.visit(x, Access(frame, symbols, False, True))
+        for i in range(len(ast.param)):
+            if sym:
+                pCode, pType = self.visit(ast.param[i], Access(frame, symbols, False, True, typ=sym.mtype.partype[i]))
+            else:
+                pCode, pType = self.visit(ast.param[i], Access(frame, symbols, False, True))
             paramsCode = paramsCode + pCode
             parType.append(pType)
             idx = idx + 1
-        ctype = MType(parType, VoidType())
+        ctype = MType(parType, IntType()) if type(typ) is BoolType else MType(parType, typ)
         code = ""
         if sym is None:
-            code = paramsCode + self.emit.emitINVOKESTATIC(self.className + "/" + ast.method.name, ctype, frame) 
             for i in self.function:
-                if i.name.name == ast.method.name:
+                if i.name.name == ast.method.name and not Utils.lookup(i.name.name, self.visitFunc, lambda x: x.name.name):
                     varD = [j.variable.name for j in i.param]
                     self.visitFunc.append(FuncDecl(i.name, (varD, ctype), i.body))
+            code = paramsCode + self.emit.emitINVOKESTATIC(self.className + "/" + ast.method.name, ctype, frame) 
         else:
             ctype = sym.mtype
             code = paramsCode + self.emit.emitINVOKESTATIC(sym.value.value + "/" + sym.name, ctype, frame) 
@@ -340,9 +344,9 @@ class CodeGenVisitor(BaseVisitor):
         
         frame = o.frame
         nenv = o.sym
-        retType = frame.returnType
+        retType = frame.returnType.mtype.rettype
         if not type(retType) is VoidType:
-            expCode, expType = self.visit(ast.expr, Access(frame, nenv, False, True))
+            expCode, expType = self.visit(ast.expr, Access(frame, nenv, False, True, typ=retType))
             self.emit.printout(expCode)
         self.emit.printout(self.emit.emitRETURN(retType, frame))
         return True
@@ -356,7 +360,7 @@ class CodeGenVisitor(BaseVisitor):
         labelE = frame.getNewLabel() 
         hasReturnStmt = False
         for ele in ast.ifthenStmt:
-            expCode, expType = self.visit(ele[0], Access(frame, nenv, False, True))
+            expCode, expType = self.visit(ele[0], Access(frame, nenv, False, True, typ=BoolType()))
             labelF = frame.getNewLabel()
             self.emit.printout(expCode)
             self.emit.printout(self.emit.emitIFFALSE(labelF, frame))
@@ -387,7 +391,7 @@ class CodeGenVisitor(BaseVisitor):
         
         frame = o.frame
         nenv = o.sym
-        expCode, expType = self.visit(ast.exp, Access(frame, nenv, False, True))
+        expCode, expType = self.visit(ast.exp, Access(frame, nenv, False, True, typ=BoolType()))
         
         labelS = frame.getNewLabel() # label start
         labelE = frame.getNewLabel() # label end
@@ -413,7 +417,7 @@ class CodeGenVisitor(BaseVisitor):
     def visitDowhile(self, ast, o):
         frame = o.frame
         nenv = o.sym
-        expCode, expType = self.visit(ast.exp, Access(frame, nenv, False, True))
+        expCode, expType = self.visit(ast.exp, Access(frame, nenv, False, True, typ=BoolType()))
         
         labelS = frame.getNewLabel() # label start
         labelE = frame.getNewLabel() # label end
@@ -442,12 +446,12 @@ class CodeGenVisitor(BaseVisitor):
         frame = o.frame
         nenv = o.sym
 
-        exp1Code, _ = self.visit(ast.expr1, Access(frame, nenv, False, True))
-        exp2Code, _ = self.visit(ast.expr2, Access(frame, nenv, False, True))
-        exp3Code, _ = self.visit(ast.expr3, Access(frame, nenv, False, True))
+        exp1Code, _ = self.visit(ast.expr1, Access(frame, nenv, False, True, typ=IntType()))
+        exp2Code, _ = self.visit(ast.expr2, Access(frame, nenv, False, True, typ=BoolType()))
+        exp3Code, _ = self.visit(ast.expr3, Access(frame, nenv, False, True, typ=IntType()))
 
-        lhsWCode, _ = self.visit(ast.idx1, Access(frame, nenv, True, True)) # Write code
-        lhsRCode, _ = self.visit(ast.idx1, Access(frame, nenv, False, False)) # Read code
+        lhsWCode, _ = self.visit(ast.idx1, Access(frame, nenv, True, True, typ=IntType())) # Write code
+        lhsRCode, _ = self.visit(ast.idx1, Access(frame, nenv, False, False, typ=IntType())) # Read code
         
         labelS = frame.getNewLabel() # label start
         labelE = frame.getNewLabel() # label end
@@ -506,7 +510,8 @@ class CodeGenVisitor(BaseVisitor):
         if isArray: [frame.push() for i in range(0,2)]
 
         # Visit LHS: Id || ArrayCell
-        rhsCode, rhsType = self.visit(ast.rhs, Access(frame, nenv, False, True))
+        leftType = Utils.getSymbol(nenv, ast.lhs).mtype
+        rhsCode, rhsType = self.visit(ast.rhs, Access(frame, nenv, False, True, typ=leftType))
         lhsCode, lhsType = self.visit(ast.lhs, Access(frame, nenv, True, True))
         if not isArray:
             self.emit.printout(rhsCode + lhsCode)
@@ -567,7 +572,7 @@ class CodeGenVisitor(BaseVisitor):
 
 
     def visitCallExpr(self, ast, o):
-        return self.handleCall(ast, o.frame, o.sym, isStmt=False)
+        return self.handleCall(ast, o.frame, o.sym, isStmt=False, typ=o.typ)
 
 
 
@@ -576,6 +581,7 @@ class CodeGenVisitor(BaseVisitor):
         frame = o.frame
         op = ast.op
         if op in ['&&', '||']:
+            o.typ = BoolType()
             frame = o.frame
             buffer = []
             labelT = frame.getNewLabel()
@@ -603,7 +609,9 @@ class CodeGenVisitor(BaseVisitor):
                 buffer.append(self.emit.emitPUSHICONST("False",frame))
                 buffer.append(self.emit.emitLABEL(labelT,frame))
             return "".join(buffer),BoolType()
-        
+        if op in ['+', '-', '*', '\\', '%', '==', '!=', '>', '<', '>=', '<=']:
+            o.typ = IntType()
+        else: o.typ = FloatType()
         lCode, lType = self.visit(ast.left, o)
         rCode, rType = self.visit(ast.right, o)
         if op in ['+', '-', '+.', '-.']:
@@ -618,6 +626,9 @@ class CodeGenVisitor(BaseVisitor):
         frame = o.frame
         op = ast.op
         bCode, bType = self.visit(ast.body, o)
+        if op == '-': o.typ = IntType()
+        if op == '-.': o.typ = FloatType()
+        if op == '!': o.typ = BoolType()
         if op in ['-', '-.']: return bCode + self.emit.emitNEGOP(bType, frame), bType
         if op == '!': return bCode + self.emit.emitNOT(bType, frame), bType
 
@@ -637,40 +648,4 @@ class CodeGenVisitor(BaseVisitor):
 
     # def visitArrayLiteral(self, ast, param):
     #     return Utils.getArrayType(ast)
-    def genInit(self):
-        methodname,methodtype = "<init>",MType([],VoidType())
-        frame = Frame(methodname, methodtype.rettype)
-        self.emit.printout(self.emit.emitMETHOD(methodname,methodtype,False,frame))
-        frame.enterScope(True)
-        varname,vartype,varindex = "this",ClassType(self.className),frame.getNewIndex()
-        startLabel, endLabel = frame.getStartLabel(), frame.getEndLabel()
-        self.emit.printout(self.emit.emitVAR(varindex, varname, vartype, startLabel, endLabel,frame ))
-        self.emit.printout(self.emit.emitLABEL(startLabel,frame))
-        self.emit.printout(self.emit.emitREADVAR(varname, vartype, varindex, frame))
-        self.emit.printout(self.emit.emitINVOKESPECIAL(frame))
-        self.emit.printout(self.emit.emitLABEL(endLabel, frame))
-        self.emit.printout(self.emit.emitRETURN(methodtype.rettype, frame))
-        self.emit.printout(self.emit.emitENDMETHOD(frame))
-
-    # The following code is just for initial, students should remove it and write your visitor from here
-    def genMain(self,o):
-        methodname,methodtype = "main",MType([ArrayType(StringType())],VoidType())
-        frame = Frame(methodname, methodtype.rettype)
-        self.emit.printout(self.emit.emitMETHOD(methodname,methodtype,True,frame))
-        frame.enterScope(True)
-        varname,vartype,varindex = "args",methodtype.partype[0],frame.getNewIndex()
-        startLabel, endLabel = frame.getStartLabel(), frame.getEndLabel()
-        self.emit.printout(self.emit.emitVAR(varindex, varname, vartype, startLabel, endLabel,frame ))
-        self.emit.printout(self.emit.emitLABEL(startLabel,frame))
-        self.emit.printout(self.emit.emitPUSHICONST(120, frame))
-        sym = next(filter(lambda x: x.name == "string_of_int",o.sym))
-        self.emit.printout(self.emit.emitINVOKESTATIC(sym.value.value+"/string_of_int",sym.mtype,frame))
-        sym = next(filter(lambda x: x.name == "print",o.sym))
-        self.emit.printout(self.emit.emitINVOKESTATIC(sym.value.value+"/print",sym.mtype,frame))
-        self.emit.printout(self.emit.emitLABEL(endLabel, frame))
-        self.emit.printout(self.emit.emitRETURN(methodtype.rettype, frame))
-        self.emit.printout(self.emit.emitENDMETHOD(frame))
-
-
-
     
