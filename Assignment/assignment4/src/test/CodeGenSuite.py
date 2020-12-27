@@ -673,3 +673,17 @@ class CheckCodeGenSuite(unittest.TestCase):
         """
         expect = "45"
         self.assertTrue(TestCodeGen.test(input,expect,541))
+
+    def test42(self):
+        input = """
+        Function: main
+        Body: 
+            Var: x[3] = {"Hoang", "Gia", "Khang"};
+            Var: i = 0;
+            For (i = 0, i < 3, 1) Do
+                print(x[i]);
+            EndFor.
+        EndBody.
+        """
+        expect = "HoangGiaKhang"
+        self.assertTrue(TestCodeGen.test(input,expect,542))

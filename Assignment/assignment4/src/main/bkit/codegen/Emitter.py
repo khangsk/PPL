@@ -33,9 +33,9 @@ class Emitter():
         typeIn = type(inType)
         if typeIn is cgen.IntType:
             return "int"
-        elif typeIn is FloatType:
+        elif typeIn is cgen.FloatType:
             return "float"
-        elif typeIn is BoolType:
+        elif typeIn is cgen.BoolType:
             return "boolean"
         elif typeIn is cgen.StringType:
             return "java/lang/String"
@@ -119,7 +119,7 @@ class Emitter():
         frame.pop()
         if type(in_) is cgen.IntType:
             return self.jvm.emitIASTORE()
-        elif type(in_) is cgen.ArrayType or type(in_) is ClassType or type(in_) is cgen.StringType:
+        elif type(in_) is cgen.ArrayType or type(in_) is cgen.ClassType or type(in_) is cgen.StringType:
             return self.jvm.emitAASTORE()
         else:
             raise IllegalOperandException(str(in_))

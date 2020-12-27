@@ -1,0 +1,24 @@
+
+        Function: foo
+        Parameter: n
+        Body:
+            Return n +. 1.0;
+        EndBody.
+        Function: main
+        Body: 
+            Var: x = 5;
+            While (check(x)) Do
+                Var: y = 0.;
+                y = y +. float_to_int(x);
+                print(string_of_float(y));
+                x = x - 1;
+            EndWhile.
+        EndBody.
+        Function: check
+        Parameter: x
+        Body:
+            If (x > 0) Then
+                Return True;
+            EndIf.
+            Return False;
+        EndBody.
