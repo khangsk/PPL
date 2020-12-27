@@ -49,7 +49,6 @@ Label0:
 	iadd
 	ireturn
 Label1:
-	return
 .limit stack 3
 .limit locals 2
 .end method
@@ -63,7 +62,6 @@ Label0:
 	imul
 	ireturn
 Label1:
-	return
 .limit stack 2
 .limit locals 2
 .end method

@@ -57,7 +57,6 @@ Label2:
 	iconst_0
 	ireturn
 Label1:
-	return
 .limit stack 5
 .limit locals 1
 .end method

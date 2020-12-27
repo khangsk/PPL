@@ -604,3 +604,72 @@ class CheckCodeGenSuite(unittest.TestCase):
         EndBody."""
         expect = "5.04.03.02.01.0"
         self.assertTrue(TestCodeGen.test(input,expect,538))
+
+    def test39(self):
+        input = """
+        Var: x[3][3][2] = 
+        {
+            {
+                {4, 5}, {8, 4}, {9, 7}
+            }, 
+            {
+                {1, 0}, {4, 8}, {7, 6}
+            }, 
+            {
+                {5, 5}, {9, 0}, {4, 2}
+            }
+        };
+        Var: y[2] = {5, 7};
+        Function: main
+        Body: 
+           print(string_of_int(x[2][1][0] * y[0]));
+        EndBody.
+        """
+        expect = "45"
+        self.assertTrue(TestCodeGen.test(input,expect,539))
+    
+    def test40(self):
+        input = """
+        Function: main
+        Body: 
+               Var: x[3][3][2] = 
+        {
+            {
+                {4, 5}, {8, 4}, {9, 7}
+            }, 
+            {
+                {1, 0}, {4, 8}, {7, 6}
+            }, 
+            {
+                {5, 5}, {9, 0}, {4, 2}
+            }
+        };
+            print(string_of_int(x[1][1][0]));
+        EndBody.
+        """
+        expect = "4"
+        self.assertTrue(TestCodeGen.test(input,expect,540))
+    
+    
+    def test41(self):
+        input = """
+        Var: x[3][3][2] = 
+        {
+            {
+                {4, 5}, {8, 4}, {9, 7}
+            }, 
+            {
+                {1, 0}, {4, 8}, {7, 6}
+            }, 
+            {
+                {5, 5}, {9, 0}, {4, 2}
+            }
+        };
+        Function: main
+        Body: 
+            Var: y[2] = {5, 7};
+           print(string_of_int(x[2][1][0] * y[0]));
+        EndBody.
+        """
+        expect = "45"
+        self.assertTrue(TestCodeGen.test(input,expect,541))

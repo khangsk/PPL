@@ -20,17 +20,23 @@ class Emitter():
             return "Z"
         elif typeIn is cgen.VoidType:
             return "V"
-        elif typeIn is cgen.ArrayType:
+        elif typeIn is cgen.ArrayPointerType:
             return "[" + self.getJVMType(inType.eleType)
+        elif typeIn is cgen.ArrayType:
+            return self.getJVMType(cgen.ArrayPointerType(inType.eleType))
         elif typeIn is cgen.MType:
             return "(" + "".join(list(map(lambda x: self.getJVMType(x), inType.partype))) + ")" + self.getJVMType(inType.rettype)
         elif typeIn is cgen.ClassType:
             return "L" + inType.cname + ";"
 
-    def getFullType(inType):
+    def getFullType(self, inType):
         typeIn = type(inType)
         if typeIn is cgen.IntType:
             return "int"
+        elif typeIn is FloatType:
+            return "float"
+        elif typeIn is BoolType:
+            return "boolean"
         elif typeIn is cgen.StringType:
             return "java/lang/String"
         elif typeIn is cgen.VoidType:
@@ -146,7 +152,7 @@ class Emitter():
             return self.jvm.emitILOAD(index)
         elif type(inType) is cgen.FloatType:
             return self.jvm.emitFLOAD(index)
-        elif type(inType) is cgen.ArrayType or type(inType) is cgen.ClassType or type(inType) is cgen.StringType:
+        elif type(inType) is cgen.ArrayPointerType or type(inType) is cgen.ClassType or type(inType) is cgen.StringType:
             return self.jvm.emitALOAD(index)
         else:
             raise IllegalOperandException(name)
@@ -503,7 +509,28 @@ class Emitter():
     '''   generate code to initialize a local array variable.<p>
     *   @param index the index of the local variable.
     *   @param in the type of the local array variable.
-    '''
+    ''' 
+    def emitInitNewStaticArray(self, name, size, eleType, frame):
+        result = []
+        result.append(self.emitPUSHICONST(size, frame))
+        frame.pop()
+        if type(eleType) is cgen.StringType:
+            result.append(self.jvm.emitANEWARRAY(self.getFullType(eleType)))
+        else:
+            result.append(self.jvm.emitNEWARRAY(self.getFullType(eleType)))
+        result.append(self.jvm.emitPUTSTATIC(name, self.getJVMType(cgen.ArrayPointerType(eleType))))
+        return ''.join(result)
+    
+    def emitInitNewLocalArray(self, addressIndex, size, eleType, frame):
+        result = []
+        result.append(self.emitPUSHICONST(size, frame))
+        frame.pop()
+        if type(eleType) is cgen.StringType:
+            result.append(self.jvm.emitANEWARRAY(self.getFullType(eleType)))
+        else:
+            result.append(self.jvm.emitNEWARRAY(self.getFullType(eleType)))
+        result.append(self.jvm.emitASTORE(addressIndex))
+        return ''.join(result)
 
     '''   generate code to initialize local array variables.
     *   @param in the list of symbol entries corresponding to local array variable.    

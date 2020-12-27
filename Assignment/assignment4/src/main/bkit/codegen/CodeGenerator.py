@@ -60,23 +60,16 @@ class MType(Type):
     def __str__(self):
         return 'MType(' + printlist(self.partype) + ',' + str(self.rettype) + ')'
 class ArrayType(Type):
-    def __init__(self,et,*s):
+    def __init__(self,et,s):
         self.eleType = et #Type
         self.dimen = s   #List[int] 
     def __str__(self):
-        return "ArrayType(" + printlist(self.dimen) + ',' + str(self.eletype) + ")"
-
-class Unknown(Type):
-    def __str__(self):
-        return "Unknown()"
+        return "ArrayType(" + printlist(self.dimen) + ',' + str(self.eleType) + ")"
 
 class ArrayPointerType(Type):
     def __init__(self, ctype):
         # cname: String
         self.eleType = ctype
-
-    def __str__(self):
-        return "ArrayPointerType({0})".format(str(self.eleType))
 
 class Access():
     def __init__(self, frame, sym, isLeft, isFirst, checkArrayType=False, typ=None):
@@ -122,6 +115,51 @@ class Utils:
             if name == func(x):
                 return x
         return None
+    
+    @staticmethod
+    def getArrayType(ast):
+        arr = []
+        stack = [ast]
+        temp = []
+        check = 0
+        while stack:
+            check += 1
+            if type(stack[0]) is not ArrayLiteral:
+                if type(stack[0]) is IntLiteral:
+                    return ArrayType(IntType(), arr)
+                elif type(stack[0]) is FloatLiteral:
+                    return ArrayType(FloatType(), arr)
+                elif type(stack[0]) is BooleanLiteral:
+                    return ArrayType(BoolType(), arr)
+                elif type(stack[0]) is StringLiteral:
+                    return ArrayType(StringType(), arr)
+            x = stack.pop(0)
+            if check == 1:
+                arr.append(len(x.value))
+            temp += x.value
+            if not stack:
+                stack = temp.copy()
+                temp = []
+                check = 0
+    
+    @staticmethod
+    def listElements(ast):
+        arr = []
+        stack = [ast]
+        temp = []
+        check = 0
+        while stack:
+            check += 1
+            if type(stack[0]) is not ArrayLiteral:
+                return stack
+            x = stack.pop(0)
+            if check == 1:
+                arr.append(len(x.value))
+            temp += x.value
+            if not stack:
+                stack = temp.copy()
+                temp = []
+                check = 0
 
 
 class CodeGenerator():
@@ -209,7 +247,7 @@ class CodeGenVisitor(BaseVisitor):
         frame = o.frame
         isGlobal = o.isGlobal
         varName = ast.variable.name
-        varType = self.getTypeVar(ast.varInit) if ast.varInit else Unknown()
+        varType = self.getTypeVar(ast.varInit)
         if isGlobal:
             self.emit.printout(self.emit.emitATTRIBUTE(varName, Utils.retrieveType(varType), False, ""))
             if type(varType) is ArrayType: 
@@ -225,7 +263,7 @@ class CodeGenVisitor(BaseVisitor):
         elif type(x) is FloatLiteral: return FloatType() 
         elif type(x) is BooleanLiteral: return BoolType() 
         elif type(x) is StringLiteral: return StringType() 
-        elif type(x) is ArrayLiteral: return ArrayType() 
+        elif type(x) is ArrayLiteral: return Utils.getArrayType(x)
 
     def visitFuncDecl(self, ast, o):
         ret = Utils.getSymbol(o.sym, ast.name.name)
@@ -240,7 +278,7 @@ class CodeGenVisitor(BaseVisitor):
         if methodName == "main": returnType = VoidType()
         isMain = methodName == "main" and len(decl.param) == 0 and type(returnType) is VoidType
         isProc = type(returnType) is VoidType
-        intype = [ArrayType(StringType())] if isMain else decl.param[1].partype
+        intype = [ArrayType(StringType(),[])] if isMain else decl.param[1].partype
         mtype = MType(intype, returnType)
         self.emit.printout(self.emit.emitMETHOD(methodName, mtype, True, frame))
         frame.enterScope(isProc)
@@ -263,23 +301,31 @@ class CodeGenVisitor(BaseVisitor):
                 #     listParamArray.append(varList.sym[0])
         for x in decl.body[0]:
             varList = self.visit(x, varList)
-            if self.getTypeVar(x.varInit) is ArrayType:
+            if type(self.getTypeVar(x.varInit)) is ArrayType:
                 listLocalArray.append(varList.sym[0])
 
         self.emit.printout(self.emit.emitLABEL(frame.getStartLabel(), frame))
 
-        # Init local array declare
-        for sym in listLocalArray:
-            index = sym.value.value
-            varType = sym.mtype
-            size = varType.upper - varType.lower + 1
-            self.emit.printout(self.emit.emitInitNewLocalArray(index, size, varType.eleType, frame))
+        # Init global array declare
+        for x in self.listGlobalArray:
+            arr = Utils.getArrayType(x.varInit)
+            size = 1
+            for i in arr.dimen: size *= i
+            self.emit.printout(self.emit.emitInitNewStaticArray(self.className + "/" + x.variable.name, size, arr.eleType, frame))
+        
 
-        # Clone params array
-        for sym in listParamArray:
-            index = sym.value.value
-            eleType = sym.mtype.eleType
-            self.emit.printout(self.emit.emitCloneArray(index, eleType, frame))
+        # # Init local array declare
+        for sym in listLocalArray:
+            arr = sym.mtype
+            size = 1
+            for i in arr.dimen: size *= i
+            self.emit.printout(self.emit.emitInitNewLocalArray(sym.value.value, size, arr.eleType, frame))
+
+        # # Clone params array
+        # for sym in listParamArray:
+        #     index = sym.value.value
+        #     eleType = sym.mtype.eleType
+        #     self.emit.printout(self.emit.emitCloneArray(index, eleType, frame))
 
         for x in varList.sym:
             if x.val:
@@ -290,8 +336,8 @@ class CodeGenVisitor(BaseVisitor):
         self.emit.printout(self.emit.emitLABEL(frame.getEndLabel(), frame))
         if isProc:
             self.emit.printout(self.emit.emitRETURN(VoidType(), frame))
-        else:
-            self.emit.printout(self.emit.emitRETURN(VoidType(), frame))
+        # else:
+        #     self.emit.printout(self.emit.emitRETURN(VoidType(), frame))
         self.emit.printout(self.emit.emitENDMETHOD(frame))
         frame.exitScope()
 
@@ -500,25 +546,34 @@ class CodeGenVisitor(BaseVisitor):
 
 
     def visitAssign(self, ast, o):
-        
         frame = o.frame
         nenv = o.sym
-        # Pre-prepare for assign to array cell
-        # stack: ..., arrayref, index, value -> ...
-        # push 2 slot for arrayref and index, visit exp first
-        isArray, _ = self.visit(ast.lhs, Access(frame, nenv, True, True, checkArrayType=True))
-        if isArray: [frame.push() for i in range(0,2)]
-
-        # Visit LHS: Id || ArrayCell
-        leftType = Utils.getSymbol(nenv, ast.lhs).mtype
-        rhsCode, rhsType = self.visit(ast.rhs, Access(frame, nenv, False, True, typ=leftType))
-        lhsCode, lhsType = self.visit(ast.lhs, Access(frame, nenv, True, True))
-        if not isArray:
-            self.emit.printout(rhsCode + lhsCode)
+        if type(ast.rhs) is ArrayLiteral:
+            listEle = Utils.listElements(ast.rhs)
+            for i in range(len(listEle)):
+                temp = ArrayCell(ast.lhs, [IntLiteral(i)])
+                isArray, _ = self.visit(temp, Access(frame, nenv, True, True, checkArrayType=True))
+                if isArray: [frame.push() for i in range(0,2)]
+                # Visit LHS: Id || ArrayCell
+                rhsCode, rhsType = self.visit(listEle[i], Access(frame, nenv, False, True, typ=self.getTypeVar(listEle[i])))
+                lhsCode, lhsType = self.visit(temp, Access(frame, nenv, True, True))
+                self.emit.printout(lhsCode[0] + rhsCode + lhsCode[1])
+                    # recover stack status
+                [frame.pop() for i in range(0,2)]
         else:
-            self.emit.printout(lhsCode[0] + rhsCode + lhsCode[1])
-            # recover stack status
-            [frame.pop() for i in range(0,2)]
+            isArray, _ = self.visit(ast.lhs, Access(frame, nenv, True, True, checkArrayType=True))
+            if isArray: [frame.push() for i in range(0,2)]
+
+            # Visit LHS: Id || ArrayCell
+            leftType = Utils.getSymbol(nenv, ast.lhs).mtype
+            rhsCode, rhsType = self.visit(ast.rhs, Access(frame, nenv, False, True, typ=leftType))
+            lhsCode, lhsType = self.visit(ast.lhs, Access(frame, nenv, True, True))
+            if not isArray:
+                self.emit.printout(rhsCode + lhsCode)
+            else:
+                self.emit.printout(lhsCode[0] + rhsCode + lhsCode[1])
+                # recover stack status
+                [frame.pop() for i in range(0,2)]
 
 
 
@@ -548,8 +603,8 @@ class CodeGenVisitor(BaseVisitor):
             else: retCode = self.emit.emitGETSTATIC(self.className + "/" + sym.name, emitType, frame)
         else:
             if isLeft and not isArrayType: retCode = self.emit.emitWRITEVAR(sym.name, emitType, sym.value.value, frame)
-            else: retCode = self.emit.emitREADVAR(sym.name, emitType, sym.value.value, frame)
-
+            else: 
+                retCode = self.emit.emitREADVAR(sym.name, emitType, sym.value.value, frame)
         return retCode, sym.mtype
 
 
@@ -560,11 +615,19 @@ class CodeGenVisitor(BaseVisitor):
         isFirst = o.isFirst
 
         if isLeft and o.checkArrayType: return True, None
-
         arrCode, arrType = self.visit(ast.arr, Access(frame, symbols, True, True))
-        idxCode, idxType = self.visit(ast.idx, Access(frame, symbols, False, True))
-        # update index jvm, i.e [3..5] -> [0..2], access [4] -> [1]
-        idxCode = idxCode + self.emit.emitPUSHICONST(arrType.lower, frame) + self.emit.emitADDOP('-', IntType(), frame)
+        asym = Utils.getSymbol(symbols, ast.arr).mtype.dimen
+        idxCode = ""
+        if len(ast.idx) > 1:
+            index = 0
+            for i in range(len(ast.idx)):
+                temp = ast.idx[i].value
+                for j in range(i + 1, len(asym)):
+                    temp *= asym[j]
+                index += temp
+            idxCode, idxType = self.visit(IntLiteral(index), Access(frame, symbols, False, True))
+        else:
+            idxCode, idxType = self.visit(ast.idx[0], Access(frame, symbols, False, True))
         # Steps: aload(address index) -> iconst(access index) -> iaload
         if isLeft:
             return [arrCode + idxCode, self.emit.emitASTORE(arrType.eleType, frame)], arrType.eleType
@@ -646,6 +709,6 @@ class CodeGenVisitor(BaseVisitor):
     def visitStringLiteral(self, ast, o):
         return self.emit.emitPUSHCONST(ast.value, StringType(), o.frame), StringType()
 
-    # def visitArrayLiteral(self, ast, param):
-    #     return Utils.getArrayType(ast)
+    def visitArrayLiteral(self, ast, param):
+        return Utils.getArrayType(ast)
     

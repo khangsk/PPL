@@ -37,7 +37,6 @@ Label0:
 	iadd
 	ireturn
 Label1:
-	return
 .limit stack 2
 .limit locals 2
 .end method
