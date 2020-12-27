@@ -67,7 +67,6 @@ class Emitter():
     def emitPUSHFCONST(self, in_, frame):
         #in_: String
         #frame: Frame
-        
         f = float(in_)
         frame.push()
         rst = "{0:.4f}".format(f)
@@ -104,6 +103,10 @@ class Emitter():
         frame.pop()
         if type(in_) is cgen.IntType:
             return self.jvm.emitIALOAD()
+        elif type(in_) is cgen.FloatType:
+            return self.jvm.emitFALOAD()
+        elif type(in_) is cgen.BoolType:
+            return self.jvm.emitBALOAD()
         elif type(in_) is cgen.ArrayType or type(in_) is cgen.ClassType or type(in_) is cgen.StringType:
             return self.jvm.emitAALOAD()
         else:
@@ -119,6 +122,10 @@ class Emitter():
         frame.pop()
         if type(in_) is cgen.IntType:
             return self.jvm.emitIASTORE()
+        elif type(in_) is cgen.FloatType:
+            return self.jvm.emitFASTORE()
+        elif type(in_) is cgen.BoolType:
+            return self.jvm.emitBASTORE()
         elif type(in_) is cgen.ArrayType or type(in_) is cgen.ClassType or type(in_) is cgen.StringType:
             return self.jvm.emitAASTORE()
         else:
@@ -213,7 +220,6 @@ class Emitter():
         #in_: Type
         #isFinal: Boolean
         #value: String
-
         return self.jvm.emitSTATICFIELD(lexeme, self.getJVMType(in_), False)
 
     def emitGETSTATIC(self, lexeme, in_, frame):
@@ -609,13 +615,14 @@ class Emitter():
     def emitRETURN(self, in_, frame):
         #in_: Type
         #frame: Frame
-
-        if type(in_) is cgen.IntType:
-            frame.pop()
-            return self.jvm.emitIRETURN()
-        elif type(in_) is cgen.VoidType:
+        if type(in_) is cgen.VoidType:
             return self.jvm.emitRETURN()
-
+        frame.pop()
+        if type(in_) in [cgen.IntType, cgen.BoolType]:
+            return self.jvm.emitIRETURN()
+        elif type(in_) is cgen.FloatType:
+            return self.jvm.emitFRETURN()
+        return self.jvm.emitARETURN()
     ''' generate code that represents a label	
     *   @param label the label
     *   @return code Label<label>:

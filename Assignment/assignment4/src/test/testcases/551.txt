@@ -1,0 +1,15 @@
+
+Function: main
+    Body:
+        Var: i = 0, a = 100;
+
+        printLn();
+        Do
+            Var: a = 0;
+            print(string_of_int(a));
+            a = a + 1;
+            i = i + 1;
+        While i < 5 EndDo.
+        printLn();
+        printStrLn(string_of_int(a));
+    EndBody.

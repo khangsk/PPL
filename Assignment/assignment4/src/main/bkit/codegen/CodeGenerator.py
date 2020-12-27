@@ -65,7 +65,6 @@ class ArrayType(Type):
         self.dimen = s   #List[int] 
     def __str__(self):
         return "ArrayType(" + printlist(self.dimen) + ',' + str(self.eleType) + ")"
-
 class ArrayPointerType(Type):
     def __init__(self, ctype):
         # cname: String
@@ -326,9 +325,10 @@ class CodeGenVisitor(BaseVisitor):
         #     index = sym.value.value
         #     eleType = sym.mtype.eleType
         #     self.emit.printout(self.emit.emitCloneArray(index, eleType, frame))
-
+        visitSym = []
         for x in varList.sym:
-            if x.val:
+            if x.val and x.name not in visitSym:
+                visitSym.append(x.name)
                 self.visit(Assign(Id(x.name), x.val), varList)
 
         list(map(lambda x: self.visit(x, varList), decl.body[1]))
@@ -342,19 +342,14 @@ class CodeGenVisitor(BaseVisitor):
         frame.exitScope()
 
 
-
-
 # ================   Visit Statements   =================
 # Param:    o: SubBody(frame, sym)
-
 
     def visitCallStmt(self, ast, o):
         
         frame = o.frame
         symbols = o.sym
         self.handleCall(ast, frame, symbols, isStmt=True)
-
-
 
     def handleCall(self, ast, frame, symbols, isStmt=False, typ=VoidType()):
         # ast: CallStmt | CallExpr
@@ -377,14 +372,12 @@ class CodeGenVisitor(BaseVisitor):
                 if i.name.name == ast.method.name and not Utils.lookup(i.name.name, self.visitFunc, lambda x: x.name.name):
                     varD = [j.variable.name for j in i.param]
                     self.visitFunc.append(FuncDecl(i.name, (varD, ctype), i.body))
-            code = paramsCode + self.emit.emitINVOKESTATIC(self.className + "/" + ast.method.name, ctype, frame) 
+            code = paramsCode + self.emit.emitINVOKESTATIC(self.className + "/" + ast.method.name, ctype, frame)
         else:
             ctype = sym.mtype
-            code = paramsCode + self.emit.emitINVOKESTATIC(sym.value.value + "/" + sym.name, ctype, frame) 
+            code = paramsCode + self.emit.emitINVOKESTATIC(sym.value.value + "/" + sym.name, ctype, frame)
         if isStmt: self.emit.printout(code)
         else: return code, ctype.rettype
-
-
 
     def visitReturn(self, ast, o):
         
@@ -393,12 +386,9 @@ class CodeGenVisitor(BaseVisitor):
         retType = frame.returnType.mtype.rettype
         if not type(retType) is VoidType:
             expCode, expType = self.visit(ast.expr, Access(frame, nenv, False, True, typ=retType))
-            self.emit.printout(expCode)
+            self.emit.printout(expCode)        
         self.emit.printout(self.emit.emitRETURN(retType, frame))
         return True
-
-
-
 
     def visitIf(self, ast, o):
         frame = o.frame
@@ -430,8 +420,6 @@ class CodeGenVisitor(BaseVisitor):
         # End
         self.emit.printout(self.emit.emitLABEL(labelE, frame))
         return hasReturnStmt
-
-
 
     def visitWhile(self, ast, o):
         
@@ -542,9 +530,6 @@ class CodeGenVisitor(BaseVisitor):
         frame = o.frame
         self.emit.printout(self.emit.emitGOTO(frame.getContinueLabel(), frame))
 
-
-
-
     def visitAssign(self, ast, o):
         frame = o.frame
         nenv = o.sym
@@ -574,8 +559,6 @@ class CodeGenVisitor(BaseVisitor):
                 self.emit.printout(lhsCode[0] + rhsCode + lhsCode[1])
                 # recover stack status
                 [frame.pop() for i in range(0,2)]
-
-
 
 # ================   Visit Expression   =================
 # Param:    o: Access(frame, sym, isLeft, isFirst)
@@ -607,40 +590,41 @@ class CodeGenVisitor(BaseVisitor):
                 retCode = self.emit.emitREADVAR(sym.name, emitType, sym.value.value, frame)
         return retCode, sym.mtype
 
-
     def visitArrayCell(self, ast, o):
         frame = o.frame
         symbols = o.sym
         isLeft = o.isLeft
         isFirst = o.isFirst
-
         if isLeft and o.checkArrayType: return True, None
-        arrCode, arrType = self.visit(ast.arr, Access(frame, symbols, True, True))
-        asym = Utils.getSymbol(symbols, ast.arr).mtype.dimen
         idxCode = ""
-        if len(ast.idx) > 1:
-            index = 0
-            for i in range(len(ast.idx)):
-                temp = ast.idx[i].value
-                for j in range(i + 1, len(asym)):
-                    temp *= asym[j]
-                index += temp
-            idxCode, idxType = self.visit(IntLiteral(index), Access(frame, symbols, False, True))
+        if type(ast.arr) is CallExpr:
+            arrCode, arrType = self.visit(ast.arr, Access(frame, symbols, True, True, typ=ArrayType(o.typ, [])))
+            idxCode, idxType = self.visit(ast.idx[0], Access(frame, symbols, False, True, typ=IntType()))
+            if isLeft:
+                return [arrCode + idxCode, self.emit.emitASTORE(o.typ, frame)], o.typ
+            return arrCode + idxCode + self.emit.emitALOAD(o.typ, frame), o.typ
         else:
-            idxCode, idxType = self.visit(ast.idx[0], Access(frame, symbols, False, True))
-        # Steps: aload(address index) -> iconst(access index) -> iaload
-        if isLeft:
-            return [arrCode + idxCode, self.emit.emitASTORE(arrType.eleType, frame)], arrType.eleType
-        return arrCode + idxCode + self.emit.emitALOAD(arrType.eleType, frame), arrType.eleType
-
+            arrCode, arrType = self.visit(ast.arr, Access(frame, symbols, True, True, typ=o.typ))
+            asym = Utils.getSymbol(symbols, ast.arr).mtype.dimen
+            if len(ast.idx) > 1:
+                index = 0
+                for i in range(len(ast.idx)):
+                    temp = ast.idx[i].value
+                    for j in range(i + 1, len(asym)):
+                        temp *= asym[j]
+                    index += temp
+                idxCode, idxType = self.visit(IntLiteral(index), Access(frame, symbols, False, True, typ=IntType()))
+            else:
+                idxCode, idxType = self.visit(ast.idx[0], Access(frame, symbols, False, True, typ=IntType()))
+            # Steps: aload(address index) -> iconst(access index) -> iaload
+            if isLeft:
+                return [arrCode + idxCode, self.emit.emitASTORE(arrType.eleType, frame)], arrType.eleType
+            return arrCode + idxCode + self.emit.emitALOAD(arrType.eleType, frame), arrType.eleType
 
     def visitCallExpr(self, ast, o):
         return self.handleCall(ast, o.frame, o.sym, isStmt=False, typ=o.typ)
 
-
-
-    def visitBinaryOp(self, ast, o):
-        
+    def visitBinaryOp(self, ast, o):  
         frame = o.frame
         op = ast.op
         if op in ['&&', '||']:
@@ -684,7 +668,6 @@ class CodeGenVisitor(BaseVisitor):
         if op in ['==', '!=', '>', '<', '>=', '<=', '=/=', '>.', '<.', '>=.', '<=.']:
             return lCode + rCode + self.emit.emitREOP(op, lType, frame), BoolType()
 
-
     def visitUnaryOp(self, ast, o):
         frame = o.frame
         op = ast.op
@@ -694,8 +677,6 @@ class CodeGenVisitor(BaseVisitor):
         if op == '!': o.typ = BoolType()
         if op in ['-', '-.']: return bCode + self.emit.emitNEGOP(bType, frame), bType
         if op == '!': return bCode + self.emit.emitNOT(bType, frame), bType
-
-
 
     def visitIntLiteral(self, ast, o):
         return self.emit.emitPUSHICONST(ast.value, o.frame), IntType()

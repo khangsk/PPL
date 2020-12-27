@@ -1,8 +1,8 @@
 
-                    Function: main
-                   Body:        
-                        
-                        printStrLn(string_of_bool(True && False));
-                        printStrLn(string_of_bool(True && True));
-                        print(string_of_bool(False && True));
-                   EndBody.
+Function: main
+    Body:
+        printLn();
+        printStrLn(string_of_bool(1 == 2));
+        printStrLn(string_of_bool(4 == 3));
+        printStrLn(string_of_bool(5 == 5));
+    EndBody.

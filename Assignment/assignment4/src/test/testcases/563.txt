@@ -1,0 +1,12 @@
+
+Function: main
+    Body:
+        Var: i = 0;
+        printLn();
+        For (i = 0, i < 5, 1) Do
+            print(string_of_int(i));
+            Continue;
+        EndFor.
+        printLn();
+        printStrLn(string_of_int(i));
+    EndBody.

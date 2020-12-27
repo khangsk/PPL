@@ -1,0 +1,18 @@
+
+Var: a[2][2] = {{1,2},{3,4}};
+Var: b[2][2] = {{1.,2.},{3.,4.}};
+Var: c[2][2] = {{True,False},{False,True}};
+Var: d[2][2] = {{"A","B"},{"C","D"}};
+
+Function: main
+    Body:
+        a[1][1] = 5;
+        b[1][1] = 5.;
+        c[1][1] = False;
+        d[1][1] = "Hi!";
+        printLn();
+        printStrLn(string_of_int(a[1][1]));
+        printStrLn(string_of_float(b[1][1]));
+        printStrLn(string_of_bool(c[1][1]));
+        printStrLn(d[1][1]);
+    EndBody.

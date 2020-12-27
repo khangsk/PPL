@@ -1,0 +1,10 @@
+
+Function: main
+    Body:
+        Var: i = 0;
+        printLn();
+        For (i = 0, i < 0, 1) Do
+            print(string_of_int(i));
+        EndFor.
+        printStrLn("No iteration");
+    EndBody.

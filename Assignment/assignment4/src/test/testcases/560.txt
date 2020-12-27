@@ -1,0 +1,11 @@
+
+Function: main
+    Body:
+        Var: i = 0, step = 0;
+        printLn();
+        For (i = 0, i < 20, step) Do
+            printStrLn(string_of_int(i));
+            i = i + 1;
+            step = step + 1;
+        EndFor.
+    EndBody.

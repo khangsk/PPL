@@ -1,0 +1,14 @@
+
+Function: main
+    Body:
+        Var: i = 0;
+
+        printLn();
+        While i < 5 Do
+            print(string_of_int(i));
+            i = i + 1;
+            Continue;
+        EndWhile.
+        printLn();
+        printStrLn(string_of_int(i));
+    EndBody.

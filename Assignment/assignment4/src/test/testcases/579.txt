@@ -1,0 +1,32 @@
+
+** Find first positive missing value **
+
+Var: arr[15] = {
+    0, 3, 4, 100, 2,
+    20, 1, 99, 7, 8,
+    6, 2, 5, 10, 12
+};
+
+Function: main
+    Body:
+        Var: n = 15, hashTable[15] = {
+            False,False,False,False,False,
+            False,False,False,False,False,
+            False,False,False,False,False
+        };
+        Var: i = 0, firstMissValue = 0;
+        ** Iterate and save to hash table **
+        For (i = 0, i < n, 1) Do
+            If (arr[i] > n) || (arr[i] <= 0) Then
+                Continue;
+            EndIf.
+            hashTable[arr[i] - 1] = True;
+        EndFor.
+        ** Find first miss value **
+        firstMissValue = 1;
+        While (firstMissValue <= n) && hashTable[firstMissValue - 1] Do
+            firstMissValue = firstMissValue + 1;
+        EndWhile.
+        print("\nFirst positive missing value: ");
+        printStrLn(string_of_int(firstMissValue));
+    EndBody.

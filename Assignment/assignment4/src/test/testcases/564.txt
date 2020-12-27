@@ -1,0 +1,14 @@
+
+Function: main
+    Body:
+        Var: i = 0;
+        printLn();
+        For (i = 0, i < 5, 1) Do
+            If i < 3 Then
+                Continue;
+            EndIf.
+            print(string_of_int(i));
+        EndFor.
+        printLn();
+        printStrLn(string_of_int(i));
+    EndBody.

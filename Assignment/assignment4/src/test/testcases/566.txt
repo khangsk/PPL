@@ -1,0 +1,11 @@
+
+Var: a[1] = {1}, b[1] = {1.}, c[1] = {True}, d[1] = {"Hi!"};
+
+Function: main
+    Body:
+        printLn();
+        printStrLn(string_of_int(a[0]));
+        printStrLn(string_of_float(b[0]));
+        printStrLn(string_of_bool(c[0]));
+        printStrLn(d[0]);
+    EndBody.

@@ -1,0 +1,18 @@
+
+Var: a[1][1][1][1][1] = {{{{{1}}}}};
+Var: b[1][1][1][1][1] = {{{{{1.}}}}};
+Var: c[1][1][1][1][1] = {{{{{True}}}}};
+Var: d[1][1][1][1][1] = {{{{{"Hi!"}}}}};
+
+Function: main
+    Body:
+        a[0][0][0][0][0] = 2;
+        b[0][0][0][0][0] = 2.;
+        c[0][0][0][0][0] = False;
+        d[0][0][0][0][0] = "Hello!";
+        printLn();
+        printStrLn(string_of_int(a[0][0][0][0][0]));
+        printStrLn(string_of_float(b[0][0][0][0][0]));
+        printStrLn(string_of_bool(c[0][0][0][0][0]));
+        printStrLn(d[0][0][0][0][0]);
+    EndBody.

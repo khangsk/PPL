@@ -1,0 +1,6 @@
+
+Function: main
+    Body:
+        printLn();
+        printStrLn(string_of_bool(False && (1 \ 0 == 0)));
+    EndBody.

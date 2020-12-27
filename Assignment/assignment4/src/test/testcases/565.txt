@@ -1,0 +1,13 @@
+
+Function: main
+    Body:
+        Var: condition = False;
+        printLn();
+        If condition Then
+            printStrLn("Not return first");
+        Else
+            printStrLn("Return first");
+            Return;
+        EndIf.
+        printStrLn("This line should not be printed");
+    EndBody.

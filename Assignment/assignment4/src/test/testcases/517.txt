@@ -1,8 +1,8 @@
 
-                    Function: main
-                   Body:        
-                        Var: x = True;
-                        x = (3 == 3) && (10 != 9) && (100 > -10) && (-2 < 0) && (90 >= 90) && (-12 <= -12);
-                        print(string_of_bool(x));
-
-                   EndBody.
+Function: main
+    Body:
+        printLn();
+        printStrLn(string_of_bool(1. =/= 2.));
+        printStrLn(string_of_bool(4. =/= 3.));
+        printStrLn(string_of_bool(5. =/= 5.));
+    EndBody.
