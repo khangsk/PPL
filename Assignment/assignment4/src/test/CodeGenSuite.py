@@ -1536,3 +1536,138 @@ Function: main
 First positive missing value: 9
 """
         self.assertTrue(TestCodeGen.test(input, expect, 579))
+    
+    def test80(self):
+        input = """
+                    Function: foo
+                    Parameter: a[2][2]
+                    Body:
+                        print(string_of_float(a[1][1]));
+                    EndBody.
+                    Function: main
+                    Body:
+                        foo({{1., 2.},{3., 4.}});
+                        print("h");
+                    EndBody.
+                """
+        expect = "4.0h"
+        self.assertTrue(TestCodeGen.test(input,expect,580))
+    
+    def test81(self):
+        input = """
+                    Function: foo
+                    Parameter: a[2][2]
+                    Body:
+                        print(a[1][1]);
+                    EndBody.
+                    Function: main
+                    Body:
+                        foo({{"Hoang", "Gia"}, {"Khang", "CSE"}});
+                    EndBody.
+                """
+        expect = "CSE"
+        self.assertTrue(TestCodeGen.test(input,expect,581))
+    
+    def test82(self):
+        input = """
+                    Function: fact
+                    Parameter: n
+                    Body:
+                        If (n == 1) Then
+                            Return 1;
+                        EndIf.
+                        Return n * fact(n - 1);
+                    EndBody.
+                    Function: main
+                    Body:
+                        print(string_of_int(fact(5)));
+                    EndBody.
+                """
+        expect = "120"
+        self.assertTrue(TestCodeGen.test(input,expect,582))
+    
+    def test83_fibo(self):
+        input = """
+                    Function: fibonaci
+                    Parameter: n
+                    Body:
+                        If (n == 0) Then
+                            Return 0;
+                        ElseIf (n == 1) Then
+                            Return 1;
+                        EndIf.
+                        Return fibonaci(n - 1) + fibonaci(n - 2);
+                    EndBody.
+                    Function: main
+                    Body:
+                        print(string_of_int(fibonaci(5)));
+                    EndBody.
+                """
+        expect = "5"
+        self.assertTrue(TestCodeGen.test(input,expect,583))
+
+    def test84(self):
+        input = """
+                Function: foo
+                Parameter: a[4], n
+                Body:
+                    While (n > 0) Do
+                        n = n - 1;
+                        printStrLn(string_of_int(a[n]));
+                    EndWhile.
+                EndBody.
+                Function: main
+                Body:
+                    foo({5,4,8,9}, 4);
+                EndBody.
+                """
+        expect = "9\n8\n4\n5\n"
+        self.assertTrue(TestCodeGen.test(input,expect,584))
+
+    def test85(self):
+        input = """
+            Function: foo
+            Parameter: a[4], n
+            Body:
+                While (n > 0) Do
+                    n = n - 1;
+                    printStrLn(string_of_float(a[n]));
+                EndWhile.
+            EndBody.
+            Function: main
+            Body:
+                foo({5.,4.,8.,9.}, 4);
+            EndBody.
+                """
+        expect = "9.0\n8.0\n4.0\n5.0\n"
+        self.assertTrue(TestCodeGen.test(input,expect,585))
+
+    def test86(self):
+        input = """
+                    Function: foo
+                    Parameter: a[2][2]
+                    Body:
+                        print(a[1][1]);
+                    EndBody.
+                    Function: main
+                    Parameter: x
+                    Body:
+                        x = 1;
+                        foo({{"Hoang", "Gia"}, {"Khang", "CSE"}});
+                        print(string_of_int(x));
+                    EndBody.
+                """
+        expect = "CSE1"
+        self.assertTrue(TestCodeGen.test(input,expect,586))
+
+    # def test86(self):
+    #     input = """
+    #                 Function: main
+    #                 Parameter: x, i, c[2]
+    #                 Body:
+    #                     c = {4, 5};
+    #                     print(string_of_int(c[1]));
+    #                 EndBody.
+    #             """
+    #     expect = "CSE1"
+    #     self.assertTrue(TestCodeGen.test(input,expect,586))

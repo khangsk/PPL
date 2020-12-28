@@ -1,0 +1,12 @@
+
+                    Function: foo
+                    Parameter: a[2][2]
+                    Body:
+                        print(string_of_float(a[1][1]));
+                    EndBody.
+                    Function: main
+                    Body:
+                        foo({{1., 2.},{3., 4.}});
+                        print("h");
+                    EndBody.
+                

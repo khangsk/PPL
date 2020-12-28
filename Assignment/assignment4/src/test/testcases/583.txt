@@ -1,0 +1,16 @@
+
+                    Function: fibonaci
+                    Parameter: n
+                    Body:
+                        If (n == 0) Then
+                            Return 0;
+                        ElseIf (n == 1) Then
+                            Return 1;
+                        EndIf.
+                        Return fibonaci(n - 1) + fibonaci(n - 2);
+                    EndBody.
+                    Function: main
+                    Body:
+                        print(string_of_int(fibonaci(5)));
+                    EndBody.
+                

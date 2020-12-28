@@ -1,0 +1,11 @@
+
+                    Function: foo
+                    Parameter: a[2][2]
+                    Body:
+                        print(a[1][1]);
+                    EndBody.
+                    Function: main
+                    Body:
+                        foo({{"Hoang", "Gia"}, {"Khang", "CSE"}});
+                    EndBody.
+                

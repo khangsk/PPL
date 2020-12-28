@@ -202,38 +202,26 @@ class CodeGenVisitor(BaseVisitor):
         self.className = "MCClass"
         self.path = dir_
         self.emit = Emitter(self.path + "/" + self.className + ".j")
-
-        self.listGlobalArray = [] # list(VarDecl: array declare global)
-
+        self.listGlobalArray = [] 
         self.function = []
-
         self.visitFunc = []
+        self.paramMain = []
+        self.visitedPara = []
 
     def visitProgram(self, ast, c):
         # #ast: Program
         # #c: Any
-
-        # self.emit.printout(self.emit.emitPROLOG(self.className, "java.lang.Object"))
-        # e = SubBody(None, self.env)
-        # self.genMain(e)
-        # # generate default constructor
-        # self.genInit()
-        # # generate class init if necessary
-        # self.emit.emitEPILOG()
-        # return c
         self.emit.printout(self.emit.emitPROLOG(self.className, "java.lang.Object"))
         staticDecl = self.env
         for x in ast.decl:
             if type(x) is FuncDecl and x.name.name == 'main':
-                # partype = [i.varType for i in x.param]
-                partype = []
-                staticDecl = [Symbol(x.name.name, MType(partype, VoidType()), CName(self.className))] + staticDecl
+                self.paramMain = x.param
+                staticDecl = [Symbol(x.name.name, MType([], VoidType()), CName(self.className))] + staticDecl
             elif type(x) is VarDecl:
                 newSym = self.visit(x, SubBody(None, None, isGlobal=True))
                 staticDecl = [newSym] + staticDecl
             else:
                 self.function.append(x)
-        
         e = SubBody(None, staticDecl)
         [self.visit(x, e) for x in ast.decl if type(x) is FuncDecl and x.name.name == 'main']
         for x in self.visitFunc:
@@ -252,7 +240,6 @@ class CodeGenVisitor(BaseVisitor):
             if type(varType) is ArrayType: 
                 self.listGlobalArray.append(ast)
             return Symbol(varName, varType, val=ast.varInit)
-        # params
         idx = frame.getNewIndex()
         self.emit.printout(self.emit.emitVAR(idx, varName, Utils.retrieveType(varType), frame.getStartLabel(), frame.getEndLabel(), frame))
         return SubBody(frame, [Symbol(varName, varType, Index(idx), val=ast.varInit)] + o.sym)
@@ -270,89 +257,57 @@ class CodeGenVisitor(BaseVisitor):
         self.genMETHOD(ast, o.sym, frame)
 
     def genMETHOD(self, decl, o, frame):
-        # o: Any
         glenv = o
         methodName = decl.name.name
         returnType = Utils.getSymbol(o, decl.name.name).mtype.rettype
         if methodName == "main": returnType = VoidType()
-        isMain = methodName == "main" and len(decl.param) == 0 and type(returnType) is VoidType
+        isMain = methodName == "main"
         isProc = type(returnType) is VoidType
         intype = [ArrayType(StringType(),[])] if isMain else decl.param[1].partype
         mtype = MType(intype, returnType)
         self.emit.printout(self.emit.emitMETHOD(methodName, mtype, True, frame))
         frame.enterScope(isProc)
-
-        # Generate code for parameter declarations
         if isMain:
             self.emit.printout(self.emit.emitVAR(frame.getNewIndex(), "args",
                 StringType(), frame.getStartLabel(), frame.getEndLabel(), frame))
-
-        listParamArray = [] # list(Symbol(name, mtype, value: Index(idx)))
-        listLocalArray = [] # list(Symbol(name, mtype, value: Index(idx)))
+        listLocalArray = [] 
         varList = SubBody(frame, glenv)
         if not isMain:
             for i in range(len(decl.param[0])):
                 idx = varList.frame.getNewIndex()
                 self.emit.printout(self.emit.emitVAR(idx, decl.param[0][i], Utils.retrieveType(decl.param[1].partype[i]), varList.frame.getStartLabel(), varList.frame.getEndLabel(), varList.frame))
                 varList = SubBody(varList.frame, [Symbol(decl.param[0][i], decl.param[1].partype[i], Index(idx))] + varList.sym)
-                # varList = self.visit(x, varList)
-                # if type(x.mtype) is ArrayType:
-                #     listParamArray.append(varList.sym[0])
         for x in decl.body[0]:
             varList = self.visit(x, varList)
             if type(self.getTypeVar(x.varInit)) is ArrayType:
                 listLocalArray.append(varList.sym[0])
-
         self.emit.printout(self.emit.emitLABEL(frame.getStartLabel(), frame))
-
-        # Init global array declare
         for x in self.listGlobalArray:
             arr = Utils.getArrayType(x.varInit)
             size = 1
             for i in arr.dimen: size *= i
             self.emit.printout(self.emit.emitInitNewStaticArray(self.className + "/" + x.variable.name, size, arr.eleType, frame))
-        
-
-        # # Init local array declare
         for sym in listLocalArray:
             arr = sym.mtype
             size = 1
             for i in arr.dimen: size *= i
             self.emit.printout(self.emit.emitInitNewLocalArray(sym.value.value, size, arr.eleType, frame))
-
-        # # Clone params array
-        # for sym in listParamArray:
-        #     index = sym.value.value
-        #     eleType = sym.mtype.eleType
-        #     self.emit.printout(self.emit.emitCloneArray(index, eleType, frame))
         visitSym = []
         for x in varList.sym:
             if x.val and x.name not in visitSym:
                 visitSym.append(x.name)
                 self.visit(Assign(Id(x.name), x.val), varList)
-
         list(map(lambda x: self.visit(x, varList), decl.body[1]))
-
         self.emit.printout(self.emit.emitLABEL(frame.getEndLabel(), frame))
         if isProc:
             self.emit.printout(self.emit.emitRETURN(VoidType(), frame))
-        # else:
-        #     self.emit.printout(self.emit.emitRETURN(VoidType(), frame))
         self.emit.printout(self.emit.emitENDMETHOD(frame))
         frame.exitScope()
 
-
-# ================   Visit Statements   =================
-# Param:    o: SubBody(frame, sym)
-
     def visitCallStmt(self, ast, o):
-        
-        frame = o.frame
-        symbols = o.sym
-        self.handleCall(ast, frame, symbols, isStmt=True)
+        self.handleCall(ast, o.frame, o.sym, isStmt=True)
 
     def handleCall(self, ast, frame, symbols, isStmt=False, typ=VoidType()):
-        # ast: CallStmt | CallExpr
         sym = Utils.lookup(ast.method.name, symbols, lambda x: x.name)
         paramsCode = ""
         idx = 0
@@ -399,50 +354,42 @@ class CodeGenVisitor(BaseVisitor):
             labelF = frame.getNewLabel()
             self.emit.printout(expCode)
             self.emit.printout(self.emit.emitIFFALSE(labelF, frame))
-            #  var 
             newScope = o
             for x in ele[1]:
                 newScope = self.visit(x, newScope)
             for x in ele[1]:
                 self.visit(Assign(Id(x.variable.name), x.varInit), newScope)
             hasReturnStmt = True in [self.visit(x, newScope) for x in ele[2]]
-            self.emit.printout(self.emit.emitGOTO(labelE, frame)) # go to end
+            self.emit.printout(self.emit.emitGOTO(labelE, frame)) 
             self.emit.printout(self.emit.emitLABEL(labelF, frame))
-
-        #  var 
         newScope = o
         for x in ast.elseStmt[0]:
             newScope = self.visit(x, newScope)
         for x in ast.elseStmt[0]:
             self.visit(Assign(Id(x.variable.name), x.varInit), newScope)
         hasReturnStmt = True in [self.visit(x, newScope) for x in ast.elseStmt[1]]
-        # End
         self.emit.printout(self.emit.emitLABEL(labelE, frame))
         return hasReturnStmt
 
     def visitWhile(self, ast, o):
-        
         frame = o.frame
         nenv = o.sym
         expCode, expType = self.visit(ast.exp, Access(frame, nenv, False, True, typ=BoolType()))
-        
-        labelS = frame.getNewLabel() # label start
-        labelE = frame.getNewLabel() # label end
+        labelS = frame.getNewLabel() 
+        labelE = frame.getNewLabel() 
         frame.enterLoop()
         self.emit.printout(self.emit.emitLABEL(labelS, frame))
         self.emit.printout(expCode)
         self.emit.printout(self.emit.emitIFFALSE(labelE, frame))
-
         newScope = o
         for x in ast.sl[0]:
             newScope = self.visit(x, newScope)
         for x in ast.sl[0]:
             self.visit(Assign(Id(x.variable.name), x.varInit), newScope)
-
         hasReturnStmt = True in [self.visit(x, newScope) for x in ast.sl[1]]
         self.emit.printout(self.emit.emitLABEL(frame.getContinueLabel(), frame))
         if not hasReturnStmt:
-            self.emit.printout(self.emit.emitGOTO(labelS, frame)) # loop
+            self.emit.printout(self.emit.emitGOTO(labelS, frame))
         self.emit.printout(self.emit.emitLABEL(labelE, frame))
         self.emit.printout(self.emit.emitLABEL(frame.getBreakLabel(), frame))
         frame.exitLoop()
@@ -450,82 +397,64 @@ class CodeGenVisitor(BaseVisitor):
     def visitDowhile(self, ast, o):
         frame = o.frame
         nenv = o.sym
-        expCode, expType = self.visit(ast.exp, Access(frame, nenv, False, True, typ=BoolType()))
-        
-        labelS = frame.getNewLabel() # label start
-        labelE = frame.getNewLabel() # label end
+        expCode, _ = self.visit(ast.exp, Access(frame, nenv, False, True, typ=BoolType()))
+        labelS = frame.getNewLabel() 
+        labelE = frame.getNewLabel()
         frame.enterLoop()
         self.emit.printout(self.emit.emitLABEL(labelS, frame))
-
         newScope = o
         for x in ast.sl[0]:
             newScope = self.visit(x, newScope)
         for x in ast.sl[0]:
             self.visit(Assign(Id(x.variable.name), x.varInit), newScope)
         hasReturnStmt = True in [self.visit(x, newScope) for x in ast.sl[1]]
-
         self.emit.printout(self.emit.emitLABEL(frame.getContinueLabel(), frame))
         if hasReturnStmt:
-            self.emit.printout(self.emit.emitGOTO(labelE, frame)) # loop
+            self.emit.printout(self.emit.emitGOTO(labelE, frame)) 
         self.emit.printout(expCode)
         self.emit.printout(self.emit.emitIFTRUE(labelS, frame))
-            
         self.emit.printout(self.emit.emitLABEL(labelE, frame))
         self.emit.printout(self.emit.emitLABEL(frame.getBreakLabel(), frame))
         frame.exitLoop()
 
     def visitFor(self, ast, o):
-        
         frame = o.frame
         nenv = o.sym
-
         exp1Code, _ = self.visit(ast.expr1, Access(frame, nenv, False, True, typ=IntType()))
         exp2Code, _ = self.visit(ast.expr2, Access(frame, nenv, False, True, typ=BoolType()))
         exp3Code, _ = self.visit(ast.expr3, Access(frame, nenv, False, True, typ=IntType()))
-
-        lhsWCode, _ = self.visit(ast.idx1, Access(frame, nenv, True, True, typ=IntType())) # Write code
-        lhsRCode, _ = self.visit(ast.idx1, Access(frame, nenv, False, False, typ=IntType())) # Read code
-        
-        labelS = frame.getNewLabel() # label start
-        labelE = frame.getNewLabel() # label end
-
-        # Init value
+        lhsWCode, _ = self.visit(ast.idx1, Access(frame, nenv, True, True, typ=IntType())) 
+        lhsRCode, _ = self.visit(ast.idx1, Access(frame, nenv, False, False, typ=IntType())) 
+        labelS = frame.getNewLabel() 
+        labelE = frame.getNewLabel() 
         self.emit.printout(exp1Code)
         self.emit.printout(lhsWCode)
         frame.enterLoop()
-        # Loop
         self.emit.printout(self.emit.emitLABEL(labelS, frame))
-        # 1. Condition
         self.emit.printout(exp2Code)
         self.emit.printout(self.emit.emitIFFALSE(labelE, frame))
-        # 2. Statements
         newScope = o
         for x in ast.loop[0]:
             newScope = self.visit(x, newScope)
         for x in ast.loop[0]:
             self.visit(Assign(Id(x.variable.name), x.varInit), newScope)
         hasReturnStmt = True in [self.visit(x, newScope) for x in ast.loop[1]]
-
         self.emit.printout(self.emit.emitLABEL(frame.getContinueLabel(), frame))
-        # 3. Update index
         self.emit.printout(lhsRCode)
         self.emit.printout(exp3Code)
         self.emit.printout(self.emit.emitADDOP('+', IntType(), frame))
         self.emit.printout(lhsWCode)
-
         if not hasReturnStmt:
-            self.emit.printout(self.emit.emitGOTO(labelS, frame)) # loop
+            self.emit.printout(self.emit.emitGOTO(labelS, frame)) 
         self.emit.printout(self.emit.emitLABEL(labelE, frame))
         self.emit.printout(self.emit.emitLABEL(frame.getBreakLabel(), frame))
         frame.exitLoop()
 
-    def visitBreak(self, ast, o):
-        
+    def visitBreak(self, ast, o):    
         frame = o.frame
         self.emit.printout(self.emit.emitGOTO(frame.getBreakLabel(), frame))
 
-    def visitContinue(self, ast, o):
-        
+    def visitContinue(self, ast, o):    
         frame = o.frame
         self.emit.printout(self.emit.emitGOTO(frame.getContinueLabel(), frame))
 
@@ -538,49 +467,46 @@ class CodeGenVisitor(BaseVisitor):
                 temp = ArrayCell(ast.lhs, [IntLiteral(i)])
                 isArray, _ = self.visit(temp, Access(frame, nenv, True, True, checkArrayType=True))
                 if isArray: [frame.push() for i in range(0,2)]
-                # Visit LHS: Id || ArrayCell
                 rhsCode, rhsType = self.visit(listEle[i], Access(frame, nenv, False, True, typ=self.getTypeVar(listEle[i])))
                 lhsCode, lhsType = self.visit(temp, Access(frame, nenv, True, True))
                 self.emit.printout(lhsCode[0] + rhsCode + lhsCode[1])
-                    # recover stack status
                 [frame.pop() for i in range(0,2)]
         else:
             isArray, _ = self.visit(ast.lhs, Access(frame, nenv, True, True, checkArrayType=True))
             if isArray: [frame.push() for i in range(0,2)]
-
-            # Visit LHS: Id || ArrayCell
-            leftType = Utils.getSymbol(nenv, ast.lhs).mtype
+            left = Utils.getSymbol(nenv, ast.lhs)
+            leftType = left.mtype if left else IntType()
             rhsCode, rhsType = self.visit(ast.rhs, Access(frame, nenv, False, True, typ=leftType))
-            lhsCode, lhsType = self.visit(ast.lhs, Access(frame, nenv, True, True))
+            lhsCode, lhsType = self.visit(ast.lhs, Access(frame, nenv, True, True, typ=rhsType))
             if not isArray:
                 self.emit.printout(rhsCode + lhsCode)
             else:
                 self.emit.printout(lhsCode[0] + rhsCode + lhsCode[1])
-                # recover stack status
                 [frame.pop() for i in range(0,2)]
 
-# ================   Visit Expression   =================
-# Param:    o: Access(frame, sym, isLeft, isFirst)
-# Return:   (code, type)
-
     def visitId(self, ast, o):
-        # Return (name, type, index)
         frame = o.frame
         symbols = o.sym
         isLeft = o.isLeft
         isFirst = o.isFirst
-
         if isLeft and o.checkArrayType: return False, None
-
         sym = Utils.lookup(ast.name, symbols, lambda x: x.name)
-
-        # recover status of stack in frame
+        if sym is None:
+            sym = Utils.lookup(ast.name, self.visitedPara, lambda x: x.name)
+            if sym is None:
+                for x in self.paramMain:
+                    if x.variable.name == ast.name:
+                        idx = frame.getNewIndex()
+                        self.emit.printout(self.emit.emitVAR(idx, ast.name, Utils.retrieveType(o.typ), frame.getStartLabel(), frame.getEndLabel(), frame))
+                        symbols = [Symbol(ast.name, Utils.retrieveType(o.typ), Index(idx))] + o.sym
+                        self.visitedPara.append(Symbol(ast.name, o.typ, Index(idx)))
+                        sym = Utils.lookup(ast.name, symbols, lambda x: x.name)
+                    self.paramMain.remove(x)
         if not isFirst and isLeft: frame.push()
         elif not isFirst and not isLeft: frame.pop()
-
         isArrayType = type(sym.mtype) is ArrayType
         emitType = Utils.retrieveType(sym.mtype)
-        if sym.value is None: # not index -> global var - static field
+        if sym.value is None: 
             if isLeft and not isArrayType: retCode = self.emit.emitPUTSTATIC(self.className + "/" + sym.name, emitType, frame)
             else: retCode = self.emit.emitGETSTATIC(self.className + "/" + sym.name, emitType, frame)
         else:
@@ -615,7 +541,6 @@ class CodeGenVisitor(BaseVisitor):
                 idxCode, idxType = self.visit(IntLiteral(index), Access(frame, symbols, False, True, typ=IntType()))
             else:
                 idxCode, idxType = self.visit(ast.idx[0], Access(frame, symbols, False, True, typ=IntType()))
-            # Steps: aload(address index) -> iconst(access index) -> iaload
             if isLeft:
                 return [arrCode + idxCode, self.emit.emitASTORE(arrType.eleType, frame)], arrType.eleType
             return arrCode + idxCode + self.emit.emitALOAD(arrType.eleType, frame), arrType.eleType
