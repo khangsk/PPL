@@ -1,13 +1,11 @@
 
-** Local Variable **
-
-Function: main
-    Body:
-        Var: a = 1, b = 1., c = True, d = "";
-
-        printLn();
-        printStrLn(string_of_int(a));
-        printStrLn(string_of_float(b));
-        printStrLn(string_of_bool(c));
-        printStrLn(d);
-    EndBody.
+                    Function: main
+                   Body:        
+                        Var: n = 10;
+                        Do
+                            If (n % 2 != 0) Then
+                                print(string_of_int(n));
+                            EndIf.
+                            n = n - 1;
+                        While (n >= 0) EndDo.
+                   EndBody.

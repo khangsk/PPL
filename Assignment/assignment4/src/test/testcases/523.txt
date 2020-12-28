@@ -1,9 +1,15 @@
 
-Function: main
-    Body:
-        printLn();
-        printStrLn(string_of_bool(True || True));
-        printStrLn(string_of_bool(True || False));
-        printStrLn(string_of_bool(False || True));
-        printStrLn(string_of_bool(False || False));
-    EndBody.
+                    Var: x = 10;
+                    Function: main
+                   Body:        
+                        Var: x = 10;
+                        While (x >= 0) Do
+                            Var: y = 2;
+                            If (x % 2 == 0) Then
+                                print(string_of_int(x));
+                            Else
+                                x = x - y;
+                            EndIf.
+                            x = x - 1;
+                        EndWhile.
+                   EndBody.

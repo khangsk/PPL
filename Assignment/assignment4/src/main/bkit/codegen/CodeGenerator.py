@@ -361,7 +361,7 @@ class CodeGenVisitor(BaseVisitor):
             if sym:
                 pCode, pType = self.visit(ast.param[i], Access(frame, symbols, False, True, typ=sym.mtype.partype[i]))
             else:
-                pCode, pType = self.visit(ast.param[i], Access(frame, symbols, False, True))
+                pCode, pType = self.visit(ast.param[i], Access(frame, symbols, False, True, typ=typ))
             paramsCode = paramsCode + pCode
             parType.append(pType)
             idx = idx + 1
@@ -371,7 +371,7 @@ class CodeGenVisitor(BaseVisitor):
             for i in self.function:
                 if i.name.name == ast.method.name and not Utils.lookup(i.name.name, self.visitFunc, lambda x: x.name.name):
                     varD = [j.variable.name for j in i.param]
-                    self.visitFunc.append(FuncDecl(i.name, (varD, ctype), i.body))
+                    self.visitFunc.append(FuncDecl(i.name, (varD, ctype), i.body))         
             code = paramsCode + self.emit.emitINVOKESTATIC(self.className + "/" + ast.method.name, ctype, frame)
         else:
             ctype = sym.mtype
@@ -380,13 +380,12 @@ class CodeGenVisitor(BaseVisitor):
         else: return code, ctype.rettype
 
     def visitReturn(self, ast, o):
-        
         frame = o.frame
         nenv = o.sym
         retType = frame.returnType.mtype.rettype
         if not type(retType) is VoidType:
             expCode, expType = self.visit(ast.expr, Access(frame, nenv, False, True, typ=retType))
-            self.emit.printout(expCode)        
+            self.emit.printout(expCode)     
         self.emit.printout(self.emit.emitRETURN(retType, frame))
         return True
 
@@ -690,6 +689,29 @@ class CodeGenVisitor(BaseVisitor):
     def visitStringLiteral(self, ast, o):
         return self.emit.emitPUSHCONST(ast.value, StringType(), o.frame), StringType()
 
-    def visitArrayLiteral(self, ast, param):
-        return Utils.getArrayType(ast)
+    def visitArrayLiteral(self, ast, o):
+        listEle = Utils.listElements(ast)
+        frame = o.frame
+        idx = frame.getNewIndex()
+        eletype = self.getTypeVar(listEle[0])
+        code = self.emit.emitInitNewLocalArray(idx, len(listEle), eletype, frame)
+        astr = ""
+        if type(eletype) is FloatType: astr = "fastore"  
+        elif type(eletype) is IntType: astr = "iastore" 
+        elif type(eletype) is BoolType: astr = "bastore" 
+        else: astr = "aastore"
+        astore = "\t" + astr + "\n"
+        aload = ""
+        if idx >= 0 and idx <= 3: 
+            aload = "\t" + "aload_" + str(idx) + "\n"
+        else: 
+            aload = "\t" + "aload" + str(idx) + "\n"
+        for i in range(len(listEle)):
+            code += aload
+            code += self.emit.emitPUSHICONST(i, frame)
+            frame.pop()
+            rhsCode, rhsType = self.visit(listEle[i], Access(o.frame, o.sym, False, True, typ=eletype))
+            code += rhsCode + astore
+        code += aload
+        return code, Utils.getArrayType(ast)
     

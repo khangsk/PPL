@@ -1,27 +1,13 @@
 
-Function: main
-    Body:
-        printLn();
-
-        If False Then
-            printStrLn(string_of_int(1));
-        ElseIf False Then
-            printStrLn(string_of_int(2));
-        ElseIf False Then
-            printStrLn(string_of_int(3));
-        ElseIf False Then
-            printStrLn(string_of_int(4));
-        ElseIf False Then
-            printStrLn(string_of_int(5));
-        ElseIf False Then
-            printStrLn(string_of_int(6));
-        ElseIf False Then
-            printStrLn(string_of_int(7));
-        ElseIf False Then
-            printStrLn(string_of_int(8));
-        ElseIf True Then
-            printStrLn(string_of_int(9));
-        ElseIf True Then
-            printStrLn(string_of_int(10));
-        EndIf.
-    EndBody.
+        Function: foo
+        Parameter: a, b
+        Body:
+            print(string_of_int(1));
+            Return a + b;
+        EndBody.
+        Function: main
+        Body: 
+            Var: x = 10;
+            x = x + foo(3, 4);
+            print(string_of_int(x + 120));
+        EndBody.

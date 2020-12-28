@@ -1,4 +1,4 @@
-
-true
-true
-false
+10
+11
+5
+2

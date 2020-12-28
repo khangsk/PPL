@@ -1,14 +1,20 @@
 
-Function: main
-    Body:
-        Var: i = 0;
-
-        printLn();
-        While i < 5 Do
-            print(string_of_int(i));
-            i = i + 1;
-            Continue;
-        EndWhile.
-        printLn();
-        printStrLn(string_of_int(i));
-    EndBody.
+        Function: foo
+        Parameter: x
+        Body:
+            Var: t = 1;
+            t = x;
+            Return x;
+        EndBody.
+        Function: foo1
+        Parameter: x
+        Body:
+            Return x + foo(5);
+        EndBody.
+        Function: main
+        Body: 
+            Var: a = True;
+            print(string_of_int(foo1(4)));
+            print(string_of_bool(a));
+        EndBody.
+        

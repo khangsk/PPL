@@ -4,39 +4,64 @@
 
 .method public static main([Ljava/lang/String;)V
 .var 0 is args Ljava/lang/String; from Label0 to Label1
-.var 1 is i I from Label0 to Label1
+.var 1 is x [I from Label0 to Label1
 Label0:
+	iconst_3
+	newarray int
+	astore_1
+	aload_1
 	iconst_0
-	istore_1
-	invokestatic io/printLn()V
-Label4:
-	iload_1
 	iconst_5
-	if_icmpge Label2
+	iastore
+	aload_1
 	iconst_1
-	goto Label3
-Label2:
-	iconst_0
-Label3:
-	ifle Label5
-	iload_1
+	bipush 7
+	iastore
+	aload_1
+	iconst_2
+	bipush 9
+	iastore
+	aload_1
+	iconst_1
+	iaload
+	invokestatic MCClass/foo1()I
+	iadd
 	invokestatic io/string_of_int(I)Ljava/lang/String;
 	invokestatic io/print(Ljava/lang/String;)V
-	iload_1
-	iconst_1
-	iadd
-	istore_1
-	goto Label7
-Label6:
-	goto Label4
-Label5:
-Label7:
-	invokestatic io/printLn()V
-	iload_1
-	invokestatic io/string_of_int(I)Ljava/lang/String;
-	invokestatic io/printStrLn(Ljava/lang/String;)V
 Label1:
 	return
-.limit stack 4
+.limit stack 5
 .limit locals 2
+.end method
+
+.method public static foo1()I
+Label0:
+	invokestatic MCClass/foo()[I
+	iconst_1
+	iaload
+	ireturn
+Label1:
+.limit stack 2
+.limit locals 0
+.end method
+
+.method public static foo()[I
+.var 0 is x [I from Label0 to Label1
+Label0:
+	iconst_2
+	newarray int
+	astore_0
+	aload_0
+	iconst_0
+	iconst_1
+	iastore
+	aload_0
+	iconst_1
+	iconst_2
+	iastore
+	aload_0
+	areturn
+Label1:
+.limit stack 5
+.limit locals 1
 .end method

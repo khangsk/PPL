@@ -1,13 +1,15 @@
 
-Function: main
-    Body:
-        printLn();
-
-        If False Then
-            printStrLn(string_of_int(1));
-        ElseIf False Then
-            printStrLn(string_of_int(2));
-        EndIf.
-
-        printStrLn("No else clause");
-    EndBody.
+        Function: foo
+        Parameter: a, b
+        Body:
+            Return a + b;
+        EndBody.
+        Function: main
+        Body: 
+            Var: x = 4;
+            If (x > foo(3,4)) Then
+                print(string_of_int(x));
+            Else
+                print(string_of_int(foo(3,5)));
+            EndIf.
+        EndBody.

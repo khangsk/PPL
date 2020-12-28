@@ -1,8 +1,13 @@
 
-Function: main
-    Body:
-        printLn();
-        printStrLn(string_of_bool(1 >= 2));
-        printStrLn(string_of_bool(4 >= 3));
-        printStrLn(string_of_bool(5 >= 5));
-    EndBody.
+                    Function: main
+                   Body:        
+                        Var: x = 0.;
+                        x = x +. 5.;
+                        x = x -. 10.;
+                        x = x *. -.2.;
+                        printStrLn(string_of_float(x));
+                        x = x +. 1.;
+                        printStrLn(string_of_float(x));
+                        x = x \. 2.;
+                        printStrLn(string_of_float(x));
+                   EndBody.

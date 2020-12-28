@@ -1,16 +1,8 @@
 
-Var: a = 1, b = 1., c = True, d = "", e = "Hi!";
-
-Function: main
-    Body:
-        a = a + 1;
-        b = b +. 1.;
-        c = !c;
-        d = e;
-
-        printLn();
-        printStrLn(string_of_int(a));
-        printStrLn(string_of_float(b));
-        printStrLn(string_of_bool(c));
-        printStrLn(d);
-    EndBody.
+                    Function: main
+                   Body:        
+                        Var: i = 0;
+                        For (i = 0, i < 10, 1) Do
+                            print(string_of_int(i));
+                        EndFor.
+                   EndBody.

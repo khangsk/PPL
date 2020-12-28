@@ -1,13 +1,6 @@
 
-Function: main
-    Body:
-        printLn();
-        printStrLn(string_of_float(float_of_string("-3.4028235E38")));
-        printStrLn(string_of_float(float_of_string("-1.4E-45")));
-        printStrLn(string_of_float(float_of_string("-1.")));
-        printStrLn(string_of_float(0.));
-        printStrLn(string_of_float(1.));
-        printStrLn(string_of_float(2.));
-        printStrLn(string_of_float(1.4E-45));
-        printStrLn(string_of_float(3.4028235E38));
-    EndBody.
+                    Function: main
+                   Body:        
+                        Var: y = True;
+                        print(string_of_bool(y));
+                   EndBody.

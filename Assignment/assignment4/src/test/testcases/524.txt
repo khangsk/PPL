@@ -1,12 +1,16 @@
 
-** Global Variable **
-
-Var: a = 1, b = 1., c = True, d = "";
-Function: main
-    Body:
-        printLn();
-        printStrLn(string_of_int(a));
-        printStrLn(string_of_float(b));
-        printStrLn(string_of_bool(c));
-        printStrLn(d);
-    EndBody.
+                    Function: main
+                   Body:        
+                        Var: x = 5;
+                        While (x >= 0) Do
+                            Var: y = 1;
+                            If (x > y) Then
+                                print(string_of_int(x));
+                            ElseIf (x == y) Then
+                                Break;
+                            Else
+                                print(string_of_int(x));
+                            EndIf.
+                            x = x - 1;
+                        EndWhile.
+                   EndBody.
