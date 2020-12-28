@@ -714,4 +714,3 @@ class CodeGenVisitor(BaseVisitor):
             code += rhsCode + astore
         code += aload
         return code, Utils.getArrayType(ast)
-    

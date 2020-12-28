@@ -4,34 +4,37 @@
 
 .method public static main([Ljava/lang/String;)V
 .var 0 is args Ljava/lang/String; from Label0 to Label1
-.var 1 is i I from Label0 to Label1
 Label0:
-	iconst_0
-	istore_1
-	invokestatic io/printLn()V
-Label4:
-	iload_1
-	invokestatic io/string_of_int(I)Ljava/lang/String;
+	invokestatic MCClass/foo()[Ljava/lang/String;
+	iconst_2
+	aaload
 	invokestatic io/print(Ljava/lang/String;)V
-	iload_1
-	iconst_1
-	iadd
-	istore_1
-Label6:
-	iload_1
-	iconst_0
-	if_icmpge Label2
-	iconst_1
-	goto Label3
-Label2:
-	iconst_0
-Label3:
-	ifgt Label4
-Label5:
-Label7:
-	invokestatic io/printLn()V
 Label1:
 	return
-.limit stack 5
-.limit locals 2
+.limit stack 2
+.limit locals 1
+.end method
+
+.method public static foo()[Ljava/lang/String;
+Label0:
+	iconst_3
+	anewarray java/lang/String
+	astore_0
+	aload_0
+	iconst_0
+	ldc "Hoang"
+	aastore
+	aload_0
+	iconst_1
+	ldc "Gia"
+	aastore
+	aload_0
+	iconst_2
+	ldc "Khang"
+	aastore
+	aload_0
+	areturn
+Label1:
+.limit stack 3
+.limit locals 1
 .end method

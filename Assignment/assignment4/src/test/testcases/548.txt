@@ -1,10 +1,10 @@
 
         Function: foo
         Body:
-            Return {{1,2},{3,4}};
+            Return {1,2,3,4};
         EndBody.
         Function: main
         Body: 
-            print(string_of_int(foo()[1][0]));
+            print(string_of_int(foo()[2]));
         EndBody.
         

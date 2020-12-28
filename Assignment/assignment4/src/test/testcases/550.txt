@@ -1,12 +1,10 @@
 
-Function: main
-    Body:
-        Var: i = 0;
-
-        printLn();
-        Do
-            print(string_of_int(i));
-            i = i + 1;
-        While i < 0 EndDo.
-        printLn();
-    EndBody.
+        Function: foo
+        Body: 
+            Return {"Hoang", "Gia", "Khang"};
+        EndBody.
+        Function: main
+        Body: 
+            print(foo()[2]);
+        EndBody.
+        

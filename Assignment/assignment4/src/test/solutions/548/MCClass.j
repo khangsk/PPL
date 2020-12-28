@@ -6,7 +6,7 @@
 .var 0 is args Ljava/lang/String; from Label0 to Label1
 Label0:
 	invokestatic MCClass/foo()[I
-	iconst_1
+	iconst_2
 	iaload
 	invokestatic io/string_of_int(I)Ljava/lang/String;
 	invokestatic io/print(Ljava/lang/String;)V
