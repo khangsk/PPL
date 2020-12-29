@@ -1,0 +1,16 @@
+
+        Function: sum
+        Parameter: x
+        Body:
+            Var: i=0;
+            For (i = 0 , i < 5, 1) Do
+                x = x + i;
+            EndFor.
+            Return x;
+        EndBody.
+        Function: main
+        Body:
+            Var: y=0;
+            y = sum(5);
+            printStrLn(string_of_int(y));
+        EndBody.

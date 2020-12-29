@@ -1,6 +1,15 @@
 
             Function: main
             Body:
-                
+                Var: r = 10.;
+                print("The tich hinh cau ban kinh r = ");
+                print(string_of_float(r));
+                print(" la: ");
+                print(string_of_float(theTich(r)));
+            EndBody.
+            Function: theTich
+            Parameter: r
+            Body:
+                Return (4. \. 3.) *. 3.14 *. r *. r *.r;
             EndBody.
         

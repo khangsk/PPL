@@ -1824,76 +1824,114 @@ First positive missing value: 9
         expect = "6"
         self.assertTrue(TestCodeGen.test(input,expect,595))
     
-    def test92(self):
+    def test96(self):
+        input = r"""
+        Function: sum
+        Parameter: x
+        Body:
+            Var: i=0;
+            For (i = 0 , i < 5, 1) Do
+                x = x + i;
+            EndFor.
+            Return x;
+        EndBody.
+        Function: main
+        Body:
+            Var: y=0;
+            y = sum(5);
+            printStrLn(string_of_int(y));
+        EndBody."""
+        expect = "15\n"
+        self.assertTrue(TestCodeGen.test(input,expect,596))
+    
+    def test97(self):
+        input = r"""
+Function: main
+    Body:
+        printLn();
+        printStrLn(string_of_int(2 * 5));
+        printStrLn(string_of_int(20 \ 3));
+        printStrLn(string_of_float(3.14 *. 3.));
+        printStrLn(string_of_float(7. \. 8.));
+
+        printStrLn(string_of_int(2 * -5));
+        printStrLn(string_of_int(20 \ -3));
+        printStrLn(string_of_float(3.14 *. -.3.));
+        printStrLn(string_of_float(7. \. -.8.));
+    EndBody.
+"""
+        expect = r"""
+10
+6
+9.42
+0.875
+-10
+-6
+-9.42
+-0.875
+"""
+        self.assertTrue(TestCodeGen.test(input,expect,597))
+    
+    def test98(self):
+        input = r"""
+Function: main
+    Body:
+        printLn();
+        printStrLn(string_of_int(20 % 3));
+        printStrLn(string_of_int(10 % 5));
+
+        printStrLn(string_of_int(-20 % 3));
+        printStrLn(string_of_int(-10 % 5));
+    EndBody.
+"""
+        expect = r"""
+2
+0
+-2
+0
+"""
+        self.assertTrue(TestCodeGen.test(input,expect,598))
+    
+    def test99(self):
+        input = r"""
+            Function: foo
+            Parameter: a[5], b
+            Body:
+                Var: i = 0;
+                While (i < 5) Do
+                    a[i] = b +. 1.0 +. float_to_int(i);
+                    i = i + 1;
+                EndWhile.
+                i = 0;
+                While (i < 5) Do
+                    print(string_of_float(a[i]));
+                    i = i + 1;
+                EndWhile.
+            EndBody.
+            Function: main
+            Body:
+                Var: a[5] = {0., 0., 0., 0., 0.}, b = 2.;
+                foo(a, b);
+            EndBody.
+        """
+        expect = "3.04.05.06.07.0"
+        self.assertTrue(TestCodeGen.test(input,expect,599))
+    
+    def test100(self):
         input = r"""
             Function: main
             Body:
-                
+                Var: b[3][4] = {{2.3 , 5., 7.4, 4.}, {6., 17., 9.12, 30.}, {0., 10.3, 5., 2.4}}, a[6] = {1,2,3,4,5,6}, i = 0;
+                a[3 + foo(2)] = a[int_of_float(b[2][3])] + 4;
+                For (i = 0, i < 6, 1) Do
+                    print(string_of_int(a[i]));
+                EndFor.
             EndBody.
-        """
-        expect = ""
-        self.assertTrue(TestCodeGen.test(input,expect,592))
-    
-    def test92(self):
-        input = r"""
-            Function: main
+            Function: foo
+            Parameter: a
             Body:
-                
+                Return a - 1;
             EndBody.
         """
-        expect = ""
-        self.assertTrue(TestCodeGen.test(input,expect,592))
-    
-    def test92(self):
-        input = r"""
-            Function: main
-            Body:
-                
-            EndBody.
-        """
-        expect = ""
-        self.assertTrue(TestCodeGen.test(input,expect,592))
-    
-    # def test99(self):
-    #     input = r"""
-    #         Function: foo
-    #         Parameter: a[5], b
-    #         Body:
-    #             Var: i = 0;
-    #             While (i < 5) Do
-    #                 a[i] = b +. 1.0 +. float_to_int(i);
-    #                 i = i + 1;
-    #             EndWhile.
-    #             i = 0;
-    #             While (i < 5) Do
-    #                 print(string_of_float(a[i]));
-    #                 i = i + 1;
-    #             EndWhile.
-    #         EndBody.
-    #         Function: main
-    #         Body:
-    #             Var: a[5] = {0., 0., 0., 0., 0.}, b = 2.;
-    #             foo(a, b);
-    #         EndBody.
-    #     """
-    #     expect = "3.04.05.06.07.0"
-    #     self.assertTrue(TestCodeGen.test(input,expect,599))
-    
-    # def test100(self):
-    #     input = r"""
-    #         Function: main
-    #         Body:
-    #             Var: b[3][4] = {{2.3 , 5., 7.4, 4.}, {6., 17., 9.12, 30.}, {0., 10.3, 5., 2.4}}, a[6] = {1,2,3,4,5,6}, i = 0;
-    #             a[3 + foo(2)] = a[int_of_float(b[2][3])] + 4;
-    #             For (i = 0, i < 6, 1) Do
-    #                 print(string_of_int(a[i]));
-    #             EndFor.
-    #         EndBody.
-    #         Function: foo
-    #         Parameter: a
-    #         Body:
-    #             Return a - 1;
-    #         EndBody.
-    #     """
-    #     expect = "123476"
-    #     self.assertTrue(TestCodeGen.test(input,expect,600))
+        expect = "123476"
+        self.assertTrue(TestCodeGen.test(input,expect,600))

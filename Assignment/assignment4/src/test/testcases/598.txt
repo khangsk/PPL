@@ -1,0 +1,10 @@
+
+Function: main
+    Body:
+        printLn();
+        printStrLn(string_of_int(20 % 3));
+        printStrLn(string_of_int(10 % 5));
+
+        printStrLn(string_of_int(-20 % 3));
+        printStrLn(string_of_int(-10 % 5));
+    EndBody.
