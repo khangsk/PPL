@@ -1,0 +1,12 @@
+
+            Var: string[3] = {"1.23", "0.e4", "12e2"};
+            Function: main
+            Body:
+                Var: x[3] = {0., 0., 0.}, sum = 0., i = 0;
+                For (i = 0, i < 3, 1) Do
+                    x[i] = float_of_string(string[i]);
+                    sum = sum +. x[i];
+                EndFor.
+                print(string_of_float(sum));
+            EndBody.
+        

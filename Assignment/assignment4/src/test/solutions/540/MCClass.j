@@ -82,7 +82,17 @@ Label0:
 	iconst_2
 	iastore
 	aload_1
-	bipush 8
+	iconst_1
+	iconst_3
+	imul
+	iconst_2
+	imul
+	iconst_1
+	iconst_2
+	imul
+	iadd
+	iconst_0
+	iadd
 	iaload
 	invokestatic io/string_of_int(I)Ljava/lang/String;
 	invokestatic io/print(Ljava/lang/String;)V

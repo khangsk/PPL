@@ -38,12 +38,16 @@ Label1:
 .var 0 is a [F from Label0 to Label1
 Label0:
 	aload_0
-	iconst_3
+	iconst_1
+	iconst_2
+	imul
+	iconst_1
+	iadd
 	faload
 	invokestatic io/string_of_float(F)Ljava/lang/String;
 	invokestatic io/print(Ljava/lang/String;)V
 Label1:
 	return
-.limit stack 2
+.limit stack 3
 .limit locals 1
 .end method

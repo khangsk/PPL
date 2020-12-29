@@ -86,43 +86,75 @@ Label0:
 	iconst_4
 	iastore
 	getstatic MCClass/a [I
-	iconst_3
+	iconst_1
+	iconst_2
+	imul
+	iconst_1
+	iadd
 	iconst_5
 	iastore
 	getstatic MCClass/b [F
-	iconst_3
+	iconst_1
+	iconst_2
+	imul
+	iconst_1
+	iadd
 	ldc 5.0
 	fastore
 	getstatic MCClass/c [Z
-	iconst_3
+	iconst_1
+	iconst_2
+	imul
+	iconst_1
+	iadd
 	iconst_0
 	bastore
 	getstatic MCClass/d [Ljava/lang/String;
-	iconst_3
+	iconst_1
+	iconst_2
+	imul
+	iconst_1
+	iadd
 	ldc "Hi!"
 	aastore
 	invokestatic io/printLn()V
 	getstatic MCClass/a [I
-	iconst_3
+	iconst_1
+	iconst_2
+	imul
+	iconst_1
+	iadd
 	iaload
 	invokestatic io/string_of_int(I)Ljava/lang/String;
 	invokestatic io/printStrLn(Ljava/lang/String;)V
 	getstatic MCClass/b [F
-	iconst_3
+	iconst_1
+	iconst_2
+	imul
+	iconst_1
+	iadd
 	faload
 	invokestatic io/string_of_float(F)Ljava/lang/String;
 	invokestatic io/printStrLn(Ljava/lang/String;)V
 	getstatic MCClass/c [Z
-	iconst_3
+	iconst_1
+	iconst_2
+	imul
+	iconst_1
+	iadd
 	baload
 	invokestatic io/string_of_bool(Z)Ljava/lang/String;
 	invokestatic io/printStrLn(Ljava/lang/String;)V
 	getstatic MCClass/d [Ljava/lang/String;
-	iconst_3
+	iconst_1
+	iconst_2
+	imul
+	iconst_1
+	iadd
 	aaload
 	invokestatic io/printStrLn(Ljava/lang/String;)V
 Label1:
 	return
-.limit stack 10
+.limit stack 11
 .limit locals 1
 .end method

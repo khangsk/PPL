@@ -39,42 +39,266 @@ Label0:
 	iastore
 	getstatic MCClass/a [I
 	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iadd
 	iconst_2
 	iastore
 	getstatic MCClass/b [F
 	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iadd
 	ldc 2.0
 	fastore
 	getstatic MCClass/c [Z
 	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iadd
 	iconst_0
 	bastore
 	getstatic MCClass/d [Ljava/lang/String;
 	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iadd
 	ldc "Hello!"
 	aastore
 	invokestatic io/printLn()V
 	getstatic MCClass/a [I
 	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iadd
 	iaload
 	invokestatic io/string_of_int(I)Ljava/lang/String;
 	invokestatic io/printStrLn(Ljava/lang/String;)V
 	getstatic MCClass/b [F
 	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iadd
 	faload
 	invokestatic io/string_of_float(F)Ljava/lang/String;
 	invokestatic io/printStrLn(Ljava/lang/String;)V
 	getstatic MCClass/c [Z
 	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iadd
 	baload
 	invokestatic io/string_of_bool(Z)Ljava/lang/String;
 	invokestatic io/printStrLn(Ljava/lang/String;)V
 	getstatic MCClass/d [Ljava/lang/String;
 	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iconst_1
+	imul
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iconst_1
+	imul
+	iadd
+	iconst_0
+	iadd
 	aaload
 	invokestatic io/printStrLn(Ljava/lang/String;)V
 Label1:
 	return
-.limit stack 7
+.limit stack 9
 .limit locals 1
 .end method

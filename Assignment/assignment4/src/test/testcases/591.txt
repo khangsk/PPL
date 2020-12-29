@@ -1,0 +1,11 @@
+
+            Var: string[3] = {"1.23", "0.e4", "12e2"};
+            Function: main
+            Body:
+                Var: sum = 0, i = 0;
+                For (i = 0, i < 3, 1) Do
+                    sum = sum + int_of_float(float_of_string(string[i]));
+                EndFor.
+                print(string_of_int(sum));
+            EndBody.
+        

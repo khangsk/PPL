@@ -468,7 +468,7 @@ class CodeGenVisitor(BaseVisitor):
                 isArray, _ = self.visit(temp, Access(frame, nenv, True, True, checkArrayType=True))
                 if isArray: [frame.push() for i in range(0,2)]
                 rhsCode, rhsType = self.visit(listEle[i], Access(frame, nenv, False, True, typ=self.getTypeVar(listEle[i])))
-                lhsCode, lhsType = self.visit(temp, Access(frame, nenv, True, True))
+                lhsCode, lhsType = self.visit(temp, Access(frame, nenv, True, True, typ=self.getTypeVar(listEle[i])))
                 self.emit.printout(lhsCode[0] + rhsCode + lhsCode[1])
                 [frame.pop() for i in range(0,2)]
         else:
@@ -497,11 +497,18 @@ class CodeGenVisitor(BaseVisitor):
                 for x in self.paramMain:
                     if x.variable.name == ast.name:
                         idx = frame.getNewIndex()
-                        self.emit.printout(self.emit.emitVAR(idx, ast.name, Utils.retrieveType(o.typ), frame.getStartLabel(), frame.getEndLabel(), frame))
+                        if len(x.varDimen) > 0:
+                            self.emit.printout(self.emit.emitVAR(idx, ast.name, Utils.retrieveType(ArrayType(o.typ, x.varDimen)), frame.getStartLabel(), frame.getEndLabel(), frame))
+                            size = 1
+                            for i in x.varDimen: size *= i
+                            self.emit.printout(self.emit.emitInitNewLocalArray(idx, size, o.typ, frame))
+                            self.visitedPara.append(Symbol(ast.name, ArrayType(o.typ, x.varDimen), Index(idx)))
+                        else:
+                            self.emit.printout(self.emit.emitVAR(idx, ast.name, Utils.retrieveType(o.typ), frame.getStartLabel(), frame.getEndLabel(), frame))
+                            self.visitedPara.append(Symbol(ast.name, o.typ, Index(idx)))
                         symbols = [Symbol(ast.name, Utils.retrieveType(o.typ), Index(idx))] + o.sym
-                        self.visitedPara.append(Symbol(ast.name, o.typ, Index(idx)))
-                        sym = Utils.lookup(ast.name, symbols, lambda x: x.name)
-                    self.paramMain.remove(x)
+                        sym = Utils.lookup(ast.name, self.visitedPara, lambda x: x.name)
+                        self.paramMain.remove(x)
         if not isFirst and isLeft: frame.push()
         elif not isFirst and not isLeft: frame.pop()
         isArrayType = type(sym.mtype) is ArrayType
@@ -530,15 +537,16 @@ class CodeGenVisitor(BaseVisitor):
             return arrCode + idxCode + self.emit.emitALOAD(o.typ, frame), o.typ
         else:
             arrCode, arrType = self.visit(ast.arr, Access(frame, symbols, True, True, typ=o.typ))
-            asym = Utils.getSymbol(symbols, ast.arr).mtype.dimen
+            asym = Utils.getSymbol(symbols, ast.arr)
+            if asym: asym = asym.mtype.dimen
+            else: asym = Utils.lookup(ast.arr.name, self.visitedPara, lambda x: x.name).mtype.dimen
             if len(ast.idx) > 1:
-                index = 0
                 for i in range(len(ast.idx)):
-                    temp = ast.idx[i].value
+                    temp, _ = self.visit(ast.idx[i], Access(frame, symbols, False, True, typ=IntType()))
                     for j in range(i + 1, len(asym)):
-                        temp *= asym[j]
-                    index += temp
-                idxCode, idxType = self.visit(IntLiteral(index), Access(frame, symbols, False, True, typ=IntType()))
+                        temp = temp + self.emit.emitPUSHICONST(asym[j], frame) + self.emit.emitMULOP('*', IntType(), frame)
+                    if i == 0: idxCode = temp
+                    else: idxCode = idxCode + temp + self.emit.emitADDOP('+', IntType(), frame)
             else:
                 idxCode, idxType = self.visit(ast.idx[0], Access(frame, symbols, False, True, typ=IntType()))
             if isLeft:

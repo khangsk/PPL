@@ -1,0 +1,15 @@
+
+            Function: main
+            Body:
+                Var: b[3][4] = {{2.3 , 5., 7.4, 4.}, {6., 17., 9.12, 30.}, {0., 10.3, 5., 2.4}}, a[6] = {1,2,3,4,5,6}, i = 0;
+                a[3 + foo(2)] = a[int_of_float(b[2][3])] + 4;
+                For (i = 0, i < 6, 1) Do
+                    print(string_of_int(a[i]));
+                EndFor.
+            EndBody.
+            Function: foo
+            Parameter: a
+            Body:
+                Return a - 1;
+            EndBody.
+        

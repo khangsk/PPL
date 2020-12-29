@@ -1,0 +1,10 @@
+
+            Function: main
+            Body:
+                If bool_of_string("True") Then
+                    print("Dung roi");
+                Else
+                    print("Sai roi");
+                EndIf.
+            EndBody.
+        

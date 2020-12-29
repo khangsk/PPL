@@ -94,7 +94,17 @@ Label0:
 	iconst_2
 	iastore
 	getstatic MCClass/x [I
-	bipush 14
+	iconst_2
+	iconst_3
+	imul
+	iconst_2
+	imul
+	iconst_1
+	iconst_2
+	imul
+	iadd
+	iconst_0
+	iadd
 	iaload
 	getstatic MCClass/y [I
 	iconst_0

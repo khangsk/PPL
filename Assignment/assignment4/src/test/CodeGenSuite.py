@@ -1660,14 +1660,240 @@ First positive missing value: 9
         expect = "CSE1"
         self.assertTrue(TestCodeGen.test(input,expect,586))
 
-    # def test86(self):
-    #     input = """
-    #                 Function: main
-    #                 Parameter: x, i, c[2]
-    #                 Body:
-    #                     c = {4, 5};
-    #                     print(string_of_int(c[1]));
-    #                 EndBody.
-    #             """
-    #     expect = "CSE1"
-    #     self.assertTrue(TestCodeGen.test(input,expect,586))
+    def test87(self):
+        input = r"""
+            Function: prime_number
+            Parameter: n
+            Body:
+                Var: i = 0;
+                If n < 2 Then
+                    Return False;
+                EndIf.
+                If (n == 2) || (n == 3) Then
+                    Return True;
+                EndIf.
+                For (i = 2, i < n, 1) Do
+                    If n % i == 0 Then
+                        Return False;
+                    EndIf.
+                EndFor.
+                Return True;
+            EndBody.
+            Function: main
+            Body:
+                Var: i = 0;
+                For (i = 0, i < 100, 1) Do
+                    If prime_number(i) Then
+                        print(string_of_int(i));
+                    EndIf.
+                EndFor.
+            EndBody.
+        """
+        expect = "2357111317192329313741434753596167717379838997"
+        self.assertTrue(TestCodeGen.test(input,expect,587))
+
+    def test88(self):
+        input = r"""
+            Function: main
+            Body:
+                Var: a___b = 12345;
+                Var: b = True, c = 123.;
+                If b Then
+                    c = c +. 1.;
+                    print(string_of_float(c));
+                ElseIf !b Then
+                    Return c;
+                EndIf.
+                Return float(a___b) + c;
+            EndBody.
+        """
+        expect = "124.0"
+        self.assertTrue(TestCodeGen.test(input,expect,588))
+    
+    def test89(self):
+        input = r"""
+            Var: arr[3][2] = {{1, 2}, {4, 5}, {3, 5}};
+            Function: main
+            Body:
+                Var: p = 1, i = 0, j = 0;
+                For (i = 0, i < 3, 1) Do
+                    For (j = 0, j < 2, 1) Do
+                        p = p * arr[i][j];
+                    EndFor.
+                EndFor.
+                print(string_of_int(p));
+            EndBody.
+        """
+        expect = "600"
+        self.assertTrue(TestCodeGen.test(input,expect,589))
+    
+    def test90(self):
+        input = r"""
+            Var: string[3] = {"1.23", "0.e4", "12e2"};
+            Function: main
+            Body:
+                Var: x[3] = {0., 0., 0.}, sum = 0., i = 0;
+                For (i = 0, i < 3, 1) Do
+                    x[i] = float_of_string(string[i]);
+                    sum = sum +. x[i];
+                EndFor.
+                print(string_of_float(sum));
+            EndBody.
+        """
+        expect = "1201.23"
+        self.assertTrue(TestCodeGen.test(input,expect,590))
+
+    def test91(self):
+        input = r"""
+            Var: string[3] = {"1.23", "0.e4", "12e2"};
+            Function: main
+            Body:
+                Var: sum = 0, i = 0;
+                For (i = 0, i < 3, 1) Do
+                    sum = sum + int_of_float(float_of_string(string[i]));
+                EndFor.
+                print(string_of_int(sum));
+            EndBody.
+        """
+        expect = "1201"
+        self.assertTrue(TestCodeGen.test(input,expect,591))
+
+    def test92(self):
+        input = r"""
+            Function: main
+            Body:
+                Var: r = 10.;
+                print("The tich hinh cau ban kinh r = ");
+                print(string_of_float(r));
+                print(" la: ");
+                print(string_of_float(theTich(r)));
+            EndBody.
+            Function: theTich
+            Parameter: r
+            Body:
+                Return (4. \. 3.) *. 3.14 *. r *. r *.r;
+            EndBody.
+        """
+        expect = "The tich hinh cau ban kinh r = 10.0 la: 4186.667"
+        self.assertTrue(TestCodeGen.test(input,expect,592))
+    
+    def test93(self):
+        input = r"""
+            Function: foo
+            Parameter: a, b
+            Body:
+                printStrLn(string_of_float(float_to_int(a) *. b));
+            EndBody.
+            Function: main
+            Body:
+                Var: x = 5, y = 4.;
+                foo(2 + x, 3. \. y);
+                goo();
+            EndBody.
+            Function: goo
+            Body:
+                printStrLn("Nothing to print!!!");
+            EndBody.
+        """
+        expect = "5.25\nNothing to print!!!\n"
+        self.assertTrue(TestCodeGen.test(input,expect,593))
+
+    def test94(self):
+        input = r"""
+            Function: main
+            Body:
+                If bool_of_string("True") Then
+                    print("Dung roi");
+                Else
+                    print("Sai roi");
+                EndIf.
+            EndBody.
+        """
+        expect = "Dung roi"
+        self.assertTrue(TestCodeGen.test(input,expect,594))
+
+    def test95(self):
+        input = """
+                    Function: main
+                    Parameter: x, c[2][2]
+                    Body:
+                        c = {{4,5},{6,7}};
+                        print(string_of_int(c[1][0]));
+                    EndBody.
+                """
+        expect = "6"
+        self.assertTrue(TestCodeGen.test(input,expect,595))
+    
+    def test92(self):
+        input = r"""
+            Function: main
+            Body:
+                
+            EndBody.
+        """
+        expect = ""
+        self.assertTrue(TestCodeGen.test(input,expect,592))
+    
+    def test92(self):
+        input = r"""
+            Function: main
+            Body:
+                
+            EndBody.
+        """
+        expect = ""
+        self.assertTrue(TestCodeGen.test(input,expect,592))
+    
+    def test92(self):
+        input = r"""
+            Function: main
+            Body:
+                
+            EndBody.
+        """
+        expect = ""
+        self.assertTrue(TestCodeGen.test(input,expect,592))
+    
+    # def test99(self):
+    #     input = r"""
+    #         Function: foo
+    #         Parameter: a[5], b
+    #         Body:
+    #             Var: i = 0;
+    #             While (i < 5) Do
+    #                 a[i] = b +. 1.0 +. float_to_int(i);
+    #                 i = i + 1;
+    #             EndWhile.
+    #             i = 0;
+    #             While (i < 5) Do
+    #                 print(string_of_float(a[i]));
+    #                 i = i + 1;
+    #             EndWhile.
+    #         EndBody.
+    #         Function: main
+    #         Body:
+    #             Var: a[5] = {0., 0., 0., 0., 0.}, b = 2.;
+    #             foo(a, b);
+    #         EndBody.
+    #     """
+    #     expect = "3.04.05.06.07.0"
+    #     self.assertTrue(TestCodeGen.test(input,expect,599))
+    
+    # def test100(self):
+    #     input = r"""
+    #         Function: main
+    #         Body:
+    #             Var: b[3][4] = {{2.3 , 5., 7.4, 4.}, {6., 17., 9.12, 30.}, {0., 10.3, 5., 2.4}}, a[6] = {1,2,3,4,5,6}, i = 0;
+    #             a[3 + foo(2)] = a[int_of_float(b[2][3])] + 4;
+    #             For (i = 0, i < 6, 1) Do
+    #                 print(string_of_int(a[i]));
+    #             EndFor.
+    #         EndBody.
+    #         Function: foo
+    #         Parameter: a
+    #         Body:
+    #             Return a - 1;
+    #         EndBody.
+    #     """
+    #     expect = "123476"
+    #     self.assertTrue(TestCodeGen.test(input,expect,600))

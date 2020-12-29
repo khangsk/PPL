@@ -1,0 +1,8 @@
+
+                    Function: main
+                    Parameter: x, c[2][2]
+                    Body:
+                        c = {{4,5},{6,7}};
+                        print(string_of_int(c[1][0]));
+                    EndBody.
+                
