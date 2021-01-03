@@ -1,8 +1,10 @@
 
-                    Function: main
-                   Body:        
-                        
-                        printStrLn(string_of_bool(True || False));
-                        printStrLn(string_of_bool(False || False));
-                        print(string_of_bool(False || True));
-                   EndBody.
+Function: main
+    Body:
+        printLn();
+        printStrLn(string_of_int(20 % 3));
+        printStrLn(string_of_int(10 % 5));
+
+        printStrLn(string_of_int(-20 % 3));
+        printStrLn(string_of_int(-10 % 5));
+    EndBody.

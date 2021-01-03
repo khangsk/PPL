@@ -1,8 +1,9 @@
 
-                    Function: main
-                   Body:        
-                        Var: i = 0;
-                        For (i = 0, i <= 10, 2) Do
-                            print(string_of_int(i));
-                        EndFor.
-                   EndBody.
+Function: main
+    Body:
+        printLn();
+
+        If True Then
+            printStrLn(string_of_int(1));
+        EndIf.
+    EndBody.

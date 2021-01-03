@@ -620,7 +620,7 @@ class CodeGenVisitor(BaseVisitor):
         return self.emit.emitPUSHICONST(str(ast.value), o.frame), BoolType()
 
     def visitStringLiteral(self, ast, o):
-        return self.emit.emitPUSHCONST(ast.value, StringType(), o.frame), StringType()
+        return self.emit.emitPUSHCONST(ast.value.replace("'\"", '\\"'), StringType(), o.frame), StringType()
 
     def visitArrayLiteral(self, ast, o):
         listEle = Utils.listElements(ast)

@@ -4,55 +4,36 @@
 
 .method public static main([Ljava/lang/String;)V
 .var 0 is args Ljava/lang/String; from Label0 to Label1
-.var 1 is x [I from Label0 to Label1
+.var 1 is i I from Label0 to Label1
 Label0:
-	iconst_3
-	newarray int
-	astore_1
-	aload_1
 	iconst_0
-	iconst_5
-	iastore
-	aload_1
-	iconst_1
-	bipush 7
-	iastore
-	aload_1
-	iconst_2
-	bipush 9
-	iastore
-	aload_1
-	iconst_1
-	iaload
-	invokestatic MCClass/foo()[I
+	istore_1
+	invokestatic io/printLn()V
+Label4:
+	iload_1
 	iconst_0
-	iaload
-	iadd
+	if_icmpge Label2
+	iconst_1
+	goto Label3
+Label2:
+	iconst_0
+Label3:
+	ifle Label5
+	iload_1
 	invokestatic io/string_of_int(I)Ljava/lang/String;
 	invokestatic io/print(Ljava/lang/String;)V
+	iload_1
+	iconst_1
+	iadd
+	istore_1
+Label6:
+	goto Label4
+Label5:
+Label7:
+	ldc "No iteration"
+	invokestatic io/printStrLn(Ljava/lang/String;)V
 Label1:
 	return
-.limit stack 5
+.limit stack 4
 .limit locals 2
-.end method
-
-.method public static foo()[I
-.var 0 is y [I from Label0 to Label1
-Label0:
-	iconst_2
-	newarray int
-	astore_0
-	aload_0
-	iconst_0
-	iconst_1
-	iastore
-	aload_0
-	iconst_1
-	iconst_2
-	iastore
-	aload_0
-	areturn
-Label1:
-.limit stack 5
-.limit locals 1
 .end method

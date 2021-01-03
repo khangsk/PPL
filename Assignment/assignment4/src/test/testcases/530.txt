@@ -1,10 +1,11 @@
 
-        Function: foo
-        Body:
-            print(string_of_int(1));
-        EndBody.
-        Function: main
-        Body: 
-            foo();
-            print(string_of_int(120));
-        EndBody.
+Function: main
+    Body:
+        printLn();
+
+        If True Then
+            printStrLn(string_of_int(1));
+        Else
+            printStrLn(string_of_int(100));
+        EndIf.
+    EndBody.

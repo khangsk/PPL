@@ -4,47 +4,27 @@
 
 .method public static main([Ljava/lang/String;)V
 .var 0 is args Ljava/lang/String; from Label0 to Label1
-.var 1 is x I from Label0 to Label1
 Label0:
-	iconst_4
-	istore_1
-	iload_1
-	iconst_3
-	iconst_4
-	invokestatic MCClass/foo(II)I
-	if_icmple Label3
+	invokestatic io/printLn()V
+	iconst_0
+	ifle Label3
 	iconst_1
-	goto Label4
+	invokestatic io/string_of_int(I)Ljava/lang/String;
+	invokestatic io/printStrLn(Ljava/lang/String;)V
+	goto Label2
 Label3:
 	iconst_0
-Label4:
-	ifle Label5
-	iload_1
+	ifle Label4
+	iconst_2
 	invokestatic io/string_of_int(I)Ljava/lang/String;
-	invokestatic io/print(Ljava/lang/String;)V
+	invokestatic io/printStrLn(Ljava/lang/String;)V
 	goto Label2
-Label5:
-	iconst_3
-	iconst_5
-	invokestatic MCClass/foo(II)I
-	invokestatic io/string_of_int(I)Ljava/lang/String;
-	invokestatic io/print(Ljava/lang/String;)V
+Label4:
 Label2:
+	ldc "No else clause"
+	invokestatic io/printStrLn(Ljava/lang/String;)V
 Label1:
 	return
-.limit stack 4
-.limit locals 2
-.end method
-
-.method public static foo(II)I
-.var 0 is a I from Label0 to Label1
-.var 1 is b I from Label0 to Label1
-Label0:
-	iload_0
-	iload_1
-	iadd
-	ireturn
-Label1:
-.limit stack 2
-.limit locals 2
+.limit stack 3
+.limit locals 1
 .end method

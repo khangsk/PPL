@@ -1,12 +1,11 @@
 
-        Function: foo
-        Body:
-            Var: a = 1, b = 2;
-            print(string_of_int(a + b));
-        EndBody.
-        Function: main
-        Body: 
-            print(string_of_int(0));
-            foo();
-            print(string_of_int(120));
-        EndBody.
+Function: main
+    Body:
+        printLn();
+
+        If False Then
+            printStrLn(string_of_int(1));
+        Else
+            printStrLn(string_of_int(100));
+        EndIf.
+    EndBody.

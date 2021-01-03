@@ -1,18 +1,20 @@
 
-        Function: main
-        Body: 
-               Var: x[3][3][2] = 
-        {
-            {
-                {4, 5}, {8, 4}, {9, 7}
-            }, 
-            {
-                {1, 0}, {4, 8}, {7, 6}
-            }, 
-            {
-                {5, 5}, {9, 0}, {4, 2}
-            }
-        };
-            print(string_of_int(x[1][1][0]));
-        EndBody.
-        
+Var: a = 1, b = "";
+Function: main
+    Body:
+        printLn();
+
+        If False Then
+            Var: b = 1;
+            printStrLn(string_of_int(a + 1));
+            printStrLn(string_of_int(b));
+        ElseIf True Then
+            Var: b = 1.;
+            printStrLn(string_of_int(a + 2));
+            printStrLn(string_of_float(b));
+        Else
+            Var: b = True;
+            printStrLn(string_of_int(a + 3));
+            printStrLn(string_of_bool(b));
+        EndIf.
+    EndBody.

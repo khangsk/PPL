@@ -1,9 +1,9 @@
 
-                    Function: main
-                   Body:        
-                        Var: x = 5;
-                        While (x >= 0) Do
-                            print(string_of_int(x));
-                            x = x - 1;
-                        EndWhile.
-                   EndBody.
+Function: main
+    Body:
+        printLn();
+        printStrLn(string_of_bool(True && True));
+        printStrLn(string_of_bool(True && False));
+        printStrLn(string_of_bool(False && True));
+        printStrLn(string_of_bool(False && False));
+    EndBody.

@@ -1,1 +1,4 @@
-Nho hon 0
+
+true
+false
+true

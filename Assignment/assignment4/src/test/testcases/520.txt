@@ -1,12 +1,8 @@
 
-                    Function: main
-                   Body:        
-                        Var: x = 0;
-                        x = x - 1;
-                        If (x < 0) Then print("Nho hon 0");
-                        ElseIf (x == 0) Then print("Bang 0");
-                        ElseIf (x == 1) Then print("stop");
-                        Else
-                            print(string_of_int(x));
-                        EndIf.
-                   EndBody.
+Function: main
+    Body:
+        printLn();
+        printStrLn(string_of_bool(1. <=. 2.));
+        printStrLn(string_of_bool(4. <=. 3.));
+        printStrLn(string_of_bool(5. <=. 5.));
+    EndBody.

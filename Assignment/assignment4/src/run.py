@@ -37,8 +37,8 @@ def main(argv):
             suite = unittest.makeSuite(ASTGenSuite)
             test(suite)
         elif argv[1] == 'CodeGenSuite':
-            from CodeGenSuite import CheckCodeGenSuite
-            # from CodeGenSuite_hoang import CheckCodeGenSuite
+            # from CodeGenSuite import CheckCodeGenSuite
+            from CodeGenSuite_hoang import CheckCodeGenSuite
             suite = unittest.makeSuite(CheckCodeGenSuite)
             test(suite)
         else:

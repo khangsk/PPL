@@ -1,103 +1,61 @@
 .source MCClass.java
 .class public MCClass
 .super java.lang.Object
+.field static a I
+.field static b Ljava/lang/String;
 
 .method public static main([Ljava/lang/String;)V
 .var 0 is args Ljava/lang/String; from Label0 to Label1
-.var 1 is x [I from Label0 to Label1
 Label0:
-	bipush 18
-	newarray int
-	astore_1
-	aload_1
+	ldc ""
+	putstatic MCClass/b Ljava/lang/String;
+	iconst_1
+	putstatic MCClass/a I
+	invokestatic io/printLn()V
 	iconst_0
-	iconst_4
-	iastore
-	aload_1
+	ifle Label3
+.var 1 is b I from Label0 to Label1
 	iconst_1
-	iconst_5
-	iastore
-	aload_1
-	iconst_2
-	bipush 8
-	iastore
-	aload_1
-	iconst_3
-	iconst_4
-	iastore
-	aload_1
-	iconst_4
-	bipush 9
-	iastore
-	aload_1
-	iconst_5
-	bipush 7
-	iastore
-	aload_1
-	bipush 6
+	istore_1
+	getstatic MCClass/a I
 	iconst_1
-	iastore
-	aload_1
-	bipush 7
-	iconst_0
-	iastore
-	aload_1
-	bipush 8
-	iconst_4
-	iastore
-	aload_1
-	bipush 9
-	bipush 8
-	iastore
-	aload_1
-	bipush 10
-	bipush 7
-	iastore
-	aload_1
-	bipush 11
-	bipush 6
-	iastore
-	aload_1
-	bipush 12
-	iconst_5
-	iastore
-	aload_1
-	bipush 13
-	iconst_5
-	iastore
-	aload_1
-	bipush 14
-	bipush 9
-	iastore
-	aload_1
-	bipush 15
-	iconst_0
-	iastore
-	aload_1
-	bipush 16
-	iconst_4
-	iastore
-	aload_1
-	bipush 17
-	iconst_2
-	iastore
-	aload_1
-	iconst_1
-	iconst_3
-	imul
-	iconst_2
-	imul
-	iconst_1
-	iconst_2
-	imul
 	iadd
-	iconst_0
-	iadd
-	iaload
 	invokestatic io/string_of_int(I)Ljava/lang/String;
-	invokestatic io/print(Ljava/lang/String;)V
+	invokestatic io/printStrLn(Ljava/lang/String;)V
+	iload_1
+	invokestatic io/string_of_int(I)Ljava/lang/String;
+	invokestatic io/printStrLn(Ljava/lang/String;)V
+	goto Label2
+Label3:
+	iconst_1
+	ifle Label4
+.var 2 is b F from Label0 to Label1
+	ldc 1.0
+	fstore_2
+	getstatic MCClass/a I
+	iconst_2
+	iadd
+	invokestatic io/string_of_int(I)Ljava/lang/String;
+	invokestatic io/printStrLn(Ljava/lang/String;)V
+	fload_2
+	invokestatic io/string_of_float(F)Ljava/lang/String;
+	invokestatic io/printStrLn(Ljava/lang/String;)V
+	goto Label2
+Label4:
+.var 3 is b Z from Label0 to Label1
+	iconst_1
+	istore_3
+	getstatic MCClass/a I
+	iconst_3
+	iadd
+	invokestatic io/string_of_int(I)Ljava/lang/String;
+	invokestatic io/printStrLn(Ljava/lang/String;)V
+	iload_3
+	invokestatic io/string_of_bool(Z)Ljava/lang/String;
+	invokestatic io/printStrLn(Ljava/lang/String;)V
+Label2:
 Label1:
 	return
 .limit stack 5
-.limit locals 2
+.limit locals 4
 .end method
