@@ -1,9 +1,0 @@
-
-        Function: main
-        Body:
-            Var: foo = 1;
-        EndBody.
-        Function: foo
-        Body:
-        EndBody.
-        

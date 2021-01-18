@@ -1,9 +1,0 @@
-
-                  Function: main
-                  Parameter: x, y
-                  Body:
-                        Do
-                            Var: z;
-                        While z EndDo.
-                  EndBody.
-                  

@@ -1,6 +1,0 @@
-
-            procedure main();
-            begin end
-            var MAIN: integer;
-                LUAN: array[0 .. 4] of real;
-        

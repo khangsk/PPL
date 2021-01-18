@@ -1,7 +1,0 @@
-
-
-procedure main(); 
-begin 
-    putInt(198 div 8);
-end
-

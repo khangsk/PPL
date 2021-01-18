@@ -1,9 +1,0 @@
-
-        var a, b:integer;
-        procedure main();
-        var arr:array[1 .. 5] of real;
-        begin
-            arr[1] := 111.2;
-            putFloat(arr[1]);
-        end
-        

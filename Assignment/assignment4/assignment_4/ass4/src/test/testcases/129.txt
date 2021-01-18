@@ -1,7 +1,0 @@
-
-
-procedure main(); 
-begin 
-    putFloat(123 / 2.3);
-end
-

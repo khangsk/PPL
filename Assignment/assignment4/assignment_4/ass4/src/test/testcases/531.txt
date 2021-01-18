@@ -1,9 +1,0 @@
-
-        var a, b:integer;
-        procedure main();
-        var fNum:real;
-        begin
-            fNum := 9.15;
-            putFloat(fNum);
-        end
-        

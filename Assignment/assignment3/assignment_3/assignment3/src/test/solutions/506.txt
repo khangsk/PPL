@@ -1,1 +1,0 @@
-Unreachable statement: While(BooleanLiteral(True),[CallStmt(Id(putStringLn),[StringLiteral(Hello JScript!)])])

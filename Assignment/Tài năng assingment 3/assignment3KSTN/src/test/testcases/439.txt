@@ -1,7 +1,0 @@
-Function: main
-                   Body: 
-                        Var: x;
-                        If x Then
-                            x = 1;
-                        EndIf.
-                   EndBody.

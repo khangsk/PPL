@@ -1,5 +1,0 @@
-Var: main;
-                    Function: foo
-                    Body:
-                    EndBody.
-                

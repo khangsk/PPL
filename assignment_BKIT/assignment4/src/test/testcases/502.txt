@@ -1,0 +1,26 @@
+
+
+Var: arr[10] = {1, 7, 8, 4, 2, 5, 9, 10, 6, 3};
+Function: main
+    Body:
+        Var: i = 0;
+        For (i = 0, i < 10, 1) Do
+            Var: j = 0, minIndex = 0, temp = 0;
+            minIndex = i;
+            For (j = i + 1, j < 10, 1) Do
+                If arr[j] < arr[minIndex] Then
+                    minIndex = j;
+                EndIf.
+            EndFor.
+            temp = arr[i];
+            arr[i] = arr[minIndex];
+            arr[minIndex] = temp;
+        EndFor.
+
+        print("\nSorted array:");
+        For (i = 0, i < 10, 1) Do
+            print(" ");
+            print(string_of_int(arr[i]));
+        EndFor.
+        printLn();
+    EndBody.

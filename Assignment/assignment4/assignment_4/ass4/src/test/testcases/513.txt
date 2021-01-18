@@ -1,6 +1,0 @@
-
-        procedure main();
-        begin
-            putStringLn("programming");
-        end
-        

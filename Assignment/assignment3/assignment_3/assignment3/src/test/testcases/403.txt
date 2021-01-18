@@ -1,6 +1,0 @@
-
-            procedure main();
-            var x1, x2: integer;
-                y1, y2, y3, X1: real;
-            begin end
-        

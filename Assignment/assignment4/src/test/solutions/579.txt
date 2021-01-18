@@ -1,2 +1,0 @@
-
-First positive missing value: 9

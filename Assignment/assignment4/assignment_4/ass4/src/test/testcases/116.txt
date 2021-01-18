@@ -1,7 +1,0 @@
-
-
-procedure main(); 
-begin 
-    putInt(4*6);
-end
-

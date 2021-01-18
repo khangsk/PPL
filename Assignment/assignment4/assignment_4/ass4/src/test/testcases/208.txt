@@ -1,9 +1,0 @@
-
-
-procedure main();
-var a: array[3 .. 5] of integer;
-begin
-    a[5] := 10;
-    putInt(a[5]);
-end
-

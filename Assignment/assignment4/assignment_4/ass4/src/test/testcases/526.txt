@@ -1,8 +1,0 @@
-
-        var arr:array[1 .. 5] of integer;
-        procedure main();
-        begin
-            arr[1] := 15;
-            putIntLn(arr[1]);
-        end
-        

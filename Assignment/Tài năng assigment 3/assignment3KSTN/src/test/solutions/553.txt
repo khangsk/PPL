@@ -1,1 +1,0 @@
-Index Out Of Range: ArrayCell(Id(k),[IntLiteral(0),BinaryOp(\,UnaryOp(-,IntLiteral(1)),IntLiteral(2))])

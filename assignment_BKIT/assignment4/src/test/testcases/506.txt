@@ -1,0 +1,6 @@
+
+                    Function: main
+                   Body:        
+                        Var: y = "Hello, Im Khang";
+                        printStrLn(y);
+                   EndBody.

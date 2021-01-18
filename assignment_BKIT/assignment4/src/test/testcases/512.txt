@@ -1,0 +1,15 @@
+
+                    Function: main
+                   Body:        
+                        Var: x = 0;
+                        x = x + 5;
+                        x = x - 10;
+                        x = x * -2;
+                        printStrLn(string_of_int(x));
+                        x = x + 1;
+                        printStrLn(string_of_int(x));
+                        x = x \ 2;
+                        printStrLn(string_of_int(x));
+                        x = x % 3;
+                        printStrLn(string_of_int(x));
+                   EndBody.

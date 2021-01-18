@@ -1,9 +1,0 @@
-
-Function: main
-    Body:
-        printLn();
-        printStrLn(string_of_bool(True || True));
-        printStrLn(string_of_bool(True || False));
-        printStrLn(string_of_bool(False || True));
-        printStrLn(string_of_bool(False || False));
-    EndBody.

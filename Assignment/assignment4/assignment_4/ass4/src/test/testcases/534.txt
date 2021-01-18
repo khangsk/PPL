@@ -1,9 +1,0 @@
-
-        var a, b:integer;
-        procedure main();
-        var arr:array[1 .. 5] of integer;
-        begin
-            arr[1] := 111;
-            putInt(arr[1]);
-        end
-        

@@ -1,6 +1,0 @@
-
-        procedure main();
-        begin
-        putint(7);
-        end
-        

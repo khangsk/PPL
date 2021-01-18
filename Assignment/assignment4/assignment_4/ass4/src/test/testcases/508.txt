@@ -1,6 +1,0 @@
-
-        procedure main();
-        begin
-            putIntLn(000);
-        end
-        

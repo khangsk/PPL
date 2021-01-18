@@ -1,7 +1,0 @@
-
-
-procedure main(); 
-begin 
-    putFloat(0.005);
-end
-

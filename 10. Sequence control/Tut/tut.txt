@@ -1,0 +1,25 @@
+Question 1
+if mul (Node root) {
+	if (root == null) return 1;
+	else if (root.val == 0) return 0; //val=0 thì dừng
+	else root.val * mul(root.left) * mul(root.right);
+}
+
+Question 2
+A. 0210 vì pass value nên giá trị của tham số thực không bị thay đổi
+B. 2010 vì value-result là truyển giá trị vào và trả giá trị về lại
+C. 2010 vì đây là truyền tham chiếu (địa chỉ) nên giá trị sẽ thay đổi 
+D. 2210 vì đây là truyền code vào
+(t = i = 0; i = a[i] = a[0] = 2; a[i] = a[2] = t = 0 => i = 0; a[0] = 2; a[2] = 0)
+
+Question 3
+A. object P và object Q đều không thay đổi - Value assigned:  17 
+B. object P không đổi và object Q bị thay đổi - Value assigned:  17
+C. object P và object Q đều không thay đổi. Vì P được truyền tham trị không phải truyền tham chiếu
+D. object P không đổi và object Q bị thay đổi - Value assigned: Địa chỉ của P. Lúc này (Q = P) vì Q được truyền tham chiếu
+
+Question 4
+A. Lặp vô hạn (chỉ có expr được bảo vệ nên index không thay đổi (i = i - 1 sau đó i + 1 nên index không đổi))
+B. Lặp vô hạn (vì index được bảo vệ nhưng n vẫn luôn tăng 1 sau mỗi vòng lặp làm cho vòng lặp vô tận)
+C. Lặp vô hạn (vì cả i luôn giảm 1 và n tăng 1)
+D. 5 vì x và n của for được bảo vệ ( các lệnh bên trong không làm ảnh hưởng. Vòng for vẫn chạy từ 1->n)

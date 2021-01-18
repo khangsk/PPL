@@ -1,7 +1,0 @@
-
-
-procedure main(); 
-begin 
-    putBoolLn(FalSE);
-end
-

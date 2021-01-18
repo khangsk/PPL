@@ -1,5 +1,0 @@
-Function: main
-                Body:
-                    Var: i[1];
-                    i[0] = i[i[0]];
-                EndBody.

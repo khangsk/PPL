@@ -1,9 +1,0 @@
-
-        var a, b:integer;
-        procedure main();
-        var iNum:integer;
-        begin
-            iNum := 9;
-            putInt(iNum);
-        end
-        

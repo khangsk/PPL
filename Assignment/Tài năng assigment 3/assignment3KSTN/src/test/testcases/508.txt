@@ -1,7 +1,0 @@
-
-                Function: main
-                Parameter: x
-                Body:
-                    ({{1}, {2}})[0][0][0] = 0;
-                    Return 1;
-                EndBody.
